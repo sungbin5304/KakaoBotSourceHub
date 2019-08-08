@@ -12,7 +12,7 @@
 1. SMS Login
 2. Google Login (not implemented yet)
 
-## Functions
+## Functions (not implemented yet)
 1. Upload / Modify / Delete Script (Posts)
 2. Write / edit / delete comments
 3. JavaScript question / answer

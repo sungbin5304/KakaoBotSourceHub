@@ -25,4 +25,4 @@
 > PartWorm
 
 ### LICENSE
-> [LPL3 LICENSE](https://github.com/sungbin5304/KakaoBotSourceHub/blob/master/LICENSE)
+> [<GPL3 LICENSE>](https://github.com/sungbin5304/KakaoBotSourceHub/blob/master/LICENSE)

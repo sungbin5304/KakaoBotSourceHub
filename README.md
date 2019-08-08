@@ -23,3 +23,6 @@
 
 ### Special Thanks
 > PartWorm
+
+### LICENSE
+> [LICENSE](https://github.com/sungbin5304/KakaoBotSourceHub/blob/master/LICENSE)

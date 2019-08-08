@@ -9,7 +9,7 @@
 
 ## Login Method
 
-1. SNS Login
+1. SS Login
 2. Google Login (not implemented yet)
 
 ## Functions

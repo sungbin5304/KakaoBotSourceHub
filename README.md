@@ -10,7 +10,7 @@
 ## Login Method
 
 1. SNS Login
-2. Google Login (Will be added...)
+2. Google Login (not implemented yet)
 
 ## Functions
 1. Upload / Modify / Delete Script (Posts)

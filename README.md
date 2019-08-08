@@ -21,8 +21,8 @@
 6. New post notification service
 7. Etc...
 
+## LICENSE
+> [GPL3 LICENSE](https://github.com/sungbin5304/KakaoBotSourceHub/blob/master/LICENSE)
+
 ### Special Thanks
 > PartWorm
-
-### LICENSE
-> [GPL3 LICENSE](https://github.com/sungbin5304/KakaoBotSourceHub/blob/master/LICENSE)

@@ -1,8 +1,9 @@
-package com.sungbin.kakaobot.source.hub.view
+package com.sungbin.kakaobot.source.hub.view.activity
 
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewTreeObserver
@@ -35,6 +36,18 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
         toolbar.title = ""
         setSupportActionBar(toolbar)
+
+        if(!Utils.readData(applicationContext,
+                "uid", "false")!!.toBoolean()) {
+            Utils.toast(
+                applicationContext,
+                getString(R.string.welcome_join_auto_login),
+                FancyToast.LENGTH_SHORT, FancyToast.SUCCESS)
+            finish()
+            startActivity(
+                Intent(applicationContext, MainActivity::class.java)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        }
 
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
@@ -161,13 +174,16 @@ class LoginActivity : AppCompatActivity() {
                                 Utils.saveData(
                                     applicationContext,
                                     "uid", FirebaseAuth.getInstance().currentUser!!.uid)
+                                finish()
+                                startActivity(Intent(applicationContext, MainActivity::class.java)
+                                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
                             }
                             else {
                                 Utils.toast(
                                     this,
                                     getString(R.string.number_is_not_matched),
-                                    FancyToast.LENGTH_SHORT, FancyToast.WARNING
-                                )
+                                    FancyToast.LENGTH_SHORT, FancyToast.WARNING)
+                                center_layout_below.error = getString(R.string.number_is_not_matched)
                             }
                         }
                 }

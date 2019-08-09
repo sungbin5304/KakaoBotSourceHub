@@ -10,8 +10,8 @@ android {
         applicationId "com.sungbin.kakaobot.source.hub"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "0.1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -56,6 +56,8 @@ dependencies {
     implementation 'com.github.f0ris.sweetalert:library:1.5.1'
     implementation 'com.github.rustamg:file-dialogs:1.0'
     implementation 'com.github.mancj:SlideUp-Android:2.2.8'
+
+    implementation 'com.rarepebble:colorpicker:2.4.2'
 
     implementation 'org.apache.commons:commons-lang3:3.9'
     implementation 'org.apache.commons:commons-io:1.3.2'

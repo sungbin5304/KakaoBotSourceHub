@@ -8,7 +8,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationManagerCompat
 import com.sungbin.kakaobot.source.hub.R
-import com.sungbin.kakaobot.source.hub.view.MainActivity
+import com.sungbin.kakaobot.source.hub.view.activity.MainActivity
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL

@@ -1,13 +1,16 @@
 package com.sungbin.kakaobot.source.hub.utils
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import android.content.Intent
 import android.os.Environment
 import android.util.Log
 import android.widget.Toast
+import androidx.core.content.ContextCompat.startActivity
 import com.shashank.sony.fancytoastlib.FancyToast
 import java.io.BufferedReader
 import java.io.File
@@ -93,11 +96,12 @@ object Utils {
 
     fun error(ctx: Context, e: Exception, at: String) {
         val data = "Error: $e\nLineNumber: ${e.stackTrace[0].lineNumber}\nAt: $at"
-        toast(ctx, "Error: $e", FancyToast.LENGTH_SHORT, FancyToast.ERROR)
+        toast(ctx, data, FancyToast.LENGTH_SHORT, FancyToast.ERROR)
         copy(ctx, data)
         Log.e("Error", data)
     }
 
+    @JvmStatic
     fun toast(ctx: Context, txt: String, length: Int, type: Int) {
         FancyToast.makeText(ctx, txt, length, type, false).show()
     }

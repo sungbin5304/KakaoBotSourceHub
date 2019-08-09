@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:focusableInTouchMode="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context=".view.activity.PostActivity"
+        tools:showIn="@layout/activity_post">
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:layout_marginTop="@dimen/margin_half"
+            android:id="@+id/inputTitleLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:counterEnabled="true"
+            app:counterMaxLength="10">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputTitleText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:maxLength="10"
+                android:hint="@string/title_string"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:layout_marginTop="5dp"
+            android:id="@+id/inputDescLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:counterEnabled="true"
+            app:counterMaxLength="15">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputDescText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:maxLength="15"
+                android:hint="@string/desc_string"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/script_upload_string"
+            android:textColor="@android:color/white"
+            android:background="@color/colorPrimary"
+            android:layout_marginTop="@dimen/margin_half"
+            android:id="@+id/uploadScript"/>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+        <HorizontalScrollView
+                android:id="@+id/scroll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary" >
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                <ImageButton
+                        android:id="@+id/action_undo"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@null"
+                        android:contentDescription="@string/undo_string"
+                        android:src="@drawable/ic_undo_white_24dp"  />
+
+                <ImageButton
+                        android:id="@+id/action_redo"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@null"
+                        android:contentDescription="@string/redo_string"
+                        android:src="@drawable/ic_redo_white_24dp"/>
+
+                <ImageButton
+                        android:id="@+id/action_bold"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@null"
+                        android:contentDescription="@string/bold_string"
+                        android:src="@drawable/ic_format_bold_white_24dp"  />
+
+                <ImageButton
+                        android:id="@+id/action_italic"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@null"
+                        android:contentDescription="@string/italic_string"
+                        android:src="@drawable/ic_format_italic_white_24dp"/>
+
+                <ImageButton
+                        android:id="@+id/action_strikethrough"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@null"
+                        android:contentDescription="@string/strikethrough_string"
+                        android:src="@drawable/ic_strikethrough_s_white_24dp"  />
+
+                <ImageButton
+                        android:id="@+id/action_underline"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@null"
+                        android:contentDescription="@string/underlined_string"
+                        android:src="@drawable/ic_format_underlined_white_24dp" />
+
+                <ImageButton
+                        android:id="@+id/action_txt_color"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@null"
+                        android:contentDescription="@string/text_color_string"
+                        android:src="@drawable/ic_format_color_text_white_24dp" />
+
+                <ImageButton
+                        android:id="@+id/action_indent"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@null"
+                        android:contentDescription="@string/indent_increase_string"
+                        android:src="@drawable/ic_format_indent_increase_white_24dp"  />
+
+                <ImageButton
+                        android:id="@+id/action_outdent"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@null"
+                        android:contentDescription="@string/indent_outdent_string"
+                        android:src="@drawable/ic_format_indent_outdent_white_24dp" />
+
+                <ImageButton
+                        android:id="@+id/action_align_left"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@null"
+                        android:contentDescription="@string/align_left_string"
+                        android:src="@drawable/ic_format_align_left_white_24dp"/>
+
+                <ImageButton
+                        android:id="@+id/action_align_center"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@null"
+                        android:contentDescription="@string/align_center_string"
+                        android:src="@drawable/ic_format_align_center_white_24dp" />
+
+                <ImageButton
+                        android:id="@+id/action_align_right"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@null"
+                        android:contentDescription="@string/align_right_string"
+                        android:src="@drawable/ic_format_align_right_white_24dp" />
+
+                <ImageButton
+                        android:id="@+id/action_insert_bullets"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@null"
+                        android:contentDescription="@string/list_bulleted_string"
+                        android:src="@drawable/ic_format_list_bulleted_white_24dp"  />
+
+                <ImageButton
+                        android:id="@+id/action_insert_numbers"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@null"
+                        android:contentDescription="@string/list_numbered_string"
+                        android:src="@drawable/ic_format_list_numbered_white_24dp" />
+
+                <ImageButton
+                        android:id="@+id/action_blockquote"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@null"
+                        android:contentDescription="@string/quote_string"
+                        android:src="@drawable/ic_format_quote_white_24dp"/>
+
+                <ImageButton
+                        android:id="@+id/action_insert_image"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@null"
+                        android:contentDescription="@string/insert_image_string"
+                        android:src="@drawable/ic_image_white_24dp" />
+
+                <ImageButton
+                        android:id="@+id/action_insert_link"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="@null"
+                        android:contentDescription="@string/insert_link_string"
+                        android:src="@drawable/ic_insert_link_white_24dp" />
+
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <jp.wasabeef.richeditor.RichEditor
+                android:id="@+id/editor"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+    </LinearLayout>
+
+</LinearLayout>

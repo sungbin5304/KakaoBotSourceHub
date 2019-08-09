@@ -5,7 +5,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".view.LoginActivity">
+        tools:context=".view.activity.LoginActivity">
 
     <com.google.android.material.appbar.AppBarLayout
             android:layout_height="wrap_content"
@@ -21,7 +21,7 @@
 
             <TextView
                     android:id="@+id/toolbar_title"
-                    android:text="KakaoBotSourceHub 로그인"
+                    android:text="@string/app_login"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"

@@ -8,6 +8,8 @@ class BoardDataItem {
     var source: String? = null
     var version: String? = null
     var uuid: String? = null
+    var name: String? = null
+    var content: String? = null
 
     constructor() {}
     constructor(
@@ -17,7 +19,9 @@ class BoardDataItem {
         bad_count: Int?,
         source: String?,
         version: String?,
-        uuid: String?
+        uuid: String?,
+        name: String?,
+        content: String?
     ) {
         this.title = title
         this.desc = desc
@@ -26,5 +30,7 @@ class BoardDataItem {
         this.source = source
         this.version = version
         this.uuid = uuid
+        this.name = name
+        this.content = content
     }
 }

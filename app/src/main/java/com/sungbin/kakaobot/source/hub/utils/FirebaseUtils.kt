@@ -24,7 +24,7 @@ object FirebaseUtils {
         }
     }
 
-    fun showNoti(title:String, content:String, topic: String){
-        NotificationManager.sendNotiToFcm(title, content, topic)
+    fun showNoti(ctx: Context, title:String, content:String, topic: String){
+        NotificationManager.sendNotiToFcm(ctx, title, content, topic)
     }
 }

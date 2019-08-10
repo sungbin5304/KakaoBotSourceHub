@@ -23,10 +23,11 @@ import java.lang.Exception
 
 
 @SuppressLint("StaticFieldLeak")
-private var adapter:BoardListAdapter? = null
-private var uid:String? = null
-private var items:ArrayList<BoardListItem>? = null
+private var adapter: BoardListAdapter? = null
+private var uid: String? = null
+private var items: ArrayList<BoardListItem>? = null
 private val reference = FirebaseDatabase.getInstance().reference.child("Board");
+private var boardCash: ArrayList<BoardDataItem>? = null
 
 class BoardList : Fragment() {
     @SuppressLint("InflateParams")
@@ -36,6 +37,7 @@ class BoardList : Fragment() {
         uid = Utils.readData(context!!, "uid", "null")!!
         items = ArrayList()
         adapter = BoardListAdapter(items, activity!!)
+        boardCash = ArrayList<BoardDataItem>()
 
         val view = inflater.inflate(R.layout.fragment_board_list, null)
 
@@ -47,14 +49,16 @@ class BoardList : Fragment() {
             override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
                 try {
                     val boardDataItem = dataSnapshot.getValue(BoardDataItem::class.java)
-                    Log.d("TTT", boardDataItem!!.title)
-                    val boardListItem = BoardListItem(
-                        boardDataItem.title,
-                        boardDataItem.desc, boardDataItem.good_count,
-                        boardDataItem.bad_count, boardDataItem.uuid)
-                    items!!.add(boardListItem)
-                    adapter!!.notifyDataSetChanged()
-                    boardListView.scrollToPosition(adapter!!.itemCount - 1)
+                    if(!boardCash!!.contains(boardDataItem)) {
+                        val boardListItem = BoardListItem(
+                            boardDataItem!!.title,
+                            boardDataItem.desc, boardDataItem.good_count,
+                            boardDataItem.bad_count, boardDataItem.uuid)
+                        items!!.add(boardListItem)
+                        adapter!!.notifyDataSetChanged()
+                        boardListView.scrollToPosition(adapter!!.itemCount - 1)
+                        boardCash!!.add(boardDataItem)
+                    }
                 }
                 catch (e: Exception) {
                     Utils.error(context!!,
@@ -94,8 +98,7 @@ class BoardList : Fragment() {
         })
 
         post_board.setOnClickListener {
-            startActivity(
-                Intent(context, PostActivity::class.java)
+            startActivity(Intent(context, PostActivity::class.java)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         }
 

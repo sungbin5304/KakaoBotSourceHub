@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:counterEnabled="true"
-            app:counterMaxLength="10">
+            app:counterMaxLength="15">
 
         <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/inputTitleText"
@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:maxLength="10"
+                android:maxLength="15"
                 android:hint="@string/title_string"/>
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -36,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:counterEnabled="true"
-            app:counterMaxLength="15">
+            app:counterMaxLength="20">
 
         <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/inputDescText"
@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:maxLength="15"
+                android:maxLength="20"
                 android:hint="@string/desc_string"/>
 
     </com.google.android.material.textfield.TextInputLayout>

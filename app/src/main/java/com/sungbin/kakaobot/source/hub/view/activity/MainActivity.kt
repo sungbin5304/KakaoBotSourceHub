@@ -1,11 +1,19 @@
 package com.sungbin.kakaobot.source.hub.view.activity
 
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.sungbin.kakaobot.source.hub.R
+import com.sungbin.kakaobot.source.hub.utils.FirebaseUtils
+import com.sungbin.kakaobot.source.hub.utils.Utils
 import com.sungbin.kakaobot.source.hub.view.fragment.BoardList
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -52,6 +60,20 @@ class MainActivity : AppCompatActivity() {
             replace(R.id.page, BoardList())
             commit()
         }
+
+        FirebaseUtils.subscribe("NewPostNoti", applicationContext)
+
+        val reference = FirebaseDatabase.getInstance().reference.child("User Nickname")
+        reference.child(Utils.readData(applicationContext,
+            "uid", "null")!!).addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                Utils.saveData(applicationContext,
+                    "nickname", dataSnapshot.value.toString())
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+
+            }
+        })
 
     }
 }

@@ -3,6 +3,10 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="com.sungbin.kakaobot.source.hub">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
             android:allowBackup="true"
             android:icon="@drawable/icon"
@@ -11,6 +15,11 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:usesCleartextTraffic="true"
             tools:replace="android:icon">
+        <activity
+                android:name=".view.activity.PostViewActivity"
+                android:label="@string/title_activity_board_view"
+                android:theme="@style/AppTheme.NoActionBar.NoActionBar">
+        </activity>
         <activity
                 android:name=".view.activity.PostActivity"
                 android:label="@string/title_activity_post"

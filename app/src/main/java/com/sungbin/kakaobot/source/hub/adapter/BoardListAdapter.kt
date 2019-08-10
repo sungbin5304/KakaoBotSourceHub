@@ -1,10 +1,12 @@
 package com.sungbin.kakaobot.source.hub.adapter
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,18 +14,24 @@ import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityOptionsCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.sungbin.kakaobot.source.hub.R
 import com.sungbin.kakaobot.source.hub.dto.BoardListItem
+import com.sungbin.kakaobot.source.hub.view.activity.MainActivity
+import com.sungbin.kakaobot.source.hub.view.activity.PostActivity
+import com.sungbin.kakaobot.source.hub.view.activity.PostViewActivity
 
 class BoardListAdapter(private val list: ArrayList<BoardListItem>?,
                        private val act: Activity) :
-    RecyclerView.Adapter<BoardListAdapter.ChatViewHolder>() {
+    RecyclerView.Adapter<BoardListAdapter.BoardViewHolder>() {
 
-    inner class ChatViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    private var ctx: Context? = null
+
+    inner class BoardViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var title: TextView = view.findViewById(R.id.board_title)
         var desc: TextView = view.findViewById(R.id.board_desc)
         var good_count: TextView = view.findViewById(R.id.board_good_count)
@@ -31,12 +39,13 @@ class BoardListAdapter(private val list: ArrayList<BoardListItem>?,
         var view: CardView = view.findViewById(R.id.board_view)
     }
 
-    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ChatViewHolder {
+    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): BoardViewHolder {
         val view = LayoutInflater.from(viewGroup.context).inflate(R.layout.view_board_list, viewGroup, false)
-        return ChatViewHolder(view)
+        ctx = viewGroup.context
+        return BoardViewHolder(view)
     }
 
-    override fun onBindViewHolder(@NonNull viewholder: ChatViewHolder, position: Int) {
+    override fun onBindViewHolder(@NonNull viewholder: BoardViewHolder, position: Int) {
         val title = list!![position].title
         val desc = list[position].desc
         val good_count = list[position].good_count
@@ -48,7 +57,10 @@ class BoardListAdapter(private val list: ArrayList<BoardListItem>?,
         viewholder.bad_count.text = bad_count.toString()
 
         viewholder.view.setOnClickListener {
-
+            val uuid = list[position].uuid
+            ctx!!.startActivity(Intent(ctx, PostViewActivity::class.java)
+                .putExtra("uuid", uuid)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         }
     }
     override fun getItemCount(): Int {

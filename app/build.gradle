@@ -10,8 +10,8 @@ android {
         applicationId "com.sungbin.kakaobot.source.hub"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 2
-        versionName "0.1.0"
+        versionCode 3
+        versionName "0.1.5"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -67,6 +67,7 @@ dependencies {
     implementation 'com.shazam:android-reflow-animator:1.0.0-SNAPSHOT'
 
     implementation 'gun0912.ted:tedkeyboardobserver:1.0.2'
+    implementation 'gun0912.ted:tedpermission:2.2.2'
     implementation 'jp.wasabeef:richeditor-android:1.2.2'
 
     implementation files('libs/CaulySDK-3.4.23.jar')

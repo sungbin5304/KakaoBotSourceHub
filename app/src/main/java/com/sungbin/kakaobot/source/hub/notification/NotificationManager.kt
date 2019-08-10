@@ -63,6 +63,7 @@ object NotificationManager {
                 .setContentIntent(pendingIntent)
             getManager(context).notify(id, builder.build())
         } else {
+            @Suppress("DEPRECATION")
             val builder = Notification.Builder(context)
                 .setContentTitle(title)
                 .setContentText(content)
@@ -93,6 +94,7 @@ object NotificationManager {
 
             getManager(context).notify(id, builder.build())
         } else {
+            @Suppress("DEPRECATION")
             val builder = Notification.Builder(context)
                 .setContentTitle(title)
                 .setContentText(content)
@@ -125,13 +127,12 @@ object NotificationManager {
         }
     }
 
-    private const val FCM_MESSAGE_URL = "https://fcm.googleapis.com/fcm/send"
-    private const val SERVER_KEY =
-        "AAAA_iXlJpM:APA91bENMty8XL3pcaElqVJBQHENktd2Ct6ZpOw5LR9lmooWEuiDrAjb3twEczdgxf9191ThDmEZHCiIGTI35gkSDC7fNnMw0DVk_yq3i86xZiXIwPtNMKBlsdsekKR-kwLUyArXg-7x"
-
-    fun sendNotiToFcm(title: String, message: String, to: String) {
+    fun sendNotiToFcm(context: Context, title: String, message: String, to: String) {
         Thread(Runnable {
             try {
+                val FCM_MESSAGE_URL = context.getString(R.string.fcm_server_url)
+                val SERVER_KEY = context.getString(R.string.fcm_server_key)
+
                 val root = JSONObject()
                 val notification = JSONObject()
                 notification.put("body", message)

@@ -14,6 +14,7 @@ import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
+import com.google.firebase.database.FirebaseDatabase
 import com.shashank.sony.fancytoastlib.FancyToast
 import com.shazam.android.widget.text.reflow.ReflowTextAnimatorHelper
 import com.sungbin.kakaobot.source.hub.R
@@ -37,16 +38,14 @@ class LoginActivity : AppCompatActivity() {
         toolbar.title = ""
         setSupportActionBar(toolbar)
 
-        if(!Utils.readData(applicationContext,
-                "uid", "false")!!.toBoolean()) {
-            Utils.toast(
-                applicationContext,
+        if (!Utils.readData(applicationContext, "uid", "true")!!.toBoolean()) {
+            Utils.toast(applicationContext,
                 getString(R.string.welcome_join_auto_login),
                 FancyToast.LENGTH_SHORT, FancyToast.SUCCESS)
             finish()
-            startActivity(
-                Intent(applicationContext, MainActivity::class.java)
+            startActivity(Intent(applicationContext, MainActivity::class.java)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            return
         }
 
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
@@ -56,7 +55,7 @@ class LoginActivity : AppCompatActivity() {
 
         TedKeyboardObserver(this)
             .listen {
-                if(it) copyright.visibility = View.GONE
+                if (it) copyright.visibility = View.GONE
                 else copyright.visibility = View.VISIBLE
             }
 
@@ -80,13 +79,16 @@ class LoginActivity : AppCompatActivity() {
 
                         center_layout.visibility = View.VISIBLE
                         center_layout_below.visibility = View.VISIBLE
+                        nickname_layout.visibility = View.VISIBLE
                         copyright.visibility = View.VISIBLE
                         input_done.visibility = View.VISIBLE
 
                         center_layout.animation = fade
                         center_layout_below.animation = fade
+                        nickname_layout.animation = fade
                         copyright.animation = fade
                         input_done.animation = fade
+
                     }
                 })
                 animator.start()
@@ -95,30 +97,42 @@ class LoginActivity : AppCompatActivity() {
             }
         })
 
+        input_number.setOnClickListener {
+            Utils.toast(applicationContext,
+                getString(R.string.input_number_rule),
+                FancyToast.LENGTH_LONG, FancyToast.INFO)
+        }
+
         send_check_number.setOnClickListener {
-            if(StringUtils.isBlank(input_number.text.toString())){
-                Utils.toast(applicationContext,
+            if (StringUtils.isBlank(input_number.text.toString())) {
+                Utils.toast(
+                    applicationContext,
                     getString(R.string.please_input_number),
-                    FancyToast.LENGTH_SHORT, FancyToast.WARNING)
+                    FancyToast.LENGTH_SHORT, FancyToast.WARNING
+                )
                 input_number_layout.error = getString(R.string.please_input_number)
             } else {
-                if(input_number.text.toString().length != 11){
-                    Utils.toast(applicationContext,
+                if (input_number.text.toString().length != 11) {
+                    Utils.toast(
+                        applicationContext,
                         getString(R.string.please_input_correct_number),
-                        FancyToast.LENGTH_SHORT, FancyToast.WARNING)
+                        FancyToast.LENGTH_SHORT, FancyToast.WARNING
+                    )
                     input_number_layout.error = getString(R.string.please_input_correct_number)
-                }
-                else {
+                } else {
                     input_number_layout.error = null
-                        PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                    PhoneAuthProvider.getInstance().verifyPhoneNumber(
                         input_number.text.toString().replaceFirst("0", "+82"),
                         60,
                         TimeUnit.SECONDS,
                         this,
-                        snsLoginCallBack)
-                    Utils.toast(applicationContext,
+                        snsLoginCallBack
+                    )
+                    Utils.toast(
+                        applicationContext,
                         getString(R.string.send_code),
-                        FancyToast.LENGTH_SHORT, FancyToast.SUCCESS)
+                        FancyToast.LENGTH_SHORT, FancyToast.SUCCESS
+                    )
                 }
             }
         }
@@ -146,14 +160,20 @@ class LoginActivity : AppCompatActivity() {
         }
 
         input_done.setOnClickListener {
-            if(StringUtils.isBlank(input_check_number.text.toString())){
+            if (StringUtils.isBlank(input_check_number.text.toString())) {
                 Utils.toast(applicationContext,
                     getString(R.string.please_input_code),
                     FancyToast.LENGTH_SHORT, FancyToast.WARNING)
                 center_layout_below.error = getString(R.string.please_input_code)
             }
+            if (StringUtils.isBlank(input_nickname.text.toString())) {
+                    Utils.toast(applicationContext,
+                        getString(R.string.please_input_nickname),
+                        FancyToast.LENGTH_SHORT, FancyToast.WARNING)
+                    nickname_layout.error = getString(R.string.please_input_nickname)
+            }
             else {
-                if(input_check_number.text.toString().length != 6){
+                if (input_check_number.text.toString().length != 6) {
                     Utils.toast(applicationContext,
                         getString(R.string.code_is_six_num),
                         FancyToast.LENGTH_SHORT, FancyToast.WARNING)
@@ -161,26 +181,29 @@ class LoginActivity : AppCompatActivity() {
                 }
                 else {
                     center_layout_below.error = null
+                    input_number_layout.error = null
+
                     val credential = PhoneAuthProvider.getCredential(
                         verificationIdString!!,
                         input_check_number.text.toString())
                     mAuth!!.signInWithCredential(credential)
                         .addOnCompleteListener(this) { task ->
                             if (task.isSuccessful) {
-                                Utils.toast(
-                                    applicationContext,
+                                Utils.toast(applicationContext,
                                     getString(R.string.welcome_join),
                                     FancyToast.LENGTH_SHORT, FancyToast.SUCCESS)
-                                Utils.saveData(
-                                    applicationContext,
+                                Utils.saveData(applicationContext,
                                     "uid", FirebaseAuth.getInstance().currentUser!!.uid)
+                                val reference = FirebaseDatabase.getInstance().reference.child("User Nickname")
+                                reference.child(FirebaseAuth.getInstance().currentUser!!.uid)
+                                    .setValue(input_nickname.text.toString())
                                 finish()
-                                startActivity(Intent(applicationContext, MainActivity::class.java)
-                                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                                startActivity(
+                                    Intent(applicationContext, MainActivity::class.java)
+                                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
                             }
                             else {
-                                Utils.toast(
-                                    this,
+                                Utils.toast(this,
                                     getString(R.string.number_is_not_matched),
                                     FancyToast.LENGTH_SHORT, FancyToast.WARNING)
                                 center_layout_below.error = getString(R.string.number_is_not_matched)
@@ -190,5 +213,4 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
-
 }

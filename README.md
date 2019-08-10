@@ -24,5 +24,5 @@
 ## LICENSE
 > [GPL3 LICENSE](https://github.com/sungbin5304/KakaoBotSourceHub/blob/master/LICENSE)
 
-### Special Thanks
+## Special Thanks
 > PartWorm

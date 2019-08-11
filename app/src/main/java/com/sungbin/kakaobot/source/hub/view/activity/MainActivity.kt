@@ -62,6 +62,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         FirebaseUtils.subscribe("NewPostNoti", applicationContext)
+        FirebaseUtils.subscribe("new_comment", applicationContext)
 
         val reference = FirebaseDatabase.getInstance().reference.child("User Nickname")
         reference.child(Utils.readData(applicationContext,

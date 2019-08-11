@@ -64,7 +64,6 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:textColor="@color/colorPrimaryDark"
-                        android:textStyle="bold"
                         tools:text="0"/>
 
             </LinearLayout>
@@ -86,7 +85,6 @@
                     android:textSize="13sp"
                     android:paddingEnd="5dp"
                     android:gravity="center|start"
-                    android:singleLine="true"
                     tools:text="게시글 설명 미리보기"/>
 
             <View

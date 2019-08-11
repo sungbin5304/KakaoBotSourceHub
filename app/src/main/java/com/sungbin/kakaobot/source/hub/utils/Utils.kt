@@ -16,6 +16,7 @@ import java.io.BufferedReader
 import java.io.File
 import java.io.FileInputStream
 import java.io.InputStreamReader
+import java.util.*
 
 @Suppress("DEPRECATION")
 @SuppressLint("MissingPermission", "HardwareIds")
@@ -101,8 +102,11 @@ object Utils {
         Log.e("Error", data)
     }
 
-    @JvmStatic
     fun toast(ctx: Context, txt: String, length: Int, type: Int) {
         FancyToast.makeText(ctx, txt, length, type, false).show()
+    }
+
+    fun makeRandomUUID(): String{
+        return UUID.randomUUID().toString().replace("-", "")
     }
 }

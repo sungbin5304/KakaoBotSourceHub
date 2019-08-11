@@ -3,10 +3,7 @@ package com.sungbin.kakaobot.source.hub.adapter
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
-import android.text.InputFilter
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.TextPaint
+import android.text.*
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.Gravity
@@ -54,12 +51,20 @@ class CommentListAdapter(private val list: ArrayList<CommentListItem>?,
         val reference = FirebaseDatabase.getInstance().reference.child("Board Comment").child(uuid)
         val name = list!![position].name
         val content = list[position].comment
-        val key = list[position].uuid
+        val uuid = list[position].uuid
+        val uid = list[position].uid
+        val key = list[position].key
+        val myUid = Utils.readData(ctx!!, "uid", "")
 
         viewholder.sender.text = name
-        setReadMore(viewholder.comment, content!!, 2)
+        setReadMore(viewholder.comment, content!!, 3)
 
         viewholder.view.setOnLongClickListener {
+            if(uid != myUid) {
+                Utils.toast(act, act.getString(R.string.can_action_my_comment),
+                    FancyToast.LENGTH_SHORT, FancyToast.WARNING)
+                return@setOnLongClickListener false
+            }
             val dialog = AlertDialog.Builder(act)
             val action = arrayOf(act.getString(R.string.string_edit_comment),
                 act.getString(R.string.string_delete_comment))
@@ -82,6 +87,7 @@ class CommentListAdapter(private val list: ArrayList<CommentListItem>?,
 
                         val input = EditText(act)
                         input.hint = act.getString(R.string.string_comment)
+                        input.text = SpannableStringBuilder(content)
                         input.filters = arrayOf(InputFilter.LengthFilter(150))
                         layout.addView(input)
 
@@ -101,7 +107,7 @@ class CommentListAdapter(private val list: ArrayList<CommentListItem>?,
                             }
                             else {
                                 val item = CommentListItem(name,
-                                    comment, key)
+                                    comment, uuid, uid, key)
                                 reference.child(key!!).setValue(item)
                                 Utils.toast(ctx!!,
                                     act.getString(R.string.comment_edit_success),

@@ -6,21 +6,148 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
+        android:id="@+id/main_view"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:showIn="@layout/activity_board_view"
-        tools:context=".view.activity.PostViewActivity">
+        tools:context=".view.activity.PostViewActivity"
+        tools:ignore="NestedWeights, RtlSymmetry">
 
     <FrameLayout android:layout_width="match_parent"
-                 android:layout_height="match_parent">
+                 android:layout_height="match_parent"
+                android:id="@+id/frame_view">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/layout_post_view">
 
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:id="@+id/information_view"
+                    android:orientation="vertical"
+                    android:layout_margin="@dimen/margin_half"
+                    android:background="@android:color/white"
+                    android:weightSum="2">
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:weightSum="5">
+
+                    <TextView
+                            android:id="@+id/board_sender"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="4"
+                            android:paddingEnd="5dp"
+
+                            android:gravity="center|start"
+                            android:singleLine="true"
+                            tools:text="게시글 작성자 미리보기"/>
+
+                    <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/darker_gray"/>
+
+                    <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                        <ImageView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:id="@+id/board_good"
+                                android:contentDescription="@string/board_good"
+                                android:src="@drawable/ic_face_good_pink_24dp"/>
+
+                        <TextView
+                                android:id="@+id/board_good_count"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:textColor="@color/colorPrimaryDark"
+                                tools:text="0"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:weightSum="5">
+
+                    <TextView
+                            android:id="@+id/board_desc"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="4"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:paddingEnd="5dp"
+                            android:gravity="center|start"
+                            tools:text="게시글 설명 미리보기"/>
+
+                    <View
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:background="@android:color/darker_gray"/>
+
+                    <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                        <ImageView
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:id="@+id/board_bad"
+                                android:contentDescription="@string/board_bad"
+                                android:src="@drawable/ic_face_bad_pink_24dp"/>
+
+                        <TextView
+                                android:id="@+id/board_bad_count"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:textColor="@color/colorPrimaryDark"
+                                tools:text="0"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1.5dp"
+                    android:layout_marginTop="60dp"
+                    android:background="@android:color/darker_gray"/>
+
             <WebView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="65dp"
+                    android:padding="@dimen/margin_half"
+                    android:background="@android:color/white"
                     android:id="@+id/viewer"/>
 
             <include layout="@layout/content_comment_page"

@@ -54,7 +54,7 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
     private var mActionMode: ActionMode? = null
     private var upload: Button? = null
     private var script: File? = null
-    private var version = "0.0.1"
+    private var version = "000"
     private var nickname: String? = null
 
     private var mActionCallback = @SuppressLint("NewApi")
@@ -93,7 +93,13 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
         toolbar.title = ""
         setSupportActionBar(toolbar)
 
-        nickname = Utils.readData(applicationContext, "nickname", "null")
+        nickname = Utils.readData(applicationContext, "nickname", "qwertyuiopqwert")
+        if(nickname == "qwertyuiopqwert"){
+            Utils.toast(applicationContext,
+                getString(R.string.please_app_refresh),
+                FancyToast.LENGTH_LONG, FancyToast.WARNING)
+            finish()
+        }
 
         upload = findViewById(R.id.uploadScript)
 
@@ -265,7 +271,7 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
                 && !StringUtils.isBlank(mEditor!!.html)) {
 
                 val ctx: Context = this@PostActivity
-                var key = UUID.randomUUID().toString().replace("-", "")
+                var key = Utils.makeRandomUUID()
                 if (script == null) {
                     val root = reference.child(key)
                     val boardDataItem = BoardDataItem(
@@ -294,17 +300,17 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
 
                     val input = EditText(ctx)
                     input.hint = getString(R.string.string_script_version)
-                    input.inputType = 0x00002002
-                    input.filters = arrayOf(InputFilter.LengthFilter(5))
+                    input.inputType = 0x00000002
+                    input.filters = arrayOf(InputFilter.LengthFilter(3))
                     layout.addView(input)
 
                     dialog.setView(DialogUtils.makeMarginLayout(resources,
                         ctx, layout))
-                    dialog.setNegativeButton(getString(R.string.cancel_script_upload)) { _, _ ->
+                    dialog.setNeutralButton(getString(R.string.cancel_script_upload)) { _, _ ->
                         val root = reference.child(key)
                         val boardDataItem = BoardDataItem(
                             inputTitle!!.text!!.toString(),
-                            inputDesc!!.text!!.toString(), 0, 0, upload!!.text.toString() + ":V." + version,
+                            inputDesc!!.text!!.toString(), 0, 0, "null",
                             version, key, nickname, mEditor!!.html)
                         root.setValue(boardDataItem)
                         Utils.toast(ctx,
@@ -324,7 +330,7 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
                             pDialog.setTitle(resources.getString(R.string.script_uploading))
                             pDialog.setCancelable(false)
                             pDialog.show()
-                            key = upload!!.text.toString() + ":V." + version
+                            key = upload!!.text.toString().replace(".", "") + ":V:" + version
                             val file = Uri.fromFile(script)
                             val riversRef = storageRef.child(key)
                             riversRef.putFile(file).addOnFailureListener { exception ->
@@ -343,7 +349,8 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
                                 val root = reference.child(key)
                                 val boardDataItem = BoardDataItem(
                                     inputTitle!!.text!!.toString(),
-                                    inputDesc!!.text!!.toString(), 0, 0, upload!!.text.toString() + ":V." + version,
+                                    inputDesc!!.text!!.toString(), 0, 0,
+                                    upload!!.text.toString().replace(".", ""),
                                     version, key, nickname, mEditor!!.html)
                                 root.setValue(boardDataItem)
                                 finish()

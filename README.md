@@ -1,4 +1,4 @@
-# KakaoBotSourceHub - 수능 끝나고 업데이트 예정
+# KakaoBotSourceHub - 수능 끝나고 업데이트 예정이였으나 할 
 > Kakaotalk Bot Source Share Community
 
 ![Image](https://img.shields.io/badge/Hub-KakaoBotSource-pink.svg) 

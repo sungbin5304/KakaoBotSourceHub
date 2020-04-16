@@ -2,34 +2,26 @@
   <img src="https://raw.githubusercontent.com/sungbin5304/KakaoTalkBotHub/master/banner.png">
 </p>
 
-## 설명
-새자봇(새로운 자동응답 봇)은 메신저 자동 답장 봇 입니다.<br>
-반응할 채팅과 대답할 말을 설정하기 위해 코딩이 필요합니다.<br>
-지원하는 언어는 총 3가지로 자바스크립트, 커피스크립트, 루아스크립트가 있습니다.<br>
-추가로 코딩이 필요 없는 단순 자동 응답 키워드 설정도 지원 합니다.
+## Description
+KakaotalkBotHub is an application that supports KakaoTalk Bot and Hub(similar to a GitHub) for KakaoTalk Bot.<br>
+Bot production methods include programming in JavaScript and setting simple keyword auto-response.
 
+## Preview Images
+Preparing...
 
-## 미리보기 이미지
-<div>
-<img src="https://raw.githubusercontent.com/sungbin5304/NewAutoReplyBot-Helper/master/IMAGE/screener_1562496049538.png" width="300" height="500">
-<img src="https://raw.githubusercontent.com/sungbin5304/NewAutoReplyBot-Helper/master/IMAGE/screener_1568363700374.png" width="300" height="500">
-<img src="https://raw.githubusercontent.com/sungbin5304/NewAutoReplyBot-Helper/master/IMAGE/screener_1562496149897.png" width="300" height="500">
-<img src="https://raw.githubusercontent.com/sungbin5304/NewAutoReplyBot-Helper/master/IMAGE/screener_1562496170558.png" width="300" height="500">
-</div>
-
-## 개발
+## Devloper
 ![Image](https://raw.githubusercontent.com/sungbin5304/NewAutoReplyBot-Helper/master/IMAGE/sungbin.png)
 
-## 메인 함수
+## Main Function
 ``` JavaScript
 function response(room, msg, sender, isGroupChat, replier, ImageDB, package) {
   /*
-  @String room : 메세지를 받은 방 이름 리턴
-  @String sender : 메세지를 보낸 상대의 이름 리턴
-  @Boolean isGroupChat : 메세지를 받은 방이 그룹채팅방(오픈채팅방은 그룹채팅방 취급) 인지 리턴
-  @Object replier : 메세지를 받은 방의 Action를 담은 Object 리턴
-  @Object ImageDB : 이미지 관련 데이터를 담은 Object 리턴
-  @String package : 메세지를 받은 어플의 패키지명 리턴
+   @String room: Returns the name of the room that received the message
+   @String sender: Returns the name of the person who sent the message
+   @Boolean isGroupChat: Returns whether the room that received the message is a group chat room (open chat room is treated as a group chat room)
+   @Object replier: Return Object containing the action of the room that received the message
+   @Object ImageDB: Return Object containing image related data
+   @String package: Return the package name of the application that received the message
   */
 }
 ```

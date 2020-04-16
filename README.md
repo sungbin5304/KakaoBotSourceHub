@@ -142,13 +142,8 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, package) {
 }
 ```
 
------
-
-## API List
-[[API List]](https://github.com/sungbin5304/NewAutoReplyBot-Helper/blob/master/API/API.md)
-
 ## Release notes
-[[Relase]](https://github.com/sungbin5304/NewAutoReplyBot-Helper/releases)
+[[Relase]](https://github.com/sungbin5304/KakaoTalkBotHub/releases)
 
 ## Google PlayStore Link
 [[Playstore]](https://play.google.com/store/apps/details?id=com.sungbin.autoreply.bot.three)

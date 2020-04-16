@@ -1,7 +1,6 @@
-<center>
-  <h1>KakaoTalkBotHub</h1>
+<p align="center">
   <img src="https://raw.githubusercontent.com/sungbin5304/KakaoBotSourceHub/master/IMAGE/icon.png" width="300" height="300">
-</center>
+</p>
 
 -----
 

@@ -67,10 +67,6 @@ remove(name: String)
 ## Api
 ```js
 getContext(): android.content.Context
-post(address: String, name: String, data: String)
-replyRoom(room: String, message: String)
-replyRoomShowAll(room: String, msg1: String, msg2: String)
-deleteHtml(html: String): String
 ```
 
 ## Device
@@ -107,11 +103,24 @@ removeSender(sender: String)
 
 ## Utils
 ```js
+post(address: String, name: String, data: String)
+deleteHtml(html: String): String
 makeToast(content: String)
 makeNoti(title: String, content: String
 getHtml(link: String, fromJsoup: Boolean = true): String?
 makeVibration(time: Int)
 copy(content: String)
+```
+
+## Bot
+```js
+compile(name: String)
+compileAllScripts()
+getAllCompiledScripts(): ???
+replyRoom(room: String, message: String)
+replyRoomShowAll(room: String, msg1: String, msg2: String)
+powerOn(name: String)
+powerOff(name: String)
 ```
 
 -----

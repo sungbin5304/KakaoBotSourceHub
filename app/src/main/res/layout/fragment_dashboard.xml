@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_marginTop="@dimen/margin_default"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        tools:ignore="Autofill,TextFields,RtlSymmetry" >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff">
+
+        <TextView
+                android:id="@+id/tv_scripts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_default"
+                android:fontFamily="@font/poppins"
+                android:text="@string/string_bots"
+                android:textColor="#000"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        <FrameLayout
+                android:layout_width="200dp"
+                android:layout_height="40dp"
+                android:layout_marginBottom="@dimen/margin_half"
+                app:layout_constraintBottom_toTopOf="@+id/rc_script"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tv_scripts">
+
+            <EditText
+                    tools:visibility="visible"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:animateLayoutChanges="true"
+                    android:id="@+id/et_search"
+                    android:layout_marginEnd="@dimen/margin_default"
+                    android:fontFamily="@font/poppins"
+                    android:textColor="@color/colorGray"
+                    android:hint="@string/string_search"
+                    android:layout_width="match_parent"
+                    android:background="@null"
+                    android:visibility="invisible"
+                    android:layout_height="wrap_content" />
+
+            <Button
+                    android:animateLayoutChanges="true"
+                    android:layout_gravity="end"
+                    android:id="@+id/btn_script_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:background="@null"
+                    android:paddingBottom="@dimen/margin_half"
+                    android:fontFamily="@font/poppins"
+                    android:text="@string/string_search"
+                    android:textAllCaps="false"
+                    android:textColor="@color/colorPrimary" />
+
+        </FrameLayout>
+
+        <TextView
+                tools:visibility="visible"
+                android:visibility="gone"
+                android:fontFamily="@font/nanumgothic"
+                android:id="@+id/tv_script_none"
+                android:text="@string/add_script_none"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_height="125dp"
+                android:layout_marginStart="@dimen/margin_default"
+                android:layout_marginTop="@dimen/margin_half"
+                android:layout_marginEnd="@dimen/margin_default"
+                app:layout_constraintTop_toBottomOf="@+id/tv_scripts" />
+
+        <androidx.recyclerview.widget.RecyclerView
+                tools:visibility="invisible"
+                android:overScrollMode="never"
+                android:id="@+id/rc_script"
+                android:layout_width="match_parent"
+                android:layout_height="125dp"
+                android:layout_marginStart="@dimen/margin_default"
+                android:layout_marginTop="@dimen/margin_half"
+                android:layout_marginEnd="@dimen/margin_default"
+                app:layout_constraintTop_toBottomOf="@+id/tv_scripts" />
+
+        <TextView
+                android:id="@+id/tv_logs"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_default"
+                android:layout_marginTop="@dimen/margin_default"
+                android:text="@string/string_logs"
+                android:textColor="#000"
+                android:textSize="20sp"
+                android:fontFamily="@font/poppins"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rc_script" />
+
+        <Button
+                android:overScrollMode="never"
+                android:fontFamily="@font/poppins"
+                android:id="@+id/btn_logs_viewall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:text="@string/string_viewall"
+                android:textAllCaps="false"
+                android:textColor="@color/colorPrimary"
+                android:layout_marginTop="@dimen/margin_half"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rc_script"  />
+
+        <TextView
+                tools:visibility="visible"
+                android:visibility="gone"
+                android:fontFamily="@font/nanumgothic"
+                android:id="@+id/tv_log_none"
+                android:text="@string/add_log_none"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_height="125dp"
+                android:layout_marginStart="@dimen/margin_default"
+                android:layout_marginTop="@dimen/margin_half"
+                android:layout_marginEnd="@dimen/margin_default"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_logs" />
+
+        <androidx.recyclerview.widget.RecyclerView
+                tools:visibility="invisible"
+                android:overScrollMode="never"
+                android:id="@+id/rc_logs"
+                android:layout_width="match_parent"
+                android:layout_height="125dp"
+                android:layout_marginStart="@dimen/margin_default"
+                android:layout_marginTop="@dimen/margin_half"
+                android:layout_marginEnd="@dimen/margin_default"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_logs" />
+
+        <TextView
+                android:id="@+id/tv_databases"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_default"
+                android:layout_marginTop="@dimen/margin_default"
+                android:text="@string/string_databases"
+                android:textColor="#000"
+                android:textSize="20sp"
+                android:fontFamily="@font/poppins"
+                app:layout_constraintBottom_toTopOf="@+id/rc_databases"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rc_logs" />
+
+        <Button
+                android:overScrollMode="never"
+                android:fontFamily="@font/poppins"
+                android:id="@+id/btn_databases_viewall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:text="@string/string_viewall"
+                android:textAllCaps="false"
+                android:textColor="@color/colorPrimary"
+                android:layout_marginTop="@dimen/margin_half"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rc_logs"  />
+
+        <TextView
+                tools:visibility="visible"
+                android:visibility="gone"
+                android:fontFamily="@font/nanumgothic"
+                android:id="@+id/tv_database_none"
+                android:text="@string/add_database_none"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_height="145dp"
+                android:layout_marginStart="@dimen/margin_default"
+                android:layout_marginTop="@dimen/margin_half"
+                android:layout_marginEnd="@dimen/margin_default"
+                android:layout_marginBottom="@dimen/margin_half"
+                android:overScrollMode="never"
+                android:scrollbars="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_databases"  />
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:visibility="invisible"
+                android:id="@+id/rc_databases"
+                android:layout_width="match_parent"
+                android:layout_height="145dp"
+                android:layout_marginStart="@dimen/margin_default"
+                android:layout_marginTop="@dimen/margin_half"
+                android:layout_marginEnd="@dimen/margin_default"
+                android:layout_marginBottom="@dimen/margin_half"
+                android:overScrollMode="never"
+                android:scrollbars="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_databases" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

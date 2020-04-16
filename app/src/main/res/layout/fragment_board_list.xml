@@ -40,6 +40,7 @@
             android:layout_margin="@dimen/margin_default"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:src="@drawable/ic_add_white_24dp" />
+            android:tint="@color/colorWhite"
+            android:src="@drawable/ic_add_primary_24dp" />
 
 </RelativeLayout>

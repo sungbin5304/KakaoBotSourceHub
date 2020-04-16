@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/margin_default"
+        android:focusableInTouchMode="true"
+        tools:ignore="TextFields,MissingConstraints,RtlSymmetry,Autofill,LabelFor">
+
+    <FrameLayout
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="@dimen/margin_half"
+            android:id="@+id/ts_bot_type_layout"
+            android:layout_width="251.5dp"
+            android:layout_height="52dp"
+            android:background="@drawable/round_edittext_stroke">
+
+        <belka.us.androidtoggleswitch.widgets.ToggleSwitch
+                android:layout_gravity="center"
+                android:id="@+id/ts_bot_type"
+                android:layout_width="250dp"
+                android:layout_height="50dp"
+                app:activeBgColor="@color/colorLightGray"
+                app:activeTextColor="#000"
+                app:cornerRadius="5dp"
+                app:inactiveBgColor="@color/colorWhite"
+                app:inactiveTextColor="#000"
+                app:textToggleLeft="간편\n자동응답 설정"
+                app:textToggleRight="자바스크립트\n프로그래밍"
+                app:toggleWidth="125dp" />
+
+    </FrameLayout>
+
+    <FrameLayout
+            android:id="@+id/input_name_layout"
+            android:background="@drawable/round_edittext_stroke"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="@dimen/margin_default"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginEnd="@dimen/margin_default"
+            android:layout_marginBottom="@dimen/margin_default"
+            app:layout_constraintTop_toBottomOf="@+id/ts_bot_type_layout">
+
+        <EditText
+                android:id="@+id/et_input_bot_name"
+                android:fontFamily="@font/nanumgothic"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:hint="@string/input_bot_name"
+                android:textCursorDrawable="@drawable/cursor_drawable_light_gray"
+                android:textColor="#000"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_margin="@dimen/margin_half"
+                android:background="@null" />
+
+    </FrameLayout>
+
+    <Button
+            android:id="@+id/btn_bot_add"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginEnd="@dimen/margin_default"
+            android:layout_marginBottom="@dimen/margin_half"
+            android:backgroundTint="@color/colorAccent"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"
+            android:background="@drawable/round_button_lightgray"
+            android:fontFamily="@font/nanumgothic"
+            android:text="@string/string_bot_add"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="@dimen/margin_twice"
+            android:background="@color/colorGray"
+            app:layout_constraintTop_toBottomOf="@+id/input_name_layout" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

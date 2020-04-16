@@ -3,7 +3,7 @@
 
     <item
             android:id="@+id/navigation_board"
-            android:icon="@drawable/ic_dashboard_white_24dp"
+            android:icon="@drawable/ic_dashboard_primary_24dp"
             android:title="@string/title_board"/>
 
     <item

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main_layout"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite"
+        tools:ignore="TextFields,MissingConstraints,RtlSymmetry,Autofill,LabelFor,ScrollViewSize">
+
+    <TextView
+            android:id="@+id/tv_dashboard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginTop="@dimen/margin_half"
+            android:text="@string/string_dashboard"
+            android:fontFamily="@font/poppins"
+            android:textColor="#000"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+            android:id="@+id/framelayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="#fff"
+            app:layout_constraintTop_toBottomOf="@id/tv_dashboard"
+            app:layout_constraintBottom_toTopOf="@id/bottombar"/>
+
+    <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="00.5dp"
+            android:layout_gravity="bottom"
+            android:layout_alignParentBottom="true"
+            android:background="#9e9e9e"
+            app:layout_constraintBottom_toTopOf="@id/bottombar"/>
+
+    <me.ibrahimsn.lib.SmoothBottomBar
+            android:id="@+id/bottombar"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            app:backgroundColor="#fff"
+            app:iconTint="@color/colorGray"
+            app:itemFontFamily="@font/poppins"
+            app:iconTintActive="@color/colorPrimaryDark"
+            app:indicatorColor="@color/colorLightAccent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:menu="@menu/dashboard_menu"
+            app:textColor="@color/colorPrimaryDark"
+            tools:layout_editor_absoluteX="82dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

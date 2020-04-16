@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          package="com.sungbin.kakaobot.source.hub">
+        xmlns:tools="http://schemas.android.com/tools"
+        package="com.sungbin.autoreply.bot.three">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
             android:allowBackup="true"
@@ -13,62 +15,91 @@
             android:label="@string/app_name"
             android:supportsRtl="true"
             android:theme="@style/AppTheme.NoActionBar"
+            android:requestLegacyExternalStorage="true"
             android:usesCleartextTraffic="true"
             tools:replace="android:icon">
+        <activity android:name=".view.activity.ScriptEditActivity"></activity>
         <activity
-                android:name=".view.activity.PostViewActivity"
-                android:label="@string/title_activity_board_view"
-                android:theme="@style/AppTheme.NoActionBar.NoActionBar">
-        </activity>
-        <activity
-                android:name=".view.activity.PostActivity"
-                android:label="@string/title_activity_post"
-                android:theme="@style/AppTheme.NoActionBar.NoActionBar">
-        </activity>
-        <activity
-                android:name=".view.activity.LoginActivity"
+                android:name=".view.activity.DashboardActivity"
                 android:label="@string/app_name"
                 android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-                android:name=".view.activity.MainActivity"
-                android:label="@string/app_name"/>
+                android:name=".view.sourcehub.PostViewActivity"
+                android:label="@string/title_activity_board_view"
+                android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
+        <activity
+                android:name=".view.activity.IntroActivity"
+                android:label="@string/title_activity_board_view"
+                android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
+        <activity
+                android:name=".view.activity.PermissionActivity"
+                android:label="@string/title_activity_board_view"
+                android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
+        <activity
+                android:name=".view.activity.LoginActivity"
+                android:label="@string/title_activity_board_view"
+                android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
+        <activity
+                android:name=".view.sourcehub.PostActivity"
+                android:label="@string/title_activity_post"
+                android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
+        <activity
+                android:name=".view.sourcehub.MainActivity"
+                android:label="@string/app_name" />
 
         <meta-data
                 android:name="com.samsung.android.icon_container.has_icon_container"
-                android:value="true"/>
+                android:value="true" />
         <meta-data
                 android:name="com.sec.android.support.multiwindow"
-                android:value="true"/>
+                android:value="true" />
         <meta-data
                 android:name="firebase_messaging_auto_init_enabled"
-                android:value="false"/>
+                android:value="false" />
         <meta-data
                 android:name="firebase_analytics_collection_enabled"
-                android:value="false"/>
+                android:value="false" />
         <meta-data
                 android:name="com.google.firebase.messaging.default_notification_icon"
-                android:resource="@drawable/icon"/>
+                android:resource="@drawable/icon" />
         <meta-data
                 android:name="com.google.firebase.messaging.default_notification_color"
-                android:resource="@color/colorAccent"/>
+                android:resource="@color/colorAccent" />
         <meta-data
                 android:name="com.google.firebase.messaging.default_notification_channel_id"
-                android:value="@string/app_name"/>
+                android:value="@string/app_name" />
 
         <service
                 android:name=".notification.FirebaseMessagingService"
                 android:stopWithTask="false">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+        <service
+                android:name=".listener.KakaoTalkListener"
+                android:label="@string/app_name"
+                android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+        <service
+                android:name=".listener.TileServiceListener"
+                android:icon="@drawable/icon"
+                android:label="@string/app_name"
+                android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>

@@ -6,162 +6,193 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:focusableInTouchMode="true"
-        android:layout_margin="@dimen/activity_margin"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:showIn="@layout/activity_login"
-        tools:context=".view.activity.LoginActivity"
-        tools:ignore="MissingConstraints">
+        android:background="@color/colorWhite"
+        tools:ignore="MissingConstraints,RtlSymmetry,Autofill,LabelFor">
 
     <TextView
-            android:id="@+id/welcomeCenter"
+            android:id="@+id/toolbar_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/app_name"
-            android:textColor="@android:color/black"
-            android:textSize="13sp"
+            android:layout_marginTop="@dimen/margin_default"
+            android:layout_marginStart="@dimen/margin_default"
+            android:text="@string/app_login"
+            android:fontFamily="@font/nanumgothic"
+            android:textColor="@color/colorPrimary"
+            android:textSize="40sp"
             android:textStyle="bold"
-            android:gravity="center"
-            android:visibility="visible"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            tools:visibility="invisible"/>
+            tools:layout_editor_absoluteX="16dp" />
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@id/center_layout"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible">
-
-        <TextView
-                android:id="@+id/welcomeTop"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/app_name"
-                android:textColor="@android:color/black"
-                android:textStyle="bold"
-                android:visibility="invisible"
-                android:textSize="30sp"
-                tools:visibility="visible"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <LinearLayout
+    <TextView
+            android:layout_marginTop="@dimen/margin_default"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginEnd="@dimen/margin_default"
+            android:id="@+id/desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="10"
-            android:id="@+id/center_layout"
-            android:visibility="invisible"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            tools:visibility="visible">
+            android:fontFamily="@font/nanumgothic"
+            android:text="@string/need_login_use_service"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar_title"/>
 
-        <com.google.android.material.textfield.TextInputLayout
+    <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="@dimen/margin_twice"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginEnd="@dimen/margin_default"
+            android:background="@color/colorAccent"
+            app:layout_constraintTop_toBottomOf="@+id/desc"/>
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/string_id"
+            android:textColor="#000"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/nanumgothic"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginEnd="@dimen/margin_default"
+            app:layout_constraintBottom_toTopOf="@+id/input_id_layout"
+            android:layout_marginBottom="@dimen/margin_twice_half"/>
+
+    <FrameLayout
+            android:id="@+id/input_id_layout"
+            android:background="@drawable/round_button_lightgray"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginEnd="@dimen/margin_default"
+            android:layout_marginBottom="@dimen/margin_default"
+            app:layout_constraintBottom_toTopOf="@+id/textview_pw">
+
+        <EditText
+                android:fontFamily="@font/nanumgothic"
+                android:maxLines="1"
+                android:textCursorDrawable="@drawable/cursor_drawable_light_gray"
+                android:textColor="#000"
+                android:layout_gravity="center"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/input_number_layout"
-                android:layout_weight="9"
-                app:counterMaxLength="11"
-                app:counterEnabled="true"
-                app:errorEnabled="true">
+                android:layout_height="50dp"
+                android:layout_margin="@dimen/margin_half"
+                android:background="@null"/>
 
-            <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:maxLength="11"
-                    android:id="@+id/input_number"
-                    android:hint="@string/input_number"/>
+    </FrameLayout>
 
-        </com.google.android.material.textfield.TextInputLayout>
+    <TextView
+            android:id="@+id/textview_pw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/string_password"
+            android:textColor="#000"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/nanumgothic"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginEnd="@dimen/margin_default"
+            app:layout_constraintBottom_toTopOf="@+id/input_pw_layout"
+            android:layout_marginBottom="@dimen/margin_twice_half"/>
+
+    <FrameLayout
+            android:id="@+id/input_pw_layout"
+            android:background="@drawable/round_button_lightgray"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginEnd="@dimen/margin_default"
+            android:layout_marginBottom="@dimen/margin_default"
+            app:layout_constraintBottom_toTopOf="@+id/kakao_login_layout">
+
+        <EditText
+                android:fontFamily="@font/poppins"
+                android:maxLines="1"
+                android:textCursorDrawable="@drawable/cursor_drawable_light_gray"
+                android:inputType="textPassword"
+                android:textColor="#000"
+                android:layout_gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_margin="@dimen/margin_half"
+                android:background="@null"/>
+
+    </FrameLayout>
+
+    <FrameLayout
+            android:id="@+id/kakao_login_layout"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginEnd="@dimen/margin_default"
+            android:layout_marginBottom="@dimen/margin_half"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            app:layout_constraintBottom_toTopOf="@+id/google_login_layout">
 
         <Button
+                android:textColor="#fff"
+                android:id="@+id/kakao_login_btn"
+                android:layout_width="match_parent"
+                android:fontFamily="@font/nanumgothic"
+                android:text="임시 카카오 로그인 버튼"
+                android:background="@drawable/round_button_primary"
+                android:layout_height="wrap_content" />
+
+    </FrameLayout>
+
+    <FrameLayout
+            android:id="@+id/google_login_layout"
+            android:layout_marginStart="@dimen/margin_default"
+            android:layout_marginEnd="@dimen/margin_default"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="@dimen/margin_triple_and_half"
+            app:layout_constraintBottom_toTopOf="@+id/loginLayout">
+
+        <Button
+                android:textColor="#fff"
+                android:id="@+id/google_login_btn"
+                android:layout_width="match_parent"
+                android:fontFamily="@font/nanumgothic"
+                android:text="임시 구글 로그인 버튼"
+                android:background="@drawable/round_button_primary"
+                android:layout_height="wrap_content" />
+
+    </FrameLayout>
+
+    <RelativeLayout
+            android:id="@+id/loginLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:paddingTop="@dimen/margin_half"
+            android:paddingStart="@dimen/margin_default"
+            android:paddingEnd="@dimen/margin_default"
+            android:paddingBottom="@dimen/margin_half"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+                android:fontFamily="@font/nanumgothic"
+                android:layout_centerVertical="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/send_check_number"
-                android:text="@string/send_check_number"
-                android:textColor="@android:color/white"
-                android:background="@drawable/round_button"
-                android:layout_weight="1"/>
+                android:text="@string/copyright"
+                android:textColor="#fff"/>
+        
+        <Button
+                android:fontFamily="@font/nanumgothic"
+                android:gravity="center"
+                android:textColor="@color/colorPrimary"
+                android:id="@+id/btn_login"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                app:elevation="0dp"
+                android:elevation="0dp"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/login_button_design"
+                android:text="@string/string_login" />
 
-    </LinearLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/center_layout_below"
-            android:layout_marginTop="@dimen/margin_half"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="invisible"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/center_layout"
-            app:counterEnabled="true"
-            app:counterMaxLength="6"
-            app:errorEnabled="true"
-            tools:visibility="visible">
-
-        <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/input_check_number"
-                android:maxLength="6"
-                android:inputType="number"
-                android:hint="@string/input_check_number"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/nickname_layout"
-            android:layout_marginTop="@dimen/margin_half"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="invisible"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/center_layout_below"
-            app:counterEnabled="true"
-            app:counterMaxLength="11"
-            app:errorEnabled="true"
-            tools:visibility="visible">
-
-        <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/input_nickname"
-                android:maxLength="11"
-                android:hint="@string/string_nickname"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <Button
-            android:id="@+id/input_done"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/round_button"
-            android:text="@string/input_complete"
-            android:visibility="invisible"
-            android:textColor="@android:color/white"
-            android:layout_marginTop="@dimen/margin_half"
-            app:layout_constraintTop_toBottomOf="@+id/nickname_layout"
-            tools:visibility="visible"/>
-
-    <TextView
-            android:id="@+id/copyright"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="invisible"
-            android:text="@string/copyright"
-            android:textColor="#9e9e9e"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            tools:visibility="visible"/>
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,7 +9,7 @@
         android:id="@+id/main_view"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:showIn="@layout/activity_board_view"
-        tools:context=".view.activity.PostViewActivity"
+        tools:context=".view.sourcehub.PostViewActivity"
         tools:ignore="NestedWeights, RtlSymmetry">
 
     <FrameLayout android:layout_width="match_parent"

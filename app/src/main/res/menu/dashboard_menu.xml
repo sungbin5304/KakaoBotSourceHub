@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+            android:id="@+id/dashboard"
+            android:title="@string/string_dashboard"
+            android:icon="@drawable/ic_dashboard_primary_24dp"/>
+
+    <item
+            android:id="@+id/sandbox"
+            android:title="@string/string_sandbox"
+            android:icon="@drawable/ic_sandbox_primary_24dp"/>
+
+    <item
+            android:id="@+id/add"
+            android:title="@string/string_bot"
+            android:icon="@drawable/ic_add_circle_outline_primary_24dp"/>
+
+    <item
+            android:id="@+id/hub"
+            android:title="@string/string_hub"
+            android:icon="@drawable/ic_hub_icon_white_24dp"/>
+
+    <item
+            android:id="@+id/setting"
+            android:title="@string/string_setting"
+            android:icon="@drawable/ic_settings_primary_24dp"/>
+
+</menu>

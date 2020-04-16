@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/margin_half"
+        android:layout_marginStart="@dimen/margin_default"
+        android:layout_marginEnd="@dimen/margin_default"
+        android:layout_marginBottom="@dimen/margin_half"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <Switch
+            android:fontFamily="@font/nanumgothic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/isEvalMode"
+            android:text="@string/mode_eval"/>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/isEvalMode"
+            android:id="@+id/inputLayout"
+            android:weightSum="2"
+            android:orientation="horizontal">
+
+        <EditText
+                android:fontFamily="@font/nanumgothic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/roomName"
+                android:text="@string/string_debug_room"
+                android:hint="@string/string_room"
+                android:importantForAutofill="no"
+                android:inputType="text" />
+
+        <EditText
+                android:fontFamily="@font/nanumgothic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/senderName"
+                android:text="@string/string_debug_sender"
+                android:hint="@string/string_sender"
+                android:importantForAutofill="no"
+                android:inputType="text" />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/debugView"
+            android:overScrollMode="never"
+            android:layoutAnimation="@anim/layout_animation"
+            android:layout_below="@id/inputLayout"
+            android:layout_above="@id/sendLayout"/>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/sendLayout"
+            android:layout_alignParentBottom="true"
+            android:weightSum="5">
+
+        <EditText
+                android:fontFamily="@font/nanumgothic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/string_input"
+                android:id="@+id/input"
+                android:layout_weight="1"/>
+
+        <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/string_send"
+                android:background="@null"
+                android:tint="@color/colorPrimary"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:id="@+id/send"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_send_white_24dp"
+                android:layout_weight="4" />
+
+    </LinearLayout>
+
+</RelativeLayout>

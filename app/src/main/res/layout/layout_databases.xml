@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:focusableInTouchMode="true"
+        tools:ignore="ContentDescription,Useless,ButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginBottom="@dimen/margin_twice_half"
+        android:layout_marginEnd="1dp"
+        android:elevation="0dp"
+        app:elevation="0dp"
+        app:cardElevation="1dp"
+        app:cardBackgroundColor="@color/colorTwiceLightGray"
+        app:cardCornerRadius="8dp">
+
+    <LinearLayout
+            android:layout_margin="@dimen/margin_twice_half"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:focusableInTouchMode="true"
+            tools:ignore="ContentDescription,Useless,ButtonStyle">
+
+        <ImageView
+                android:layout_gravity="center"
+                android:tint="@color/colorYellow"
+                android:src="@drawable/ic_adb_white_24dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/iv_icon" />
+
+        <LinearLayout
+                android:layout_marginTop="@dimen/margin_twice_half"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+            <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/string_databases"
+                    android:maxLength="12"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/nanumgothic"/>
+
+            <TextView
+                    android:id="@+id/tv_size"
+                    android:layout_marginTop="@dimen/margin_twice_half"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorGray"
+                    android:text="@string/database_size_preview"
+                    android:fontFamily="@font/poppins"
+                    android:layout_marginEnd="@dimen/margin_default"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+                android:layout_marginEnd="@dimen/margin_half"
+                android:gravity="end|bottom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+            <Button
+                    android:textAllCaps="false"
+                    android:id="@+id/btn_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:fontFamily="@font/poppins"
+                    android:textColor="#fff"
+                    android:elevation="8dp"
+                    app:elevation="8dp"
+                    android:text="@string/string_view"
+                    android:background="@drawable/round_button_primary"/>
+
+            <Button
+                    android:textAllCaps="false"
+                    android:id="@+id/btn_remove"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:fontFamily="@font/poppins"
+                    android:textColor="#fff"
+                    android:text="@string/string_remove"
+                    android:layout_marginStart="@dimen/margin_half"
+                    android:elevation="8dp"
+                    app:elevation="8dp"
+                    android:background="@drawable/round_button_pink" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>

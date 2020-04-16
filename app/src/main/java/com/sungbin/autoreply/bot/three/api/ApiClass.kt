@@ -1,6 +1,8 @@
 package com.sungbin.autoreply.bot.three.api
 
 import android.annotation.SuppressLint
+import android.util.Log
+import com.sungbin.autoreply.bot.three.utils.LogUtils
 import com.sungbin.autoreply.bot.three.utils.RhinoUtils
 import com.sungbin.autoreply.bot.three.utils.StackUtils
 import com.sungbin.sungbintool.StorageUtils
@@ -19,32 +21,53 @@ object ApiClass {
             @SuppressLint("SimpleDateFormat")
             @JvmStatic
             @JSStaticFunction
-            fun d(log: String?) {
+            fun d(name: String, content: String) {
                 val now = System.currentTimeMillis()
                 val date = Date(now)
                 val sdf = SimpleDateFormat("hh:mm:ss")
                 val time = sdf.format(date)
 
-                /*String pre = com.sungbin.reply.bot.utils.Utils.readData(ctx, "Log/"+scriptName, "");
-                String new_ = pre + "\n<font color=green>["+time+"] "+log+"</font>";*/
+                LogUtils.save(name, content, time, LogUtils.Type.DEBUG)
             }
 
             @SuppressLint("SimpleDateFormat")
             @JvmStatic
             @JSStaticFunction
-            fun e(log: String?) {
+            fun e(name: String, content: String) {
                 val now = System.currentTimeMillis()
                 val date = Date(now)
                 val sdf = SimpleDateFormat("hh:mm:ss")
-                val getTime = sdf.format(date)
+                val time = sdf.format(date)
 
-                /*String pre = com.sungbin.reply.bot.utils.Utils.readData(ctx, "Log/"+scriptName, "");
-            String new_ = pre + "\n<font color=red>["+getTime+"] "+log+"</font>";
-
-                com.sungbin.reply.bot.utils.Utils.saveData(ctx, "Log/"+scriptName, new_);*/
+                LogUtils.save(name, content, time, LogUtils.Type.ERROR)
             }
+
+            @SuppressLint("SimpleDateFormat")
+            @JvmStatic
+            @JSStaticFunction
+            fun i(name: String, content: String) {
+                val now = System.currentTimeMillis()
+                val date = Date(now)
+                val sdf = SimpleDateFormat("hh:mm:ss")
+                val time = sdf.format(date)
+
+                LogUtils.save(name, content, time, LogUtils.Type.INFO)
+            }
+
+            @SuppressLint("SimpleDateFormat")
+            @JvmStatic
+            @JSStaticFunction
+            fun s(name: String, content: String) {
+                val now = System.currentTimeMillis()
+                val date = Date(now)
+                val sdf = SimpleDateFormat("hh:mm:ss")
+                val time = sdf.format(date)
+
+                LogUtils.save(name, content, time, LogUtils.Type.SUCCESS)
+            }
+
         }
-    }
+   }
 
     class AppData : ScriptableObject() {
         override fun getClassName(): String {
@@ -54,37 +77,37 @@ object ApiClass {
         companion object {
             @JvmStatic
             @JSStaticFunction
-            fun putInt(name: String?, value: Int) {
+            fun putInt(name: String, value: Int) {
                 com.sungbin.autoreply.bot.three.api.AppData.putInt(name, value)
             }
 
             @JvmStatic
             @JSStaticFunction
-            fun putString(name: String?, value: String?) {
+            fun putString(name: String, value: String) {
                 com.sungbin.autoreply.bot.three.api.AppData.putString(name, value)
             }
 
             @JvmStatic
             @JSStaticFunction
-            fun putBoolean(name: String?, value: Boolean) {
+            fun putBoolean(name: String, value: Boolean) {
                 com.sungbin.autoreply.bot.three.api.AppData.putBoolean(name, value)
             }
 
             @JvmStatic
             @JSStaticFunction
-            fun getInt(name: String?, value: Int): Int {
+            fun getInt(name: String, value: Int): Int {
                 return com.sungbin.autoreply.bot.three.api.AppData.getInt(name, value)
             }
 
             @JvmStatic
             @JSStaticFunction
-            fun getString(name: String?, value: String?): String? {
+            fun getString(name: String, value: String): String? {
                 return com.sungbin.autoreply.bot.three.api.AppData.getString(name, value)
             }
 
             @JvmStatic
             @JSStaticFunction
-            fun getBoolean(name: String?, value: Boolean): Boolean {
+            fun getBoolean(name: String, value: Boolean): Boolean {
                 return com.sungbin.autoreply.bot.three.api.AppData.getBoolean(name, value)
             }
 
@@ -96,7 +119,7 @@ object ApiClass {
 
             @JvmStatic
             @JSStaticFunction
-            fun remove(name: String?) {
+            fun remove(name: String) {
                 com.sungbin.autoreply.bot.three.api.AppData.remove(name)
             }
         }
@@ -117,8 +140,8 @@ object ApiClass {
 
             @JvmStatic
             @JSStaticFunction
-            fun getHtml(link: String?): String? {
-                return com.sungbin.autoreply.bot.three.api.Api.getHtmlFromJava(link!!)
+            fun getHtml(link: String, fromJsoup: Boolean = true): String? {
+                return com.sungbin.autoreply.bot.three.api.Api.getHtmlFromJava(link)
             }
 
             /*@JvmStatic
@@ -129,8 +152,8 @@ object ApiClass {
 
             @JvmStatic
             @JSStaticFunction
-            public static Boolean replyRoom(String room, String mesesage){
-                return com.sungbin.autoreply.bot.three.api.Api.replyRoom(room, mesesage);
+            public static Boolean replyRoom(String room, String message){
+                return com.sungbin.autoreply.bot.three.api.Api.replyRoom(room, message);
             }
 
             @JvmStatic
@@ -141,35 +164,8 @@ object ApiClass {
 
             @JvmStatic
             @JSStaticFunction
-            fun deleteHtml(html: String?): String {
+            fun deleteHtml(html: String): String {
                 return com.sungbin.autoreply.bot.three.api.Api.deleteHtml(html)
-            }
-        }
-    }
-
-    class
-    Clock : ScriptableObject() {
-        override fun getClassName(): String {
-            return "Clock"
-        }
-
-        companion object {
-            @JvmStatic
-            @JSStaticFunction
-            fun normal(isFull: Boolean): String {
-                return com.sungbin.autoreply.bot.three.api.Clock.normal(isFull)
-            }
-
-            @JvmStatic
-            @JSStaticFunction
-            fun digital(isFull: Boolean): String {
-                return com.sungbin.autoreply.bot.three.api.Clock.digital(isFull)
-            }
-
-            @JvmStatic
-            @JSStaticFunction
-            fun analog(): String {
-                return com.sungbin.autoreply.bot.three.api.Clock.analog()
             }
         }
     }
@@ -212,7 +208,7 @@ object ApiClass {
         }
     }
 
-    class Bridge : ScriptableObject() {
+    class Scope : ScriptableObject() {
         override fun getClassName(): String {
             return "Bridge"
         }
@@ -226,35 +222,35 @@ object ApiClass {
         }
     }
 
-    class FileStream : ScriptableObject() {
+    class File : ScriptableObject() {
         override fun getClassName(): String {
-            return "FileStream"
+            return "File"
         }
 
         companion object {
             @JvmStatic
             @JSStaticFunction
-            fun read(path: String?, _null: String): String {
-                return read(path!!, _null)
+            fun read(path: String, _null: String): String {
+                return StorageUtils.read(path, _null)
             }
 
             @JvmStatic
             @JSStaticFunction
-            fun write(path: String?, content: String?) {
-                StorageUtils.save(path!!, content!!)
+            fun write(path: String, content: String) {
+                StorageUtils.save(path, content)
             }
 
             @JvmStatic
             @JSStaticFunction
-            fun append(path: String?, content: String) {
-                val string = "${read(path, "")}\n$content"
-                append(path, string)
+            fun append(path: String, content: String) {
+                val string = "${StorageUtils.read(path, "")}\n$content"
+                write(path, string)
             }
 
             @JvmStatic
             @JSStaticFunction
-            fun remove(path: String?) {
-                StorageUtils.delete(path!!)
+            fun remove(path: String) {
+                StorageUtils.delete(path)
             }
         }
     }
@@ -279,26 +275,26 @@ object ApiClass {
 
             @JvmStatic
             @JSStaticFunction
-            fun addRoom(room: String?) {
+            fun addRoom(room: String) {
                 com.sungbin.autoreply.bot.three.api.Black.addRoom(room)
             }
 
             @JvmStatic
             @JSStaticFunction
-            fun addSender(sender: String?) {
+            fun addSender(sender: String) {
                 com.sungbin.autoreply.bot.three.api.Black.addSender(sender)
             }
 
             @JvmStatic
             @JSStaticFunction
-            fun removeRoom(room: String?) {
+            fun removeRoom(room: String) {
                 com.sungbin.autoreply.bot.three.api.Black.removeRoom(room)
             }
 
             @JvmStatic
             @JSStaticFunction
-            fun removeSender(sender: String?) {
-                com.sungbin.autoreply.bot.three.api.Black.addSender(sender)
+            fun removeSender(sender: String) {
+                com.sungbin.autoreply.bot.three.api.Black.removeSender(sender)
             }
         }
     }
@@ -311,25 +307,19 @@ object ApiClass {
         companion object {
             @JvmStatic
             @JSStaticFunction
-            fun makeToast(str: String?) {
-                com.sungbin.autoreply.bot.three.api.Utils.makeToast(str)
+            fun makeToast(content: String) {
+                com.sungbin.autoreply.bot.three.api.Utils.makeToast(content)
             }
 
             @JvmStatic
             @JSStaticFunction
-            fun makeNoti(title: String?, content: String?) {
-                com.sungbin.autoreply.bot.three.api.Utils.makeNoti(title!!, content!!)
+            fun makeNoti(title: String, content: String) {
+                com.sungbin.autoreply.bot.three.api.Utils.makeNoti(title, content)
             }
 
             @JvmStatic
             @JSStaticFunction
-            fun getWebText(link: String?): String? {
-                return com.sungbin.autoreply.bot.three.api.Api.getHtmlFromJsoup(link!!)
-            }
-
-            @JvmStatic
-            @JSStaticFunction
-            fun getHtml(link: String): String {
+            fun getHtml(link: String, fromJsoup: Boolean = true): String? {
                 return com.sungbin.autoreply.bot.three.api.Api.getHtmlFromJava(link).toString()
             }
 
@@ -341,7 +331,7 @@ object ApiClass {
 
             @JvmStatic
             @JSStaticFunction
-            fun copy(content: String?) {
+            fun copy(content: String) {
                 com.sungbin.autoreply.bot.three.api.Utils.copy(content)
             }
         }

@@ -31,9 +31,12 @@ import com.sungbin.autoreply.bot.three.dto.DatabaseListItem
 import com.sungbin.autoreply.bot.three.dto.LogListItem
 import com.sungbin.autoreply.bot.three.dto.ScriptListItem
 import com.sungbin.autoreply.bot.three.utils.BotPowerUtils
+import com.sungbin.autoreply.bot.three.utils.LogUtils
 import com.sungbin.autoreply.bot.three.view.activity.DashboardActivity
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import java.io.File
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 @Suppress("DEPRECATED_IDENTITY_EQUALS")
@@ -110,6 +113,7 @@ class DashboardFragment : Fragment() {
                 .playOn(btn_script_search)
         }
 
+        val sdcard = Environment.getExternalStorageDirectory().absolutePath
         val layoutManagerHorizontal =
             LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         val layoutManagerVertical =
@@ -117,30 +121,50 @@ class DashboardFragment : Fragment() {
         val layoutManagerVertical2 =
             LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
 
-        val sdcard = Environment.getExternalStorageDirectory().absolutePath
+        val scriptItem = ArrayList<ScriptListItem>()
+        val logItem = ArrayList<LogListItem>()
+        val databaseItem = ArrayList<DatabaseListItem>()
+
         val jsPath = "$sdcard/AutoReply Bot/Bots/JavaScript/"
-        val jsList = File(jsPath).listFiles()
         val simplePath = "$sdcard/AutoReply Bot/Bots/AutoReply/"
+        val logPath = "$sdcard/AutoReply Bot/Log/"
+
+        val jsList = File(jsPath).listFiles()
         val simpleList = File(simplePath).listFiles()
-        val scriptList = ArrayList<ScriptListItem>()
+        val logList = File(logPath).listFiles()
 
         if (simpleList != null) {
-            for (i in simpleList.indices) {
-                val name = simpleList[i].name
+            for (element in simpleList) {
+                val name = element.name
                 val onOff = BotPowerUtils.getIsOn(context!!, name)
-                scriptList.add(ScriptListItem(name, onOff, 1, "마지막작동: 없음", R.drawable.ic_textsms_blue_24dp))
+                scriptItem.add(ScriptListItem(name, onOff, 1, "마지막작동: ??", R.drawable.ic_textsms_blue_24dp))
             }
         }
         if (jsList != null) {
-            for (i in jsList.indices) {
-                val name = jsList[i].name
+            for (element in jsList) {
+                val name = element.name
                 val onOff = BotPowerUtils.getIsOn(context!!, name)
-                scriptList.add(ScriptListItem(name, onOff, 0, "마지막작동: 없음", R.drawable.ic_javascript))
+                scriptItem.add(ScriptListItem(name, onOff, 0, "마지막작동: ??", R.drawable.ic_javascript))
+            }
+        }
+        if (logList != null) {
+            Collections.sort(logList.asList(), kotlin.Comparator { t, t2 ->
+                return@Comparator t2.lastModified().compareTo(t.lastModified())
+            })
+
+            for (i in logList.indices) {
+                if(i >= 2) break
+                val name = logList[i].name
+                val content = LogUtils.get(name, "content")
+                val time = LogUtils.get(name, "time")
+                val type = LogUtils.get(name, "type")
+                val item = LogListItem(name, time, content, type)
+                logItem.add(item)
+                Log.d("SIZE", i.toString())
             }
         }
 
-        if((simpleList == null && jsList == null) ||
-            (simpleList!!.isEmpty() && jsList!!.isEmpty())){
+        if (scriptItem.isEmpty()) {
             scriptsNoneTv!!.visibility = View.VISIBLE
             scriptsRc!!.visibility = View.INVISIBLE
         }
@@ -148,27 +172,34 @@ class DashboardFragment : Fragment() {
             scriptsNoneTv!!.visibility = View.INVISIBLE
             scriptsRc!!.visibility = View.VISIBLE
         }
+        if (logItem.isEmpty()) {
+            logsNoneTv!!.visibility = View.VISIBLE
+            logsRc!!.visibility = View.INVISIBLE
+        }
+        else {
+            logsNoneTv!!.visibility = View.INVISIBLE
+            logsRc!!.visibility = View.VISIBLE
+        }
+        if (databaseItem.isEmpty()){
+            databasesNoneTv!!.visibility = View.VISIBLE
+            databasesRc!!.visibility = View.INVISIBLE
+        }
+        else {
+            databasesNoneTv!!.visibility = View.INVISIBLE
+            databasesRc!!.visibility = View.VISIBLE
+        }
 
-        logsNoneTv!!.visibility = View.VISIBLE
-        logsRc!!.visibility = View.INVISIBLE
-        databasesNoneTv!!.visibility = View.VISIBLE
-        databasesRc!!.visibility = View.INVISIBLE
-
-        val scriptListAdapter = ScriptListAdapter(scriptList, activity!!)
+        val scriptListAdapter = ScriptListAdapter(scriptItem, activity!!)
         scriptsRc!!.layoutManager = layoutManagerHorizontal
         scriptsRc!!.adapter = scriptListAdapter
         scriptsRc!!.addItemDecoration(ListDecoration()) //아이템 간격
 
-        val logList = arrayListOf(LogListItem("Name", "log", "dd", 0))
-        logList.add(LogListItem("LogName", "This is log", "dd", 0))
-        val logListAdapter = LogListAdapter(logList, activity!!)
+        val logListAdapter = LogListAdapter(logItem, activity!!)
         logsRc!!.layoutManager = layoutManagerVertical
         logsRc!!.adapter = logListAdapter
         logsRc!!.addItemDecoration(DividerItemDecoration(activity!!, 1)) //아이템 구분선
 
-        val databaseList = arrayListOf(DatabaseListItem("Name", "0 MB"))
-        databaseList.add(DatabaseListItem("Database", "2 MB"))
-        val databaseListAdapter = DatabaseListAdapter(databaseList, activity!!)
+        val databaseListAdapter = DatabaseListAdapter(databaseItem, activity!!)
         databasesRc!!.layoutManager = layoutManagerVertical2
         databasesRc!!.adapter = databaseListAdapter
 

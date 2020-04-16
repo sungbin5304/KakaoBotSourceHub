@@ -42,11 +42,9 @@ class DashboardActivity  : AppCompatActivity() {
 
             StorageUtils.createFolder("AutoReply Bot/Bots/AutoReply")
             StorageUtils.createFolder("AutoReply Bot/Bots/JavaScript")
-            StorageUtils.createFolder("Android/data/com.sungbin.autoreply.bot.three/information/autoreply/desc")
-            StorageUtils.createFolder("Android/data/com.sungbin.autoreply.bot.three/information/javascript/desc")
+            StorageUtils.createFolder("AutoReply Bot/Bots/Log")
 
             val title = findViewById<TextView>(R.id.tv_dashboard)
-
             fragmentManager.beginTransaction().add(R.id.framelayout, DashboardFragment()).commit()
             bottombar.onItemSelected = {
                 val fragmentTransaction = fragmentManager.beginTransaction()

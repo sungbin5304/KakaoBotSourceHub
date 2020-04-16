@@ -8,7 +8,7 @@ object AppData {
         ctx = context
     }
 
-    fun getInt(name: String?, _null: Int): Int {
+    fun getInt(name: String, _null: Int): Int {
         val sf =
             ctx!!.getSharedPreferences(
                 "AppData",
@@ -17,7 +17,7 @@ object AppData {
         return sf.getInt(name, _null)
     }
 
-    fun getBoolean(name: String?, _null: Boolean): Boolean {
+    fun getBoolean(name: String, _null: Boolean): Boolean {
         val sf =
             ctx!!.getSharedPreferences(
                 "AppData",
@@ -26,7 +26,7 @@ object AppData {
         return sf.getBoolean(name, _null)
     }
 
-    fun getString(name: String?, _null: String?): String? {
+    fun getString(name: String, _null: String): String? {
         val sf =
             ctx!!.getSharedPreferences(
                 "AppData",
@@ -35,7 +35,7 @@ object AppData {
         return sf.getString(name, _null)
     }
 
-    fun putString(name: String?, data: String?) {
+    fun putString(name: String, data: String) {
         val sharedPreferences =
             ctx!!.getSharedPreferences(
                 "AppData",
@@ -46,7 +46,7 @@ object AppData {
         editor.apply()
     }
 
-    fun putInt(name: String?, data: Int) {
+    fun putInt(name: String, data: Int) {
         val sharedPreferences =
             ctx!!.getSharedPreferences(
                 "AppData",
@@ -57,7 +57,7 @@ object AppData {
         editor.apply()
     }
 
-    fun putBoolean(name: String?, data: Boolean?) {
+    fun putBoolean(name: String, data: Boolean?) {
         val sharedPreferences =
             ctx!!.getSharedPreferences(
                 "AppData",

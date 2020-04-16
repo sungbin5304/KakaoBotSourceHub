@@ -15,6 +15,7 @@ import android.widget.Switch
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.github.zawadz88.materialpopupmenu.popupMenu
 import com.google.android.material.snackbar.Snackbar
@@ -32,6 +33,7 @@ class ScriptListAdapter(private val list: ArrayList<ScriptListItem>?, private va
     RecyclerView.Adapter<ScriptListAdapter.ScriptListViewHolder>() {
 
     private var ctx: Context? = null
+    private var beforeDeleteIndex = -1
     private var beforeDeleteSource = ""
     private var beforeDeleteItem: ScriptListItem? = null
 
@@ -154,6 +156,7 @@ class ScriptListAdapter(private val list: ArrayList<ScriptListItem>?, private va
                         icon = R.drawable.ic_delete_white_24dp
                         callback = {
                             beforeDeleteItem = list[position]
+                            beforeDeleteIndex = list.indexOf(beforeDeleteItem!!)
                             beforeDeleteSource = StorageUtils.read("AutoReply Bot/Bots/JavaScript/$name.js",
                                 """
                             function response(room, msg, sender, isGroupChat, replier, ImageDB, package) {
@@ -175,12 +178,14 @@ class ScriptListAdapter(private val list: ArrayList<ScriptListItem>?, private va
                                 .setActionTextColor(ContextCompat.getColor(ctx!!, R.color.colorPrimaryDark))
                                 .setAction("되돌리기") {
                                     StorageUtils.save("AutoReply Bot/Bots/JavaScript/$name.js", beforeDeleteSource)
-                                    list.add(beforeDeleteItem!!)
+                                    list.add(beforeDeleteIndex, beforeDeleteItem!!)
                                     notifyDataSetChanged()
                                 }
                             bar.view.setBackgroundColor(ContextCompat.getColor(ctx!!, R.color.colorAccent))
                             bar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
-                                .typeface = createFromAsset(act.assets, "nanumgothic.ttf")
+                                .typeface = ResourcesCompat.getFont(ctx!!, R.font.nanumgothic)
+                            bar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_action)
+                                .typeface = ResourcesCompat.getFont(ctx!!, R.font.nanumgothic)
                             bar.show()
                         }
                     }

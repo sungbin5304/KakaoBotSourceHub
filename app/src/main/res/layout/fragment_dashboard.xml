@@ -65,8 +65,7 @@
         </FrameLayout>
 
         <TextView
-                tools:visibility="visible"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:fontFamily="@font/nanumgothic"
                 android:id="@+id/tv_script_none"
                 android:text="@string/add_script_none"
@@ -81,7 +80,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_scripts" />
 
         <androidx.recyclerview.widget.RecyclerView
-                tools:visibility="invisible"
+                android:visibility="invisible"
                 android:overScrollMode="never"
                 android:id="@+id/rc_script"
                 android:layout_width="match_parent"
@@ -119,8 +118,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/rc_script"  />
 
         <TextView
-                tools:visibility="visible"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:fontFamily="@font/nanumgothic"
                 android:id="@+id/tv_log_none"
                 android:text="@string/add_log_none"
@@ -137,7 +135,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tv_logs" />
 
         <androidx.recyclerview.widget.RecyclerView
-                tools:visibility="invisible"
+                android:visibility="invisible"
                 android:overScrollMode="never"
                 android:id="@+id/rc_logs"
                 android:layout_width="match_parent"
@@ -178,8 +176,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/rc_logs"  />
 
         <TextView
-                tools:visibility="visible"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:fontFamily="@font/nanumgothic"
                 android:id="@+id/tv_database_none"
                 android:text="@string/add_database_none"

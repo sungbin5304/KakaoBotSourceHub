@@ -75,7 +75,6 @@ class KakaoTalkListener : NotificationListenerService() {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         super.onNotificationPosted(sbn)
-        if (!DataUtils.readData(ctx!!, "OnOff", "true").toBoolean()) return
         var packageList = DataUtils.readData(
             ctx!!, "PackageList", "com.kakao.talk")
         if (StringUtils.isBlank(packageList)) packageList = "com.kakao.talk"
@@ -399,10 +398,9 @@ class KakaoTalkListener : NotificationListenerService() {
                 ScriptableObject.defineClass(scope, ApiClass.Log::class.java, false, true)
                 ScriptableObject.defineClass(scope, ApiClass.AppData::class.java, false, true)
                 ScriptableObject.defineClass(scope, ApiClass.Api::class.java, false, true)
-                ScriptableObject.defineClass(scope, ApiClass.Clock::class.java, false, true)
                 ScriptableObject.defineClass(scope, ApiClass.Device::class.java, false, true)
-                ScriptableObject.defineClass(scope, ApiClass.Bridge::class.java, false, true)
-                ScriptableObject.defineClass(scope, ApiClass.FileStream::class.java, false, true)
+                ScriptableObject.defineClass(scope, ApiClass.Scope::class.java, false, true)
+                ScriptableObject.defineClass(scope, ApiClass.File::class.java, false, true)
                 ScriptableObject.defineClass(scope, ApiClass.Black::class.java, false, true)
                 ScriptableObject.defineClass(scope, ApiClass.Utils::class.java, false, true)
                 val script = parseContext.compileReader(FileReader(scriptFile), name, 0, null)

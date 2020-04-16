@@ -48,8 +48,10 @@ replier.replyShowAll(room: String, msg1: String, msg2: String) //In a room calle
 ImageDB.getProfileImage() //Encodes the profile picture of the other person who received the message in KakaoTalk as Base64 and returns it.
 ImageDB.getPicture() //Encodes the last photo received in KakaoTalk as Base64 and returns. (Default : null)
 
-※ If you use replier.reply(ImageDB.getPicture()), the error data parcel size ~~~ bytes may occur.
-In this case, the base64 value of the picture is too long and it is an error in the process of sending it to Kakao Talk, so if you receive Base64 as a small photo and send it, it will work.
+/*
+If you use replier.reply(ImageDB.getPicture()), the error data parcel size ~~~ bytes may occur.
+In this case, the base64 value of the picture is too long and it is an error in the process of sending it to KakaoTalk, so if you receive Base64 as a small photo and send it, it will work.
+*/
 ```
 
 ## JavaScript Example

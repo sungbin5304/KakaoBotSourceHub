@@ -39,16 +39,16 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, package) {
 ## 메인함수 인자  설명
 ```js
 @replier
-replier.reply(String msg) //Sends msg.
-replier.reply (String room, String msg) //Send msg to the room named room.
-replier.replyShowAll (String msg1, String msg2) //msg1 is visible and msg2 is sent visible only when the full view button is pressed.
-replier.replyShowAll (String room, String msg1, String msg2) //In a room called room, msg1 is just visible, and msg2 is sent to be visible only when the full view button is pressed.
+replier.reply(msg: String) //Sends msg.
+replier.reply (room: String, msg: String) //Send msg to the room named room.
+replier.replyShowAll(msg1: String, msg2: String) //msg1 is visible and msg2 is sent visible only when the full view button is pressed.
+replier.replyShowAll(room: String, msg1: String, msg2: String) //In a room called room, msg1 is just visible, and msg2 is sent to be visible only when the full view button is pressed.
 
 @ImageDB
 ImageDB.getProfileImage() //Encodes the profile picture of the other person who received the message in KakaoTalk as Base64 and returns it.
 ImageDB.getPicture() //Encodes the last photo received in KakaoTalk as Base64 and returns. (Default : null)
 
-※ If you use refler.reply (ImageDB.getPicture(), the error data parcel size~~~ bytes may occur.
+※ If you use replier.reply(ImageDB.getPicture()), the error data parcel size~~~ bytes may occur.
 In this case, the base64 value of the picture is too long and it is an error in the process of sending it to Kakao Talk, so if you receive Base64 as a small photo and send it, it will work.
 ```
 

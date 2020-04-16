@@ -2,17 +2,17 @@
   <img src="https://raw.githubusercontent.com/sungbin5304/KakaoTalkBotHub/master/banner.png">
 </p>
 
-## Description
+# Description
 KakaotalkBotHub is an application that supports KakaoTalk Bot and Hub(similar to a GitHub) for KakaoTalk Bot.<br>
 Bot production methods include programming in JavaScript and setting simple keyword auto-response.
 
-## Preview Images
+# Preview Images
 Preparing...
 
-## Devloper
+# Devloper
 ![Image](https://raw.githubusercontent.com/sungbin5304/NewAutoReplyBot-Helper/master/IMAGE/sungbin.png)
 
-## Main Function
+# Main Function
 ``` JavaScript
 function response(room, msg, sender, isGroupChat, replier, ImageDB, package) {
   /*
@@ -26,7 +26,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, package) {
 }
 ```
 
-## Main Function Argument Description
+# Main Function Argument Description
 ```js
 @replier
 replier.reply(msg: String) //Sends msg.

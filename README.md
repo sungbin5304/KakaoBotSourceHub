@@ -1,8 +1,6 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/sungbin5304/KakaoBotSourceHub/master/IMAGE/icon.png" width="300" height="300">
+  <img src="https://raw.githubusercontent.com/sungbin5304/KakaoTalkBotHub/master/banner.png">
 </p>
-
------
 
 ## 설명
 새자봇(새로운 자동응답 봇)은 메신저 자동 답장 봇 입니다.<br>

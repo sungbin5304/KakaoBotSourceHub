@@ -1,6 +1,7 @@
 package com.sungbin.autoreply.bot.three.utils
 
 import android.annotation.SuppressLint
+import com.faendir.rhino_android.RhinoAndroidHelper
 import com.sungbin.autoreply.bot.three.api.*
 import com.sungbin.autoreply.bot.three.api.Utils
 import com.sungbin.autoreply.bot.three.listener.KakaoTalkListener
@@ -26,11 +27,13 @@ class RhinoUtils constructor(context: android.content.Context) {
         Device.init(ctx)
         Utils.init(ctx)
         Black.init(ctx)
+        ApiClass.setContext(ctx)
     }
 
     fun runJs(source: String): String{
         return try {
-            val rhino: Context = Context.enter()
+            val rhino: Context = RhinoAndroidHelper().enterContext()
+            rhino.wrapFactory = PrimitiveWrapFactory()
             rhino.languageVersion =  Context.VERSION_ES6
             rhino.optimizationLevel = -1
             val scope: Scriptable = rhino.initSafeStandardObjects()

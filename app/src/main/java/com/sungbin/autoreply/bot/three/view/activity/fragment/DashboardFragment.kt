@@ -149,7 +149,7 @@ class DashboardFragment : Fragment() {
         }
         if (logList != null) {
             Collections.sort(logList.asList(), kotlin.Comparator { t, t2 ->
-                return@Comparator t2.lastModified().compareTo(t.lastModified())
+                return@Comparator t.lastModified().compareTo(t2.lastModified())
             })
 
             for (i in logList.indices) {

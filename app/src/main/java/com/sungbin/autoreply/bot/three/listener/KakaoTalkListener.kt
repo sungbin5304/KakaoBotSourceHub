@@ -60,10 +60,11 @@ class KakaoTalkListener : NotificationListenerService() {
 
         com.sungbin.autoreply.bot.three.api.AppData.init(ctx)
         com.sungbin.autoreply.bot.three.api.Api.init(ctx)
-        com.sungbin.autoreply.bot.three.api.Api.init(ctx)
         com.sungbin.autoreply.bot.three.api.Device.init(ctx)
         com.sungbin.autoreply.bot.three.api.Utils.init(ctx)
         com.sungbin.autoreply.bot.three.api.Black.init(ctx)
+
+        ApiClass.setContext(ctx!!)
     }
 
     override fun onDestroy() {
@@ -381,83 +382,83 @@ class KakaoTalkListener : NotificationListenerService() {
         private var ctx: Context? = null
 
         fun initializeJavaScript(string: String): String? {
+                return try {
+                    val name = "$string.js"
+                    val sdcard =
+                        Environment.getExternalStorageDirectory().absolutePath
+                    val scriptFile =
+                        File("$sdcard/AutoReply Bot/Bots/JavaScript/$name")
+                    if (!scriptFile.exists()) return ctx!!.getString(R.string.script_file_gone)
+                    val parseContext =
+                        RhinoAndroidHelper().enterContext()
+                    parseContext.wrapFactory = PrimitiveWrapFactory()
+                    parseContext.languageVersion = org.mozilla.javascript.Context.VERSION_ES6
+                    parseContext.optimizationLevel = -1
+                    val scope =
+                        parseContext.initStandardObjects(ImporterTopLevel(parseContext)) as ScriptableObject
+                    ScriptableObject.defineClass(scope, ApiClass.Log::class.java, false, true)
+                    ScriptableObject.defineClass(scope, ApiClass.AppData::class.java, false, true)
+                    ScriptableObject.defineClass(scope, ApiClass.Api::class.java, false, true)
+                    ScriptableObject.defineClass(scope, ApiClass.Device::class.java, false, true)
+                    ScriptableObject.defineClass(scope, ApiClass.Scope::class.java, false, true)
+                    ScriptableObject.defineClass(scope, ApiClass.File::class.java, false, true)
+                    ScriptableObject.defineClass(scope, ApiClass.Black::class.java, false, true)
+                    ScriptableObject.defineClass(scope, ApiClass.Utils::class.java, false, true)
+                    val script = parseContext.compileReader(FileReader(scriptFile), name, 0, null)
+
+                    script.exec(parseContext, scope)
+                    val responder = scope["response", scope] as Function
+
+                    jsScripts[name] = responder
+                    jsScope[name] = scope
+
+                    org.mozilla.javascript.Context.exit()
+                    "true"
+                }
+                catch (e: Exception) {
+                    /*if (e.toString()
+                            .contains("java.lang.String android.content.Context.getPackageName()' on a null object reference")
+                    ) return "리로드 오류"
+                    if (e.toString()
+                            .contains("org.mozilla.javascript.UniqueTag cannot be cast to org.mozilla.javascript.Function")
+                    ) "리로드 오류" else e.message*/
+                    e.toString()
+                }
+            }
+
+            fun reply(session: Notification.Action?, value: String?) {
+                val sendIntent = Intent()
+                val msg = Bundle()
+                for (inputable in session!!.remoteInputs) msg.putCharSequence(
+                    inputable.resultKey,
+                    value
+                )
+                RemoteInput.addResultsToIntent(session.remoteInputs, sendIntent, msg)
+                try {
+                    session.actionIntent.send(ctx, 0, sendIntent)
+                } catch (e: Exception) {
+                    ToastUtils.show(ctx!!, e.toString(),
+                        ToastUtils.LONG, ToastUtils.ERROR)
+                }
+            }
+        }
+
+        fun callJsResponder(
+            name: String,
+            sender: String?,
+            msg: String?,
+            room: String?,
+            isGroupChat: Boolean,
+            session: Notification.Action,
+            profileImage: Bitmap,
+            packageName: String?
+        ): Boolean {
+            val parseContext = RhinoAndroidHelper().enterContext()
+            parseContext.languageVersion = org.mozilla.javascript.Context.VERSION_ES6
+            val responder = jsScripts[name]
+            val execScope = jsScope[name]
             return try {
-                val name = "$string.js"
-                val sdcard =
-                    Environment.getExternalStorageDirectory().absolutePath
-                val scriptFile =
-                    File("$sdcard/AutoReply Bot/Bots/JavaScript/$name")
-                if (!scriptFile.exists()) return ctx!!.getString(R.string.script_file_gone)
-                val parseContext =
-                    RhinoAndroidHelper().enterContext()
-                parseContext.wrapFactory = PrimitiveWrapFactory()
-                parseContext.languageVersion = org.mozilla.javascript.Context.VERSION_ES6
-                parseContext.optimizationLevel = -1
-                val scope =
-                    parseContext.initStandardObjects(ImporterTopLevel(parseContext)) as ScriptableObject
-                ScriptableObject.defineClass(scope, ApiClass.Log::class.java, false, true)
-                ScriptableObject.defineClass(scope, ApiClass.AppData::class.java, false, true)
-                ScriptableObject.defineClass(scope, ApiClass.Api::class.java, false, true)
-                ScriptableObject.defineClass(scope, ApiClass.Device::class.java, false, true)
-                ScriptableObject.defineClass(scope, ApiClass.Scope::class.java, false, true)
-                ScriptableObject.defineClass(scope, ApiClass.File::class.java, false, true)
-                ScriptableObject.defineClass(scope, ApiClass.Black::class.java, false, true)
-                ScriptableObject.defineClass(scope, ApiClass.Utils::class.java, false, true)
-                val script = parseContext.compileReader(FileReader(scriptFile), name, 0, null)
-
-                script.exec(parseContext, scope)
-                val responder = scope["response", scope] as Function
-
-                jsScripts[name] = responder
-                jsScope[name] = scope
-
-                org.mozilla.javascript.Context.exit()
-                "true"
-            }
-            catch (e: Exception) {
-                /*if (e.toString()
-                        .contains("java.lang.String android.content.Context.getPackageName()' on a null object reference")
-                ) return "리로드 오류"
-                if (e.toString()
-                        .contains("org.mozilla.javascript.UniqueTag cannot be cast to org.mozilla.javascript.Function")
-                ) "리로드 오류" else e.message*/
-                e.toString()
-            }
-        }
-
-        fun reply(session: Notification.Action?, value: String?) {
-            val sendIntent = Intent()
-            val msg = Bundle()
-            for (inputable in session!!.remoteInputs) msg.putCharSequence(
-                inputable.resultKey,
-                value
-            )
-            RemoteInput.addResultsToIntent(session.remoteInputs, sendIntent, msg)
-            try {
-                session.actionIntent.send(ctx, 0, sendIntent)
-            } catch (e: Exception) {
-                ToastUtils.show(ctx!!, e.toString(),
-                    ToastUtils.LONG, ToastUtils.ERROR)
-            }
-        }
-    }
-
-    fun callJsResponder(
-        name: String,
-        sender: String?,
-        msg: String?,
-        room: String?,
-        isGroupChat: Boolean,
-        session: Notification.Action,
-        profileImage: Bitmap,
-        packageName: String?
-    ): Boolean {
-        val parseContext = RhinoAndroidHelper().enterContext()
-        parseContext.languageVersion = org.mozilla.javascript.Context.VERSION_ES6
-        val responder = jsScripts[name]
-        val execScope = jsScope[name]
-        return try {
-            if (responder == null || execScope == null) {
+                if (responder == null || execScope == null) {
                 org.mozilla.javascript.Context.exit()
                 /*ToastUtils.show(ctx!!, ctx!!.getString(R.string.reload_script_first)
                     .replace("{name}", name), ToastUtils.SHORT, ToastUtils.WARNING)*/

@@ -1,6 +1,7 @@
 package com.sungbin.autoreply.bot.three.api
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.util.Log
 import com.sungbin.autoreply.bot.three.utils.LogUtils
 import com.sungbin.autoreply.bot.three.utils.RhinoUtils
@@ -11,7 +12,13 @@ import org.mozilla.javascript.annotations.JSStaticFunction
 import java.text.SimpleDateFormat
 import java.util.*
 
-object ApiClass {
+object ApiClass{
+
+    private var context: Context? = null
+    fun setContext(ctx: Context){
+        context = ctx
+    }
+
     class Log : ScriptableObject() {
         override fun getClassName(): String {
             return "Log"
@@ -134,8 +141,8 @@ object ApiClass {
         companion object {
             @JvmStatic
             @JSStaticFunction
-            fun getContext(): android.content.Context{
-                return RhinoUtils.ctx
+            fun getContext(): Context{
+                return context!!
             }
 
             @JvmStatic

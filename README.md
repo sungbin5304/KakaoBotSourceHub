@@ -44,6 +44,78 @@ In this case, the base64 value of the picture is too long and it is an error in 
 */
 ```
 
+# JavaScript APIs
+## Log
+```js
+d(name: String, content: String)
+e(name: String, content: String)
+i(name: String, content: String)
+```
+
+## AppData
+```js
+putInt(name: String, value: Int)
+putString(name: String, value: String)
+putBoolean(name: String, value: Boolean)
+getInt(name: String, _null: Int): Int
+getString(name: String, _null: String): String?
+getBoolean(name: String, _null: Boolean)
+clear()
+remove(name: String)
+```
+
+## Api
+```js
+getContext(): android.content.Context
+post(address: String, name: String, data: String)
+replyRoom(room: String, message: String)
+replyRoomShowAll(room: String, msg1: String, msg2: String)
+deleteHtml(html: String): String
+```
+
+## Device
+```js
+getBattery(): Int
+getPhoneModel(): String
+getAndroidSDKVersion(): String
+getAndroidVersion(): String
+getIsCharging(): Boolean
+```
+
+## Scope
+```js
+get(name: String): ScriptableObject?
+```
+
+## File
+```js
+read(path: String, _null: String): String
+write(path: String, content: String)
+append(path: String, content: String)
+remove(path: String)
+```
+
+## Black
+```js
+getSender(): String
+getRoom(): String
+addRoom(room: String)
+addSender(sender: String)
+removeRoom(room: String)
+removeSender(sender: String)
+```
+
+## Utils
+```js
+makeToast(content: String)
+makeNoti(title: String, content: String
+getHtml(link: String, fromJsoup: Boolean = true): String?
+makeVibration(time: Int)
+copy(content: String)
+```
+
+-----
+
 ## JavaScript Example
 ```js
 function response(room, msg, sender, isGroupChat, replier, ImageDB, package) {

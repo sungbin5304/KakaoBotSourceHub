@@ -89,12 +89,12 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, package) {
 [[Discord]](https://discord.gg/2measTZ)
 
 ## Functions (not implemented yet)
-1. Upload / edit / Delete Script (Posts)
-2. Write / edit / delete comments
-3. JavaScript question / answer
+1. Upload, edit and delete posts
+2. Write, edit and delete comments
+3. JavaScript question and answer
 4. Point system (reflected by level)
 5. Level ranking system
-6. New post notification service
+6. New post and comment notification service
 7. Etc...
 
 ## LICENSE

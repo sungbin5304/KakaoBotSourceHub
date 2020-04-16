@@ -1,9 +1,7 @@
-# KakaoTalkBotHub
-> Kakaotalk Bot Source Share Community
-
-![Image](https://img.shields.io/badge/Hub-KakaoBotSource-pink.svg) 
-
-<img src="https://raw.githubusercontent.com/sungbin5304/KakaoBotSourceHub/master/IMAGE/icon.png" width="300" height="300">
+<center>
+  <h1>KakaoTalkBotHub</h1>
+  <img src="https://raw.githubusercontent.com/sungbin5304/KakaoBotSourceHub/master/IMAGE/icon.png" width="300" height="300">
+</center>
 
 -----
 

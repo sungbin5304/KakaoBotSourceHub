@@ -142,7 +142,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, package) {
 }
 ```
 
-## Release notes
+## Release Notes
 [[Relase]](https://github.com/sungbin5304/KakaoTalkBotHub/releases)
 
 ## Google PlayStore Link
@@ -164,7 +164,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, package) {
 ## Official Discord
 [[Discord]](https://discord.gg/2measTZ)
 
-## Functions (not implemented yet)
+## Functions of Hub
 1. Upload, edit and delete posts
 2. Write, edit and delete comments
 3. JavaScript question and answer

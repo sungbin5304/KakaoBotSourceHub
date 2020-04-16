@@ -1,4 +1,4 @@
-# KakaoBotSourceHub
+# KakaoTalkBotHub
 > Kakaotalk Bot Source Share Community
 
 ![Image](https://img.shields.io/badge/Hub-KakaoBotSource-pink.svg) 

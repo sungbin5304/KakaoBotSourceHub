@@ -25,49 +25,45 @@ object ApiClass{
         }
 
         companion object {
-            @SuppressLint("SimpleDateFormat")
             @JvmStatic
             @JSStaticFunction
             fun d(name: String, content: String) {
                 val now = System.currentTimeMillis()
                 val date = Date(now)
-                val sdf = SimpleDateFormat("hh:mm:ss")
+                val sdf = SimpleDateFormat("hh:mm:ss", Locale.getDefault())
                 val time = sdf.format(date)
 
                 LogUtils.save(name, content, time, LogUtils.Type.DEBUG)
             }
 
-            @SuppressLint("SimpleDateFormat")
             @JvmStatic
             @JSStaticFunction
             fun e(name: String, content: String) {
                 val now = System.currentTimeMillis()
                 val date = Date(now)
-                val sdf = SimpleDateFormat("hh:mm:ss")
+                val sdf = SimpleDateFormat("hh:mm:ss", Locale.getDefault())
                 val time = sdf.format(date)
 
                 LogUtils.save(name, content, time, LogUtils.Type.ERROR)
             }
 
-            @SuppressLint("SimpleDateFormat")
             @JvmStatic
             @JSStaticFunction
             fun i(name: String, content: String) {
                 val now = System.currentTimeMillis()
                 val date = Date(now)
-                val sdf = SimpleDateFormat("hh:mm:ss")
+                val sdf = SimpleDateFormat("hh:mm:ss", Locale.getDefault())
                 val time = sdf.format(date)
 
                 LogUtils.save(name, content, time, LogUtils.Type.INFO)
             }
 
-            @SuppressLint("SimpleDateFormat")
             @JvmStatic
             @JSStaticFunction
             fun s(name: String, content: String) {
                 val now = System.currentTimeMillis()
                 val date = Date(now)
-                val sdf = SimpleDateFormat("hh:mm:ss")
+                val sdf = SimpleDateFormat("hh:mm:ss", Locale.getDefault())
                 val time = sdf.format(date)
 
                 LogUtils.save(name, content, time, LogUtils.Type.SUCCESS)

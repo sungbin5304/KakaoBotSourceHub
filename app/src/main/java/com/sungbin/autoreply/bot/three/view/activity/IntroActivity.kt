@@ -12,6 +12,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.sungbin.autoreply.bot.three.R
+import com.sungbin.autoreply.bot.three.chat.custom.CustomDialogViewHolder
+import com.sungbin.autoreply.bot.three.chat.custom.CustomHolderDialogsActivity
+import com.sungbin.autoreply.bot.three.chat.custom.DemoDialogsActivity
 import com.sungbin.sungbintool.PermissionUtils
 
 
@@ -23,6 +26,8 @@ class IntroActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.statusBarColor = ContextCompat.getColor(applicationContext, R.color.colorWhite)
         }
+
+        CustomHolderDialogsActivity.open(this)
 
         PermissionUtils.request(this,
             "권한줘!!!", arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE))

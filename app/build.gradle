@@ -23,7 +23,6 @@ android {
     }
     lintOptions {
         checkReleaseBuilds false
-        abortOnError false
     }
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
@@ -35,9 +34,15 @@ android {
     useLibrary 'org.apache.http.legacy'
 }
 
+ext {
+    circleImageViewVersion = '2.2.0'
+    shapeImageViewVersion = '0.9.3'
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.legacy:legacy-support-core-ui:1.0.0'
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.core:core-ktx:1.2.0'
     implementation 'com.google.android.material:material:1.1.0'
@@ -69,6 +74,10 @@ dependencies {
     implementation 'org.mozilla:rhino:1.7.9'
     implementation 'org.jsoup:jsoup:1.12.1'
 
+    implementation 'com.github.stfalcon:chatkit:0.3.3'
+    implementation "com.github.siyamed:android-shape-imageview:$shapeImageViewVersion"
+    implementation "de.hdodenhof:circleimageview:$circleImageViewVersion"
+
     implementation 'com.faendir.rhino:rhino-android:1.5'
     implementation 'com.shazam:android-reflow-animator:1.0.0-SNAPSHOT'
 
@@ -78,7 +87,6 @@ dependencies {
     implementation 'com.github.ibrahimsn98:SmoothBottomBar:1.7'
 
     implementation 'com.makeramen:roundedimageview:2.3.0'
-
     implementation 'us.belka:androidtoggleswitch:1.2.2'
 
     implementation 'gun0912.ted:tedkeyboardobserver:1.0.2'

@@ -28,6 +28,12 @@
             </intent-filter>
         </activity>
         <activity
+                android:name=".chat.custom.CustomHolderDialogsActivity"
+                android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
+        <activity
+                android:name=".chat.custom.CustomHolderMessagesActivity"
+                android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
+        <activity
                 android:name=".view.sourcehub.PostViewActivity"
                 android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
         <activity

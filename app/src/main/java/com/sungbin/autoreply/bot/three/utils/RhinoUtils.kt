@@ -1,26 +1,16 @@
 package com.sungbin.autoreply.bot.three.utils
 
-import android.annotation.SuppressLint
 import com.faendir.rhino_android.RhinoAndroidHelper
 import com.sungbin.autoreply.bot.three.api.*
 import com.sungbin.autoreply.bot.three.api.Utils
-import com.sungbin.autoreply.bot.three.listener.KakaoTalkListener
-import com.sungbin.sungbintool.StorageUtils
+import com.sungbin.autoreply.bot.three.utils.bot.PrimitiveWrapFactory
 import org.mozilla.javascript.Context
 import org.mozilla.javascript.Scriptable
 import org.mozilla.javascript.ScriptableObject
-import org.mozilla.javascript.annotations.JSStaticFunction
-import java.text.SimpleDateFormat
-import java.util.*
 
-class RhinoUtils constructor(context: android.content.Context) {
-
-    companion object{
-        lateinit var ctx: android.content.Context
-    }
+class RhinoUtils constructor(ctx: android.content.Context) {
 
     init {
-        ctx = context
         AppData.init(ctx)
         Api.init(ctx)
         Api.init(ctx)
@@ -33,7 +23,8 @@ class RhinoUtils constructor(context: android.content.Context) {
     fun runJs(source: String): String{
         return try {
             val rhino: Context = RhinoAndroidHelper().enterContext()
-            rhino.wrapFactory = PrimitiveWrapFactory()
+            rhino.wrapFactory =
+                PrimitiveWrapFactory()
             rhino.languageVersion =  Context.VERSION_ES6
             rhino.optimizationLevel = -1
             val scope: Scriptable = rhino.initSafeStandardObjects()

@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sungbin.autoreply.bot.three.R
 import com.sungbin.autoreply.bot.three.adapter.DebugListAdapter
-import com.sungbin.autoreply.bot.three.dto.DebugListItem
+import com.sungbin.autoreply.bot.three.dto.bot.DebugListItem
 import com.sungbin.autoreply.bot.three.utils.RhinoUtils
 
 
@@ -45,8 +45,18 @@ class SandboxFragment : Fragment() {
             val message = etInput!!.text.toString()
             val result = RhinoUtils(context!!).runJs(message)
 
-            val messageItem = DebugListItem("나", 0, message)
-            val resultItem = DebugListItem("봇", 1, result)
+            val messageItem =
+                DebugListItem(
+                    "나",
+                    0,
+                    message
+                )
+            val resultItem =
+                DebugListItem(
+                    "봇",
+                    1,
+                    result
+                )
 
             items.add(messageItem)
             items.add(resultItem)

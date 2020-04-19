@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
+            android:name=".kakao.GlobalApplication"
             android:allowBackup="true"
             android:icon="@drawable/icon"
             android:label="@string/app_name"
@@ -28,13 +29,13 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".chat.custom.CustomHolderDialogsActivity"
-                android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
+                android:name=".view.chat.DialogsActivity"
+                android:theme="@style/AppThemeMaterial"></activity>
         <activity
-                android:name=".chat.custom.CustomHolderMessagesActivity"
-                android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
+                android:name=".view.chat.MessagesActivity"
+                android:theme="@style/AppTheme"></activity>
         <activity
-                android:name=".view.sourcehub.PostViewActivity"
+                android:name=".view.hub.PostViewActivity"
                 android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
         <activity
                 android:name=".view.activity.ScriptEditActivity"
@@ -49,12 +50,15 @@
                 android:name=".view.activity.LoginActivity"
                 android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
         <activity
-                android:name=".view.sourcehub.PostActivity"
+                android:name=".view.hub.PostActivity"
                 android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
         <activity
-                android:name=".view.sourcehub.MainActivity"
+                android:name=".view.hub.MainActivity"
                 android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
 
+        <meta-data
+                android:name="com.kakao.sdk.AppKey"
+                android:value="7a89f549837515bd9c9ffba767925e3b" />
         <meta-data
                 android:name="com.samsung.android.icon_container.has_icon_container"
                 android:value="true" />

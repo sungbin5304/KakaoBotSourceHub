@@ -3,11 +3,9 @@
 package com.sungbin.autoreply.bot.three.view.activity.fragment
 
 import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.graphics.Rect
 import android.os.Bundle
 import android.os.Environment
-import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.util.Log
 import android.view.LayoutInflater
@@ -27,12 +25,11 @@ import com.sungbin.autoreply.bot.three.R
 import com.sungbin.autoreply.bot.three.adapter.DatabaseListAdapter
 import com.sungbin.autoreply.bot.three.adapter.LogListAdapter
 import com.sungbin.autoreply.bot.three.adapter.ScriptListAdapter
-import com.sungbin.autoreply.bot.three.dto.DatabaseListItem
-import com.sungbin.autoreply.bot.three.dto.LogListItem
-import com.sungbin.autoreply.bot.three.dto.ScriptListItem
-import com.sungbin.autoreply.bot.three.utils.BotPowerUtils
-import com.sungbin.autoreply.bot.three.utils.LogUtils
-import com.sungbin.autoreply.bot.three.view.activity.DashboardActivity
+import com.sungbin.autoreply.bot.three.dto.bot.DatabaseListItem
+import com.sungbin.autoreply.bot.three.dto.bot.LogListItem
+import com.sungbin.autoreply.bot.three.dto.bot.ScriptListItem
+import com.sungbin.autoreply.bot.three.utils.bot.BotPowerUtils
+import com.sungbin.autoreply.bot.three.utils.bot.LogUtils
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import java.io.File
 import java.util.*
@@ -137,14 +134,30 @@ class DashboardFragment : Fragment() {
             for (element in simpleList) {
                 val name = element.name
                 val onOff = BotPowerUtils.getIsOn(context!!, name)
-                scriptItem.add(ScriptListItem(name, onOff, 1, "마지막작동: ??", R.drawable.ic_textsms_blue_24dp))
+                scriptItem.add(
+                    ScriptListItem(
+                        name,
+                        onOff,
+                        1,
+                        "마지막작동: ??",
+                        R.drawable.ic_textsms_blue_24dp
+                    )
+                )
             }
         }
         if (jsList != null) {
             for (element in jsList) {
                 val name = element.name
                 val onOff = BotPowerUtils.getIsOn(context!!, name)
-                scriptItem.add(ScriptListItem(name, onOff, 0, "마지막작동: ??", R.drawable.ic_javascript))
+                scriptItem.add(
+                    ScriptListItem(
+                        name,
+                        onOff,
+                        0,
+                        "마지막작동: ??",
+                        R.drawable.ic_javascript
+                    )
+                )
             }
         }
         if (logList != null) {
@@ -158,7 +171,12 @@ class DashboardFragment : Fragment() {
                 val content = LogUtils.get(name, "content")
                 val time = LogUtils.get(name, "time")
                 val type = LogUtils.get(name, "type")
-                val item = LogListItem(name, time, content, type)
+                val item = LogListItem(
+                    name,
+                    time,
+                    content,
+                    type
+                )
                 logItem.add(item)
                 Log.d("SIZE", i.toString())
             }

@@ -1,6 +1,5 @@
 package com.sungbin.autoreply.bot.three.listener
 
-import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.RemoteInput
 import android.content.Context
@@ -15,35 +14,28 @@ import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.text.Spanned
 import android.util.Base64
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.pm.PackageInfoCompat
 import androidx.core.text.HtmlCompat
 import com.faendir.rhino_android.RhinoAndroidHelper
 import com.sungbin.autoreply.bot.three.R
 import com.sungbin.autoreply.bot.three.api.ApiClass
-import com.sungbin.autoreply.bot.three.dto.ScriptListItem
-import com.sungbin.autoreply.bot.three.utils.BotPowerUtils
-import com.sungbin.autoreply.bot.three.utils.PrimitiveWrapFactory
-import com.sungbin.autoreply.bot.three.utils.PicturePathManager
-import com.sungbin.autoreply.bot.three.utils.RhinoUtils
-import com.sungbin.autoreply.bot.three.utils.StackUtils.jsScope
-import com.sungbin.autoreply.bot.three.utils.StackUtils.jsScripts
-import com.sungbin.autoreply.bot.three.utils.StackUtils.sessions
+import com.sungbin.autoreply.bot.three.dto.bot.ScriptListItem
+import com.sungbin.autoreply.bot.three.utils.bot.BotPowerUtils
+import com.sungbin.autoreply.bot.three.utils.bot.PrimitiveWrapFactory
+import com.sungbin.autoreply.bot.three.utils.bot.PicturePathManager
+import com.sungbin.autoreply.bot.three.utils.bot.StackUtils.jsScope
+import com.sungbin.autoreply.bot.three.utils.bot.StackUtils.jsScripts
+import com.sungbin.autoreply.bot.three.utils.bot.StackUtils.sessions
 import com.sungbin.sungbintool.DataUtils
-import com.sungbin.sungbintool.StorageUtils.delete
-import com.sungbin.sungbintool.StorageUtils.save
 import com.sungbin.sungbintool.ToastUtils
 import org.apache.commons.lang3.StringUtils
 import org.mozilla.javascript.Function
 import org.mozilla.javascript.ImporterTopLevel
-import org.mozilla.javascript.Scriptable
 import org.mozilla.javascript.ScriptableObject
-import org.mozilla.javascript.annotations.JSStaticFunction
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileReader
-import java.text.SimpleDateFormat
 import java.util.*
 
 @Suppress("TYPE_INFERENCE_ONLY_INPUT_TYPES_WARNING", "DEPRECATION")
@@ -391,7 +383,8 @@ class KakaoTalkListener : NotificationListenerService() {
                     if (!scriptFile.exists()) return ctx!!.getString(R.string.script_file_gone)
                     val parseContext =
                         RhinoAndroidHelper().enterContext()
-                    parseContext.wrapFactory = PrimitiveWrapFactory()
+                    parseContext.wrapFactory =
+                        PrimitiveWrapFactory()
                     parseContext.languageVersion = org.mozilla.javascript.Context.VERSION_ES6
                     parseContext.optimizationLevel = -1
                     val scope =

@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import com.sungbin.autoreply.bot.three.R
-import com.sungbin.autoreply.bot.three.dto.DatabaseListItem
+import com.sungbin.autoreply.bot.three.dto.bot.DatabaseListItem
 
 class DatabaseListAdapter(private val list: ArrayList<DatabaseListItem>?, private val act: Activity) :
         RecyclerView.Adapter<DatabaseListAdapter.DatabaseListViewHolder>() {

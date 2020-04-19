@@ -34,11 +34,6 @@ android {
     useLibrary 'org.apache.http.legacy'
 }
 
-ext {
-    circleImageViewVersion = '2.2.0'
-    shapeImageViewVersion = '0.9.3'
-}
-
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -58,6 +53,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:18.1.0'
     //noinspection GradleDependency
     implementation 'com.google.firebase:firebase-config:18.0.0'
+    implementation 'com.google.android.gms:play-services-auth:18.0.0'
 
     implementation 'com.github.marcoscgdev:EasyLicensesDialog:2.0.0'
     implementation 'com.github.florent37:diagonallayout:1.1.1'
@@ -75,8 +71,8 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.12.1'
 
     implementation 'com.github.stfalcon:chatkit:0.3.3'
-    implementation "com.github.siyamed:android-shape-imageview:$shapeImageViewVersion"
-    implementation "de.hdodenhof:circleimageview:$circleImageViewVersion"
+    implementation 'com.github.siyamed:android-shape-imageview:0.9.3'
+    implementation 'de.hdodenhof:circleimageview:3.0.0'
 
     implementation 'com.faendir.rhino:rhino-android:1.5'
     implementation 'com.shazam:android-reflow-animator:1.0.0-SNAPSHOT'
@@ -95,6 +91,7 @@ dependencies {
 
 
     implementation group: 'org.apache.httpcomponents', name: 'httpclient-android', version: '4.3.5.1'
+    implementation group: 'com.kakao.sdk', name: 'usermgmt', version: '1.27.0'
 
     implementation files('libs/CaulySDK-3.4.23.jar')
 

@@ -3,27 +3,27 @@
 
     <item
             android:id="@+id/dashboard"
-            android:title="@string/string_dashboard"
+            android:title=""
             android:icon="@drawable/ic_dashboard_primary_24dp"/>
 
     <item
             android:id="@+id/sandbox"
-            android:title="@string/string_sandbox"
+            android:title=""
             android:icon="@drawable/ic_sandbox_primary_24dp"/>
 
     <item
             android:id="@+id/add"
-            android:title="@string/string_bot"
+            android:title=""
             android:icon="@drawable/ic_add_circle_outline_primary_24dp"/>
 
     <item
             android:id="@+id/hub"
-            android:title="@string/string_hub"
+            android:title=""
             android:icon="@drawable/ic_hub_icon_white_24dp"/>
 
     <item
             android:id="@+id/setting"
-            android:title="@string/string_setting"
+            android:title=""
             android:icon="@drawable/ic_settings_primary_24dp"/>
 
 </menu>

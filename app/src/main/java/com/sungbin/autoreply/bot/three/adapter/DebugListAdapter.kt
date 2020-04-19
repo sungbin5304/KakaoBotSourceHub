@@ -5,14 +5,12 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.recyclerview.widget.RecyclerView
 import com.sungbin.autoreply.bot.three.R
-import com.sungbin.autoreply.bot.three.dto.DebugListItem
-import com.sungbin.autoreply.bot.three.dto.LogListItem
+import com.sungbin.autoreply.bot.three.dto.bot.DebugListItem
 import com.sungbin.sungbintool.Utils
 
 class DebugListAdapter (private val list: ArrayList<DebugListItem>?, private val act: Activity) :

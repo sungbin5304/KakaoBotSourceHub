@@ -3,13 +3,9 @@ package com.sungbin.autoreply.bot.three.adapter
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.Typeface
-import android.graphics.Typeface.createFromAsset
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CompoundButton
 import android.widget.ImageView
 import android.widget.Switch
 import android.widget.TextView
@@ -20,9 +16,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.zawadz88.materialpopupmenu.popupMenu
 import com.google.android.material.snackbar.Snackbar
 import com.sungbin.autoreply.bot.three.R
-import com.sungbin.autoreply.bot.three.dto.ScriptListItem
+import com.sungbin.autoreply.bot.three.dto.bot.ScriptListItem
 import com.sungbin.autoreply.bot.three.listener.KakaoTalkListener
-import com.sungbin.autoreply.bot.three.utils.BotPowerUtils
+import com.sungbin.autoreply.bot.three.utils.bot.BotPowerUtils
 import com.sungbin.autoreply.bot.three.view.activity.ScriptEditActivity
 import com.sungbin.sungbintool.StorageUtils
 import com.sungbin.sungbintool.ToastUtils

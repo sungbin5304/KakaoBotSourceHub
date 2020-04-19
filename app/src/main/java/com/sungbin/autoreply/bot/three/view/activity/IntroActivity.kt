@@ -2,8 +2,11 @@ package com.sungbin.autoreply.bot.three.view.activity
 
 import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Base64
+import android.util.Log
 import android.view.View
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
@@ -12,11 +15,10 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.sungbin.autoreply.bot.three.R
-import com.sungbin.autoreply.bot.three.chat.custom.CustomDialogViewHolder
-import com.sungbin.autoreply.bot.three.chat.custom.CustomHolderDialogsActivity
-import com.sungbin.autoreply.bot.three.chat.custom.DemoDialogsActivity
+import com.sungbin.autoreply.bot.three.view.chat.DialogsActivity
 import com.sungbin.sungbintool.PermissionUtils
-
+import java.lang.Exception
+import java.security.MessageDigest
 
 class IntroActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,8 +28,6 @@ class IntroActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.statusBarColor = ContextCompat.getColor(applicationContext, R.color.colorWhite)
         }
-
-        CustomHolderDialogsActivity.open(this)
 
         PermissionUtils.request(this,
             "권한줘!!!", arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE))

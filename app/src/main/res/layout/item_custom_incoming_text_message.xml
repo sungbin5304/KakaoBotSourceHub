@@ -1,47 +1,61 @@
-<RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/main_layout"
+        android:layout_marginEnd="@dimen/margin_default"
+        android:layout_marginStart="@dimen/margin_default"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="8dp">
+        tools:ignore="RtlHardcoded,SmallSp" >
 
     <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_alignParentStart="true"
             android:id="@id/messageUserAvatar"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"/>
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            tools:src="@mipmap/ic_launcher"
+            android:transitionName="tag"
+            android:layout_marginRight="10dp"
+            app:civ_border_width="0dp"
+            app:civ_border_color="@color/transparent" />
 
-    <!--this view is needed for custom holder-->
-    <ImageView
-            android:contentDescription="@string/online_indicator"
+    <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/onlineIndicator"
             android:layout_width="12dp"
             android:layout_height="12dp"
-            android:layout_alignEnd="@id/messageUserAvatar"
-            android:layout_alignStart="@id/messageUserAvatar"
-            android:layout_alignTop="@id/messageUserAvatar"
-            android:layout_marginEnd="5dp"
-            android:layout_marginStart="5dp"/>
+            android:layout_alignRight="@id/messageUserAvatar"
+            android:layout_marginRight="1dp"
+            tools:src="@drawable/shape_bubble_online"
+            app:civ_border_width="0dp"
+            app:civ_border_color="@color/transparent" />
 
-    <LinearLayout
-            android:id="@id/bubble"
+    <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="30dp"
-            android:layout_marginStart="30dp"
-            android:layout_toEndOf="@id/messageUserAvatar"
-            android:layout_toStartOf="@id/messageUserAvatar"
+            android:layout_toRightOf="@id/messageUserAvatar"
+            android:layout_alignParentTop="true"
+            android:id="@+id/messageName"
+            android:layout_marginLeft="5dp"
+            tools:text="@string/app_name"
+            android:textSize="12sp"
+            android:textColor="@color/black"/>
+
+    <LinearLayout
+            android:layout_marginTop="@dimen/margin_twice_half"
+            android:id="@id/bubble"
+            android:layout_toRightOf="@id/messageUserAvatar"
+            android:layout_below="@id/messageName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
         <TextView
                 android:id="@id/messageText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="4dp"
-                android:layout_marginStart="8dp"/>
+                tools:text="@string/add_log_none"
+                android:textSize="15sp"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>
 
@@ -49,10 +63,13 @@
             android:id="@id/messageTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@id/bubble"
-            android:layout_alignStart="@id/bubble"
             android:layout_below="@id/bubble"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"/>
+            android:layout_alignRight="@id/bubble"
+            android:layout_marginTop="@dimen/margin_twice_half"
+            android:layout_marginEnd="@dimen/margin_twice_half"
+            android:textSize="10sp"
+            tools:text="@string/preview_message_date"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/black" />
 
 </RelativeLayout>

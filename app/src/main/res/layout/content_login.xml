@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
         android:focusableInTouchMode="true"
         android:background="@color/colorWhite"
-        tools:ignore="MissingConstraints,RtlSymmetry,Autofill,LabelFor">
+        tools:ignore="TextFields,RelativeOverlap,MissingConstraints,RtlSymmetry,Autofill,LabelFor">
 
     <TextView
             android:id="@+id/toolbar_title"
@@ -50,7 +50,7 @@
     <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/string_id"
+            android:text="@string/string_email"
             android:textColor="#000"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -71,6 +71,7 @@
             app:layout_constraintBottom_toTopOf="@+id/textview_pw">
 
         <EditText
+                android:id="@+id/et_id"
                 android:fontFamily="@font/nanumgothic"
                 android:maxLines="1"
                 android:textCursorDrawable="@drawable/cursor_drawable_light_gray"
@@ -79,7 +80,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_margin="@dimen/margin_half"
-                android:background="@null"/>
+                android:background="@null" />
 
     </FrameLayout>
 
@@ -108,6 +109,7 @@
             app:layout_constraintBottom_toTopOf="@+id/kakao_login_layout">
 
         <EditText
+                android:id="@+id/et_pw"
                 android:fontFamily="@font/poppins"
                 android:maxLines="1"
                 android:textCursorDrawable="@drawable/cursor_drawable_light_gray"
@@ -130,14 +132,20 @@
             android:layout_height="50dp"
             app:layout_constraintBottom_toTopOf="@+id/google_login_layout">
 
+        <com.kakao.usermgmt.LoginButton
+                android:id="@+id/kakao_login"
+                android:visibility="invisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
         <Button
-                android:textColor="#fff"
+                android:textColor="@color/colorWhite"
                 android:id="@+id/kakao_login_btn"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:fontFamily="@font/nanumgothic"
-                android:text="임시 카카오 로그인 버튼"
-                android:background="@drawable/round_button_primary"
-                android:layout_height="wrap_content" />
+                android:text="@string/kakao_login"
+                android:background="@drawable/round_button_primary" />
 
     </FrameLayout>
 
@@ -155,7 +163,7 @@
                 android:id="@+id/google_login_btn"
                 android:layout_width="match_parent"
                 android:fontFamily="@font/nanumgothic"
-                android:text="임시 구글 로그인 버튼"
+                android:text="@string/google_login"
                 android:background="@drawable/round_button_primary"
                 android:layout_height="wrap_content" />
 

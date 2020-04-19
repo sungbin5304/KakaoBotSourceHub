@@ -20,8 +20,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.FirebaseDatabase
 import com.shashank.sony.fancytoastlib.FancyToast
 import com.sungbin.autoreply.bot.three.R
-import com.sungbin.autoreply.bot.three.dto.CommentListItem
-import com.sungbin.autoreply.bot.three.utils.DialogUtils
+import com.sungbin.autoreply.bot.three.dto.hub.CommentListItem
+import com.sungbin.autoreply.bot.three.utils.ui.DialogUtils
 import com.sungbin.autoreply.bot.three.utils.Utils
 import org.apache.commons.lang3.StringUtils
 import kotlin.collections.ArrayList
@@ -105,8 +105,11 @@ class CommentListAdapter(private val list: ArrayList<CommentListItem>?,
                                     FancyToast.LENGTH_SHORT, FancyToast.WARNING)
                             }
                             else {
-                                val item = CommentListItem(name,
-                                    comment, uuid, uid, key)
+                                val item =
+                                    CommentListItem(
+                                        name,
+                                        comment, uuid, uid, key
+                                    )
                                 reference.child(key!!).setValue(item)
                                 Utils.toast(ctx!!,
                                     act.getString(R.string.comment_edit_success),

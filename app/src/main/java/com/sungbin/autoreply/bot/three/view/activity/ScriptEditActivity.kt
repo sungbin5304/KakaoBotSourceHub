@@ -13,10 +13,9 @@ import android.widget.EditText
 import android.widget.PopupMenu
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import com.github.zawadz88.materialpopupmenu.popupMenu
 import com.sungbin.autoreply.bot.three.R
-import com.sungbin.autoreply.bot.three.utils.EdittextHistoryManager
+import com.sungbin.autoreply.bot.three.utils.ui.EdittextHistoryManager
 import com.sungbin.sungbintool.StorageUtils
 import com.sungbin.sungbintool.ToastUtils
 import kotlinx.android.synthetic.main.activity_script_edit.*
@@ -42,7 +41,10 @@ class ScriptEditActivity : AppCompatActivity() {
 
         val scriptName = intent.getStringExtra("name")!!
         val editText = editor.getEditText()
-        val edittextHistoryManager = EdittextHistoryManager(editText)
+        val edittextHistoryManager =
+            EdittextHistoryManager(
+                editText
+            )
         val suggestList: ArrayList<String> = ArrayList()
         val list = ArrayList<String>()
         val items = arrayOf(

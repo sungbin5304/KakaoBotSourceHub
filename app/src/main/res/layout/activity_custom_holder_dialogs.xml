@@ -1,4 +1,4 @@
-<RelativeLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
@@ -9,6 +9,7 @@
             android:id="@+id/dialogsList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:overScrollMode="never"
             app:dialogDividerLeftPadding="0dp"
             app:dialogMessageTextSize="17sp"
             app:dialogTitleTextStyle="bold"
@@ -16,4 +17,17 @@
             app:dialogUnreadItemBackground="@color/colorTwiceLightGray"
             app:dialogUnreadTitleTextStyle="bold"/>
 
-</RelativeLayout>
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="@dimen/margin_default"
+            android:text="@string/start_chatting"
+            android:textColor="@color/colorWhite"
+            android:fontFamily="@font/nanumgothic"
+            app:icon="@drawable/ic_add_primary_24dp"
+            app:iconTint="@color/colorWhite"
+            android:backgroundTint="@color/colorPrimary" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

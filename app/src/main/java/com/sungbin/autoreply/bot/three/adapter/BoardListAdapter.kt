@@ -13,9 +13,9 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.shashank.sony.fancytoastlib.FancyToast
 import com.sungbin.autoreply.bot.three.R
-import com.sungbin.autoreply.bot.three.dto.BoardListItem
+import com.sungbin.autoreply.bot.three.dto.hub.BoardListItem
 import com.sungbin.autoreply.bot.three.utils.Utils
-import com.sungbin.autoreply.bot.three.view.sourcehub.PostViewActivity
+import com.sungbin.autoreply.bot.three.view.hub.PostViewActivity
 
 class BoardListAdapter(private val list: ArrayList<BoardListItem>?,
                        private val good: ArrayList<String>?,

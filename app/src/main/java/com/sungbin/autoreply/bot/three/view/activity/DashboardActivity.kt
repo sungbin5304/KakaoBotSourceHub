@@ -1,27 +1,20 @@
 package com.sungbin.autoreply.bot.three.view.activity
 
-import android.animation.LayoutTransition
 import android.content.Intent
-import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.view.ViewGroup
-import android.view.animation.TranslateAnimation
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.sungbin.autoreply.bot.three.R
+import com.sungbin.autoreply.bot.three.utils.chat.ChatModuleUtils
 import com.sungbin.autoreply.bot.three.view.activity.fragment.AddFragment
 import com.sungbin.autoreply.bot.three.view.activity.fragment.DashboardFragment
 import com.sungbin.autoreply.bot.three.view.activity.fragment.SandboxFragment
 import com.sungbin.autoreply.bot.three.view.activity.fragment.SettingFragment
-import com.sungbin.autoreply.bot.three.view.sourcehub.MainActivity
+import com.sungbin.autoreply.bot.three.view.hub.MainActivity
 import com.sungbin.sungbintool.StorageUtils
 import kotlinx.android.synthetic.main.content_dashboard.*
 
@@ -43,6 +36,8 @@ class DashboardActivity  : AppCompatActivity() {
             StorageUtils.createFolder("AutoReply Bot/Bots/AutoReply")
             StorageUtils.createFolder("AutoReply Bot/Bots/JavaScript")
             StorageUtils.createFolder("AutoReply Bot/Bots/Log")
+
+            Log.d("데이터!", ChatModuleUtils.getUser(ChatModuleUtils.getDeviceId(applicationContext))!!.name)
 
             val title = findViewById<TextView>(R.id.tv_dashboard)
             fragmentManager.beginTransaction().add(R.id.framelayout, DashboardFragment()).commit()

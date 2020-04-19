@@ -8,7 +8,7 @@
         android:orientation="vertical"
         android:focusableInTouchMode="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".view.sourcehub.PostActivity"
+        tools:context=".view.hub.PostActivity"
         tools:showIn="@layout/activity_post">
 
     <com.google.android.material.textfield.TextInputLayout

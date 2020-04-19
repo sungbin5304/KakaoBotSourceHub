@@ -12,8 +12,8 @@ import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.sungbin.autoreply.bot.three.R
-import com.sungbin.autoreply.bot.three.dto.LogListItem
-import com.sungbin.autoreply.bot.three.utils.LogUtils
+import com.sungbin.autoreply.bot.three.dto.bot.LogListItem
+import com.sungbin.autoreply.bot.three.utils.bot.LogUtils
 
 class LogListAdapter (private val list: ArrayList<LogListItem>?, private val act: Activity) :
     RecyclerView.Adapter<LogListAdapter.LogListViewHolder>() {

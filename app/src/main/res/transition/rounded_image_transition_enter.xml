@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<transitionSet xmlns:app="http://schemas.android.com/apk/res-auto">
+    <transition
+            class="com.sungbin.autoreply.bot.three.view.activity.imageview.ui.transition.ChangeRoundedImageTransform"
+            app:fromRadius="36dp"
+            app:toRadius="0dp" />
+</transitionSet>

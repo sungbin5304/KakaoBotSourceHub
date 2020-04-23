@@ -38,7 +38,7 @@ import java.io.File
 import java.io.FileReader
 import java.util.*
 
-@Suppress("TYPE_INFERENCE_ONLY_INPUT_TYPES_WARNING", "DEPRECATION")
+@Suppress("TYPE_INFERENCE_ONLY_INPUT_TYPES_WARNING", "DEPRECATION", "UNUSED_VARIABLE")
 class KakaoTalkListener : NotificationListenerService() {
 
     override fun onCreate() {

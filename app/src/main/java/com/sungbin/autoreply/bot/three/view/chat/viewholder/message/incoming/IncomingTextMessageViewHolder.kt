@@ -5,20 +5,22 @@ import android.widget.TextView
 import com.stfalcon.chatkit.messages.MessageHolders.IncomingTextMessageViewHolder
 import com.sungbin.autoreply.bot.three.R
 import com.sungbin.autoreply.bot.three.dto.chat.model.Message
-import com.sungbin.sungbintool.ToastUtils
+import com.sungbin.autoreply.bot.three.utils.chat.FormatUtils
 
 class IncomingTextMessageViewHolder(
-    itemView: View,
+    itemView: View?,
     payload: Any?
 ) : IncomingTextMessageViewHolder<Message>(
     itemView,
     payload
 ) {
-    private val onlineIndicator: View = itemView.findViewById(R.id.onlineIndicator)
-    private val messageUser: TextView = itemView.findViewById(R.id.messageName)
+    private val context = itemView!!.context
+    private val onlineIndicator: View = itemView!!.findViewById(R.id.onlineIndicator)
+    private val messageUser: TextView = itemView!!.findViewById(R.id.messageName)
+    private val messageDate: TextView = itemView!!.findViewById(R.id.messageDate)
     override fun onBind(message: Message) {
         super.onBind(message)
-        val isOnline = true
+        val isOnline = message.user.online
         val userName = message.user.name
         if (isOnline) {
             onlineIndicator.setBackgroundResource(R.drawable.shape_bubble_online)
@@ -32,6 +34,7 @@ class IncomingTextMessageViewHolder(
                 payload.avatarClickListener!!.onAvatarClick()
             }
         }
+        messageDate.text = FormatUtils.createDate(message.createdAt)
     }
 
     class Payload {

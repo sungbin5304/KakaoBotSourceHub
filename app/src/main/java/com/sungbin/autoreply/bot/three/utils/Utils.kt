@@ -1,3 +1,5 @@
+@file:Suppress("UNNECESSARY_NOT_NULL_ASSERTION")
+
 package com.sungbin.autoreply.bot.three.utils
 
 import android.annotation.SuppressLint
@@ -15,7 +17,7 @@ import java.io.FileInputStream
 import java.io.InputStreamReader
 import java.util.*
 
-@Suppress("DEPRECATION")
+@Suppress("DEPRECATION", "UNUSED_PARAMETER")
 @SuppressLint("MissingPermission", "HardwareIds")
 object Utils {
 

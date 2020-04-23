@@ -1,6 +1,7 @@
 package com.sungbin.autoreply.bot.three.dto.chat.model
 
 import com.stfalcon.chatkit.commons.models.IDialog
+import com.sungbin.autoreply.bot.three.dto.chat.MessageType
 import java.util.*
 
 class Dialog(
@@ -10,8 +11,12 @@ class Dialog(
     private val dialogPhoto: String,
     private val users: ArrayList<User>,
     private var lastMessage: Message,
-    private var unreadCount: Int
+    private var unreadCount: Int,
+    private val messageType: Int
 ) : IDialog<Message> {
+
+    val type: Int
+        get() = messageType
 
     override fun getId(): String {
         return id

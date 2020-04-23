@@ -64,7 +64,8 @@ class LoginActivity : AppCompatActivity() {
             override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
                 try {
                     val item = dataSnapshot.getValue(UserItem::class.java)!!
-                    val user = User(item.id!!, item.name!!, item.avatar!!, item.isOnline!!)
+                    val user = User(item.id!!, item.name!!, item.avatar!!, item.isOnline!!,
+                        item.roomList, item.friendsList)
                     ChatModuleUtils.addUser(user)
                 }
                 catch (e: Exception) {
@@ -98,7 +99,8 @@ class LoginActivity : AppCompatActivity() {
                             ToastUtils.SHORT, ToastUtils.SUCCESS)
                         val user = UserItem(deviceId, result.kakaoAccount.profile.nickname,
                             result.kakaoAccount.profile.profileImageUrl ?:
-                            "https://cdn.pixabay.com/photo/2020/03/28/15/20/cat-4977436_960_720.jpg", true)
+                            "https://cdn.pixabay.com/photo/2020/03/28/15/20/cat-4977436_960_720.jpg", true,
+                            ArrayList<String>(), ArrayList<String>())
                         reference.child(deviceId).setValue(user)
 
                         finish()
@@ -159,7 +161,8 @@ class LoginActivity : AppCompatActivity() {
                             ToastUtils.show(applicationContext, getString(R.string.login_success),
                                 ToastUtils.SHORT, ToastUtils.SUCCESS)
                             val user = UserItem(deviceId, "사용자 ${Random().nextInt(1000)}",
-                                "https://cdn.pixabay.com/photo/2020/03/28/15/20/cat-4977436_960_720.jpg", true)
+                                "https://cdn.pixabay.com/photo/2020/03/28/15/20/cat-4977436_960_720.jpg", true,
+                                ArrayList<String>(), ArrayList<String>())
                             reference.child(deviceId).setValue(user)
 
                             finish()
@@ -190,7 +193,6 @@ class LoginActivity : AppCompatActivity() {
         Session.getCurrentSession().removeCallback(sessionCallback)
     }
 
-
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
         auth.signInWithCredential(credential)
@@ -202,7 +204,8 @@ class LoginActivity : AppCompatActivity() {
                         profileImage = "https://cdn.pixabay.com/photo/2020/03/28/15/20/cat-4977436_960_720.jpg"
                     ToastUtils.show(applicationContext, getString(R.string.login_success),
                         ToastUtils.SHORT, ToastUtils.SUCCESS)
-                    val user = UserItem(deviceId, googleUser.displayName!!, profileImage, true)
+                    val user = UserItem(deviceId, googleUser.displayName!!, profileImage, true,
+                        ArrayList<String>(), ArrayList<String>())
                     reference.child(deviceId).setValue(user)
 
                     finish()

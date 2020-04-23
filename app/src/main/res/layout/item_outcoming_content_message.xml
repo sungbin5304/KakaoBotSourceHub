@@ -1,0 +1,60 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/main_layout"
+        android:layout_marginTop="@dimen/margin_default"
+        android:layout_marginEnd="@dimen/margin_default"
+        android:layout_marginStart="@dimen/margin_default"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="RtlHardcoded,SmallSp" >
+
+    <LinearLayout
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/margin_twice_half"
+            android:id="@id/bubble"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <TextView
+                android:visibility="gone"
+                android:layout_gravity="end"
+                android:id="@id/messageText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="@string/add_log_none"
+                android:textSize="15sp"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <net.wujingchao.android.view.SimpleTagImageView
+                android:contentDescription="@string/chat_image_description"
+                android:id="@id/image"
+                android:scaleType="fitXY"
+                android:transitionName="tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:simple_tag_textSize="18sp"
+                app:simple_corner_distance="@dimen/margin_twice"
+                app:simple_tag_text="gif"
+                app:simple_tag_background_color="@color/colorGray"
+                app:simple_tag_orientation="right_bottom"
+                app:simple_tag_width="20dp"
+                app:simple_tag_textColor="@color/colorWhite"
+                app:simple_tag_enable="false"
+                app:simple_tag_round_radius="@dimen/margin_default"
+                tools:src="@drawable/icon"/>
+
+    </LinearLayout>
+
+    <TextView
+            android:id="@+id/messageDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bubble"
+            android:layout_alignRight="@id/bubble"
+            android:layout_marginTop="@dimen/margin_twice_half"
+            android:layout_marginEnd="@dimen/margin_twice_half"
+            tools:text="@string/preview_message_date" />
+
+</RelativeLayout>

@@ -4,7 +4,7 @@
         android:id="@id/dialogRootLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:ignore="RtlHardcoded" >
+        tools:ignore="UselessParent,ContentDescription,SmallSp,RtlHardcoded" >
 
     <RelativeLayout
             android:id="@id/dialogContainer"
@@ -100,6 +100,7 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/bubble_circle"
                 android:ellipsize="end"
+                android:textSize="10sp"
                 android:fontFamily="@string/font_fontFamily_medium"
                 android:gravity="center"
                 android:lines="1"/>

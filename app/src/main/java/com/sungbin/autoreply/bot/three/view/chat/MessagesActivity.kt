@@ -1,18 +1,34 @@
 package com.sungbin.autoreply.bot.three.view.chat
 
+import android.animation.Animator
+import android.annotation.SuppressLint
+import android.content.Context
+import android.database.Cursor
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
+import android.text.TextUtils
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import com.bumptech.glide.Glide
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import cn.pedant.SweetAlert.SweetAlertDialog
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
 import com.stfalcon.chatkit.commons.ImageLoader
-import com.stfalcon.chatkit.commons.models.MessageContentType
 import com.stfalcon.chatkit.messages.MessageHolders
 import com.stfalcon.chatkit.messages.MessageInput
 import com.stfalcon.chatkit.messages.MessageInput.TypingListener
@@ -20,6 +36,7 @@ import com.stfalcon.chatkit.messages.MessagesList
 import com.stfalcon.chatkit.messages.MessagesListAdapter
 import com.stfalcon.chatkit.utils.DateFormatter
 import com.sungbin.autoreply.bot.three.R
+import com.sungbin.autoreply.bot.three.adapter.PhotoListAdapter
 import com.sungbin.autoreply.bot.three.dto.chat.Content
 import com.sungbin.autoreply.bot.three.dto.chat.ContentType
 import com.sungbin.autoreply.bot.three.dto.chat.MessageState
@@ -28,23 +45,28 @@ import com.sungbin.autoreply.bot.three.dto.chat.item.UserItem
 import com.sungbin.autoreply.bot.three.dto.chat.model.Dialog
 import com.sungbin.autoreply.bot.three.dto.chat.model.Message
 import com.sungbin.autoreply.bot.three.dto.chat.model.User
+import com.sungbin.autoreply.bot.three.utils.ui.ImageUtils
 import com.sungbin.autoreply.bot.three.utils.chat.ChatModuleUtils
 import com.sungbin.autoreply.bot.three.view.chat.viewholder.message.incoming.IncomingImageMessageViewHolder
 import com.sungbin.autoreply.bot.three.view.chat.viewholder.message.incoming.IncomingTextMessageViewHolder
-import com.sungbin.autoreply.bot.three.view.chat.viewholder.message.incoming.outcoming.OutcomingImageMessageViewHolder
-import com.sungbin.autoreply.bot.three.view.chat.viewholder.message.incoming.outcoming.OutcomingTextMessageViewHolder
+import com.sungbin.autoreply.bot.three.view.chat.viewholder.message.outcoming.OutcomingImageMessageViewHolder
+import com.sungbin.autoreply.bot.three.view.chat.viewholder.message.outcoming.OutcomingTextMessageViewHolder
 import com.sungbin.sungbintool.ToastUtils
 import com.sungbin.sungbintool.Utils
+import gun0912.tedimagepicker.builder.TedImagePicker
+import gun0912.tedimagepicker.builder.type.MediaType
+import kotlinx.android.synthetic.main.activity_custom_holder_messages.*
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
 
+@Suppress("DEPRECATION")
 class MessagesActivity : AppCompatActivity(),
-    MessagesListAdapter.SelectionListener, MessagesListAdapter.OnLoadMoreListener,
+    MessagesListAdapter.SelectionListener,
     MessagesListAdapter.OnMessageLongClickListener<Message?>, MessageInput.InputListener,
     MessageInput.AttachmentsListener, DateFormatter.Formatter {
 
-    private val TOTAL_MESSAGES_COUNT = 100
     private var reference = FirebaseDatabase.getInstance().reference
     private var messagesAdapter: MessagesListAdapter<Message?>? = null
     private var menu: Menu? = null
@@ -52,41 +74,58 @@ class MessagesActivity : AppCompatActivity(),
     private var lastLoadedDate: Date? = null
     private var dialog: Dialog? = null
     private var deviceId: String? = null
+    private var lastMessage = ""
+    private var isAutoScroll = true
+    private var lastMessageId = 0
+    private var rvPhoto: RecyclerView? = null
+    private var rlAttachment: FrameLayout? = null
+    private var inputLayout: MessageInput? = null
+    private var isAnimatied = false
+    private var ivCode: ImageView? = null
+    private var ivPhoto: ImageView? = null
+    private var ivVideo: ImageView? = null
+    private var imm: InputMethodManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_custom_holder_messages)
 
+        ivCode = iv_code
+        ivVideo = iv_video
+        rvPhoto = rv_photos
+        inputLayout = input
+        ivPhoto = iv_picture
+        rlAttachment = rl_attachment
         deviceId = ChatModuleUtils.getDeviceId(applicationContext)
         dialog = ChatModuleUtils.getDialog(intent.getStringExtra("dialogId")!!)
+        imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
         supportActionBar!!.title = dialog!!.dialogName
-
         reference = reference.child("Chat").child("Messages").child(dialog!!.id)
-        val messageItems = ArrayList<Message>()
+
         val messagesList = findViewById<MessagesList>(R.id.messagesList)
         val input = findViewById<MessageInput>(R.id.input)
         val payload = IncomingTextMessageViewHolder.Payload()
         val imageLoader = ImageLoader { imageView: ImageView?, url: String?, _: Any? ->
-                Glide.with(this@MessagesActivity).load(url).into(imageView!!)
+                ImageUtils.set(url!!, imageView!!, this@MessagesActivity)
             }
         val holdersConfig = MessageHolders()
             .setIncomingTextConfig(
                 IncomingTextMessageViewHolder::class.java,
-                R.layout.item_custom_incoming_text_message,
+                R.layout.item_incoming_text_message,
                 payload
             )
             .setOutcomingTextConfig(
                 OutcomingTextMessageViewHolder::class.java,
-                R.layout.item_custom_outcoming_text_message
+                R.layout.item_outcoming_text_message
             )
             .setIncomingImageConfig(
                 IncomingImageMessageViewHolder::class.java,
-                R.layout.item_custom_incoming_content_message
+                R.layout.item_incoming_content_message
             )
             .setOutcomingImageConfig(
                 OutcomingImageMessageViewHolder::class.java,
-                R.layout.item_custom_outcoming_content_message
+                R.layout.item_outcoming_content_message
             )
 
         input.setInputListener(this)
@@ -102,13 +141,6 @@ class MessagesActivity : AppCompatActivity(),
             }
         })
 
-        payload.avatarClickListener = object : IncomingTextMessageViewHolder.OnAvatarClickListener {
-            override fun onAvatarClick() {
-                ToastUtils.show(applicationContext, "Text message avatar clicked",
-                    ToastUtils.SHORT, ToastUtils.SUCCESS)
-            }
-        }
-
         messagesAdapter =
             MessagesListAdapter(
                 ChatModuleUtils.getDeviceId(applicationContext),
@@ -116,26 +148,50 @@ class MessagesActivity : AppCompatActivity(),
                 imageLoader
             )
 
+        payload.avatarClickListener = object : IncomingTextMessageViewHolder.OnAvatarClickListener {
+            override fun onAvatarClick() {
+                ToastUtils.show(applicationContext, "Text message avatar clicked",
+                    ToastUtils.SHORT, ToastUtils.SUCCESS)
+            }
+        }
+
+        messagesAdapter!!.enableSelectionMode(this)
         messagesAdapter!!.setDateHeadersFormatter(this)
         messagesAdapter!!.setOnMessageLongClickListener(this)
-        messagesAdapter!!.setLoadMoreListener(this)
         messagesList!!.setAdapter(messagesAdapter)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            messagesList.setOnScrollChangeListener { _, _, y, _, oldY ->
+                if (y > oldY) {
+                    //Down
+                    isAutoScroll = true
+                }
+                if (y < oldY) {
+                    //Up
+                    isAutoScroll = false
+                }
+            }
+        }
 
         reference.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
                 try {
                     val item = dataSnapshot.getValue(MessageItem::class.java)!!
+
+                    if(lastMessageId < item.id!!.toInt())
+                        lastMessageId = item.id!!.toInt()
+
+                    if(lastMessage == item.text){
+                        return
+                    }
+                    else lastMessage = item.text!!
+
                     val messageUser = item.user!!
                     val user = User(messageUser.id!!, messageUser.name!!, messageUser.avatar!!,
-                        messageUser.isOnline!!)
+                        messageUser.isOnline!!, messageUser.roomList, messageUser.friendsList)
                     val message = Message(item.id!!, item.dialogIdString!!, user, item.text!!,
                         item.createdAt!!, item.messageStatue!!, item.messageContent)
-                    if(!messageItems.contains(message)) {
-                        messageItems.add(message)
-                        messagesAdapter!!.addToStart(message, true)
-                    }
-                    messagesAdapter!!.notifyDataSetChanged()
-                    Log.d("AAA", message.text)
+                    messagesAdapter!!.addToStart(message, isAutoScroll)
                 }
                 catch (e: Exception) {
                     Utils.error(applicationContext, e, "init messages")
@@ -159,13 +215,75 @@ class MessagesActivity : AppCompatActivity(),
 
             }
         })
+
+        ivPhoto!!.setOnClickListener {
+            TedImagePicker.with(this)
+                .mediaType(MediaType.IMAGE)
+                .start { uri ->
+                    addPicture(uri.toString())
+                }
+        }
+
+        ivVideo!!.setOnClickListener {
+            TedImagePicker.with(this)
+                .mediaType(MediaType.VIDEO)
+                .start { uri ->
+                    addPicture(uri.toString())
+                }
+        }
+
+        val photoAdapter = PhotoListAdapter(getPathOfAllImages(-1), this)
+        photoAdapter.setOnItemClickListener(object : PhotoListAdapter.OnItemClickListener {
+            override fun onItemClick(imageUrl: String) {
+                addPicture(imageUrl)
+            }
+        })
+        rvPhoto!!.layoutManager = GridLayoutManager(this, 3)
+        rvPhoto!!.adapter = photoAdapter
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            rvPhoto!!.setOnScrollChangeListener { _, _, y, _, oldY ->
+                if (y < oldY) { //Up
+                    if(!isAnimatied) {
+                        rlAttachment!!.visibility = View.VISIBLE
+                        YoYo.with(Techniques.FadeInUp)
+                            .duration(500)
+                            .playOn(rlAttachment!!)
+                        isAnimatied = true
+                    }
+                }
+
+                if (y > oldY) { //Down
+                    if(isAnimatied) {
+                        YoYo.with(Techniques.FadeOutDown)
+                            .withListener(object : Animator.AnimatorListener {
+                                override fun onAnimationRepeat(p0: Animator?) {
+                                }
+
+                                override fun onAnimationEnd(p0: Animator?) {
+                                    rlAttachment!!.visibility = View.INVISIBLE
+                                }
+
+                                override fun onAnimationCancel(p0: Animator?) {
+                                }
+
+                                override fun onAnimationStart(p0: Animator?) {
+                                }
+                            })
+                            .duration(500)
+                            .playOn(rlAttachment!!)
+                        isAnimatied = false
+                    }
+                }
+            }
+        }
     }
 
     override fun onSubmit(input: CharSequence): Boolean {
         val myUserData = ChatModuleUtils.getUser(deviceId!!)!!
         val user = UserItem(deviceId!!, myUserData.name,
-            myUserData.avatar, true)
-        val messageId = ChatModuleUtils.randomUuid
+            myUserData.avatar, true, myUserData.rooms, myUserData.friends)
+        val messageId = (lastMessageId + 1).toString()
         val item = MessageItem(messageId, dialog!!.id,
             user, input.toString(), Date(), MessageState.SENT, null)
         reference.child(messageId).setValue(item)
@@ -173,13 +291,165 @@ class MessagesActivity : AppCompatActivity(),
     }
 
     override fun onAddAttachments() {
+        imm!!.hideSoftInputFromWindow(inputLayout!!.windowToken, 0)
+        rvPhoto!!.visibility = View.VISIBLE
+        rlAttachment!!.visibility = View.VISIBLE
+
+        YoYo.with(Techniques.FadeOutDown)
+            .withListener(object : Animator.AnimatorListener {
+                override fun onAnimationRepeat(p0: Animator?) {
+                }
+
+                override fun onAnimationEnd(p0: Animator?) {
+                    inputLayout!!.visibility = View.GONE
+                }
+
+                override fun onAnimationCancel(p0: Animator?) {
+                }
+
+                override fun onAnimationStart(p0: Animator?) {
+                }
+            })
+            .duration(500)
+            .playOn(inputLayout)
+
+        YoYo.with(Techniques.SlideInUp)
+            .withListener(object : Animator.AnimatorListener {
+                override fun onAnimationRepeat(p0: Animator?) {
+                }
+
+                override fun onAnimationEnd(p0: Animator?) {
+                }
+
+                override fun onAnimationCancel(p0: Animator?) {
+                }
+
+                override fun onAnimationStart(p0: Animator?) {
+                }
+            })
+            .duration(500)
+            .playOn(rvPhoto!!)
+
+        YoYo.with(Techniques.SlideInUp)
+            .withListener(object : Animator.AnimatorListener {
+                override fun onAnimationRepeat(p0: Animator?) {
+                }
+
+                override fun onAnimationEnd(p0: Animator?) {
+                }
+
+                override fun onAnimationCancel(p0: Animator?) {
+                }
+
+                override fun onAnimationStart(p0: Animator?) {
+                    YoYo.with(Techniques.Bounce)
+                        .duration(1000)
+                        .playOn(ivCode!!)
+                    YoYo.with(Techniques.Bounce)
+                        .duration(1250)
+                        .playOn(ivPhoto!!)
+                    YoYo.with(Techniques.Bounce)
+                        .duration(1500)
+                        .playOn(ivVideo!!)
+                }
+            })
+            .duration(500)
+            .playOn(rlAttachment!!)
+        isAnimatied = true
+    }
+
+    private fun addPicture(linkString: String){
+        Log.d("address", linkString)
+        val link = if(linkString.startsWith("file://")) {
+            linkString.replaceFirst("file://", "")
+        } else linkString
+        val pDialog = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
+        pDialog.progressHelper.barColor = ContextCompat.getColor(applicationContext,
+            R.color.colorAccent)
+        pDialog.titleText = getString(R.string.uploading_image)
+        pDialog.setCancelable(false)
+        pDialog.show()
+
         val myUserData = ChatModuleUtils.getUser(deviceId!!)!!
-        val user = UserItem(deviceId!!, myUserData.name,
-            myUserData.avatar, true)
-        val messageId = ChatModuleUtils.randomUuid
-        val item = MessageItem(messageId, dialog!!.id,
-            user, "이미지 첨부됨!", Date(), MessageState.SENT, Content("https://cdn.pixabay.com/photo/2020/04/07/17/01/chicks-5014152_960_720.jpg", ContentType.IMAGE))
-        reference.child(messageId).setValue(item)
+        val user = UserItem(deviceId!!, myUserData.name, myUserData.avatar, true,
+            myUserData.rooms, myUserData.friends)
+        val file = Uri.fromFile(File(link))
+        val storageRef = FirebaseStorage.getInstance().reference
+        val messageId = (lastMessageId + 1).toString()
+        var prefix = "jpg"
+        if(linkString.toLowerCase(Locale.getDefault()).contains(".gif")) prefix = "gif"
+        val riversRef = storageRef.child("Chat/${dialog!!.id}/Picture/$messageId.$prefix")
+        val uploadTask = riversRef.putFile(file)
+        uploadTask.addOnFailureListener {
+            val item = MessageItem(messageId, dialog!!.id,
+                user, "이미지 업로드에 실패했습니다.\n\n${it.message}",
+                Date(), MessageState.SENT,
+                null
+            )
+            reference.child(messageId).setValue(item)
+            pDialog.cancel()
+        }.addOnSuccessListener {
+            riversRef.downloadUrl.addOnSuccessListener {
+                val item = MessageItem(messageId, dialog!!.id,
+                    user, file.lastPathSegment, Date(), MessageState.SENT,
+                    Content(it.toString(), ContentType.IMAGE)
+                )
+                reference.child(messageId).setValue(item)
+                pDialog.cancel()
+            }
+            riversRef.downloadUrl.addOnFailureListener {
+                val item = MessageItem(messageId, dialog!!.id,
+                    user, "이미지 다운로드 링크 추출에 실패했습니다.\n\n${it.message}", Date(), MessageState.SENT,
+                    null
+                )
+                reference.child(messageId).setValue(item)
+                pDialog.cancel()
+            }
+        }
+
+        inputLayout!!.visibility = View.VISIBLE
+        YoYo.with(Techniques.SlideInUp)
+            .duration(500)
+            .playOn(inputLayout)
+
+        YoYo.with(Techniques.FadeOutDown)
+            .withListener(object : Animator.AnimatorListener{
+                override fun onAnimationRepeat(p0: Animator?) {
+                }
+
+                override fun onAnimationEnd(p0: Animator?) {
+                    rvPhoto!!.visibility = View.INVISIBLE
+                }
+
+                override fun onAnimationCancel(p0: Animator?) {
+                }
+
+                override fun onAnimationStart(p0: Animator?) {
+                }
+            })
+            .duration(500)
+            .playOn(rvPhoto!!)
+
+        if(isAnimatied){
+            isAnimatied = false
+            YoYo.with(Techniques.FadeOutDown)
+                .withListener(object : Animator.AnimatorListener{
+                    override fun onAnimationRepeat(p0: Animator?) {
+                    }
+
+                    override fun onAnimationEnd(p0: Animator?) {
+                        rlAttachment!!.visibility = View.INVISIBLE
+                    }
+
+                    override fun onAnimationCancel(p0: Animator?) {
+                    }
+
+                    override fun onAnimationStart(p0: Animator?) {
+                    }
+                })
+                .duration(300)
+                .playOn(rlAttachment!!)
+        }
     }
 
     override fun onMessageLongClick(message: Message?) {
@@ -224,16 +494,60 @@ class MessagesActivity : AppCompatActivity(),
     }
 
     override fun onBackPressed() {
-        if (selectionCount == 0) {
-            super.onBackPressed()
-        } else {
-            messagesAdapter!!.unselectAllItems()
+        inputLayout!!.visibility = View.VISIBLE
+        if(selectionCount == 0) {
+            YoYo.with(Techniques.SlideInUp)
+                .duration(500)
+                .playOn(inputLayout)
         }
-    }
 
-    override fun onLoadMore(page: Int, totalItemsCount: Int) {
-        if (totalItemsCount < TOTAL_MESSAGES_COUNT) {
-            //loadMessages()
+        YoYo.with(Techniques.FadeOutDown)
+            .withListener(object : Animator.AnimatorListener{
+                override fun onAnimationRepeat(p0: Animator?) {
+                }
+
+                override fun onAnimationEnd(p0: Animator?) {
+                    rvPhoto!!.visibility = View.INVISIBLE
+                }
+
+                override fun onAnimationCancel(p0: Animator?) {
+                }
+
+                override fun onAnimationStart(p0: Animator?) {
+                }
+            })
+            .duration(500)
+            .playOn(rvPhoto!!)
+
+        if(isAnimatied){
+            isAnimatied = false
+            YoYo.with(Techniques.FadeOutDown)
+                .withListener(object : Animator.AnimatorListener{
+                    override fun onAnimationRepeat(p0: Animator?) {
+                    }
+
+                    override fun onAnimationEnd(p0: Animator?) {
+                        rlAttachment!!.visibility = View.INVISIBLE
+                    }
+
+                    override fun onAnimationCancel(p0: Animator?) {
+                    }
+
+                    override fun onAnimationStart(p0: Animator?) {
+                    }
+                })
+                .duration(300)
+                .playOn(rlAttachment!!)
+        }
+        else {
+            if (selectionCount == 0 &&
+                    inputLayout!!.visibility == View.VISIBLE &&
+                    rvPhoto!!.visibility == View.INVISIBLE &&
+                    rlAttachment!!.visibility == View.INVISIBLE) {
+                super.onBackPressed()
+            } else {
+                messagesAdapter!!.unselectAllItems()
+            }
         }
     }
 
@@ -253,4 +567,30 @@ class MessagesActivity : AppCompatActivity(),
                 createdAt, message.user.name, text
             )
         }
+
+    @SuppressLint("Recycle")
+    private fun getPathOfAllImages(maxCount: Int = 20): ArrayList<String> {
+        var count = 0
+        val result: ArrayList<String> = ArrayList()
+        val uri: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+        val projection =
+            arrayOf(MediaStore.MediaColumns.DATA, MediaStore.MediaColumns.DISPLAY_NAME)
+        val cursor: Cursor? = contentResolver.query(
+            uri,
+            projection,
+            null,
+            null,
+            MediaStore.MediaColumns.DATE_ADDED + " desc"
+        )
+        val columnIndex: Int = cursor!!.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA)
+        while (cursor.moveToNext()) {
+            if(maxCount in 1 until count) break
+            val absolutePathOfImage: String = cursor.getString(columnIndex)
+            if (!TextUtils.isEmpty(absolutePathOfImage)) {
+                result.add(absolutePathOfImage)
+            }
+            count++
+        }
+        return result
+    }
 }

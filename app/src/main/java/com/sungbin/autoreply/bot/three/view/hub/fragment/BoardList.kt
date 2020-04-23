@@ -23,6 +23,7 @@ import java.lang.Exception
 import kotlin.collections.ArrayList
 
 
+@Suppress("UNUSED_ANONYMOUS_PARAMETER")
 class BoardList : Fragment() {
 
     @SuppressLint("InflateParams", "StaticFieldLeak")

@@ -2,6 +2,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/main_layout"
+        android:layout_marginTop="@dimen/margin_default"
         android:layout_marginEnd="@dimen/margin_default"
         android:layout_marginStart="@dimen/margin_default"
         android:layout_width="wrap_content"
@@ -11,13 +12,12 @@
     <LinearLayout
             android:layout_alignParentEnd="true"
             android:layout_marginTop="@dimen/margin_twice_half"
-            android:id="@id/bubble"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:id="@id/bubble"
             android:orientation="vertical">
 
         <TextView
-                android:visibility="gone"
                 android:layout_gravity="end"
                 android:id="@id/messageText"
                 android:layout_width="wrap_content"
@@ -25,16 +25,6 @@
                 tools:text="@string/add_log_none"
                 android:textSize="15sp"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <com.makeramen.roundedimageview.RoundedImageView
-                android:contentDescription="@string/chat_image_description"
-                android:id="@id/image"
-                android:scaleType="fitXY"
-                android:transitionName="tag"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
-                app:riv_corner_radius="@dimen/margin_default"
-                tools:src="@drawable/icon"/>
 
     </LinearLayout>
 
@@ -46,9 +36,6 @@
             android:layout_alignRight="@id/bubble"
             android:layout_marginTop="@dimen/margin_twice_half"
             android:layout_marginEnd="@dimen/margin_twice_half"
-            android:textSize="10sp"
-            tools:text="@string/preview_message_date"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/black" />
+            tools:text="@string/preview_message_date" />
 
 </RelativeLayout>

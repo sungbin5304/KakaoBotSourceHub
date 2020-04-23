@@ -1,21 +1,53 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
+        android:background="@color/white"
+        tools:ignore="RtlSymmetry">
 
-    <com.stfalcon.chatkit.dialogs.DialogsList
-            android:id="@+id/dialogsList"
+    <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+            <com.ogaclejapan.smarttablayout.SmartTabLayout
+                    android:id="@+id/tab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/margin_triple_and_half"
+                    android:clipToPadding="false"
+                    android:layout_gravity="center_horizontal"
+                    app:stl_titleOffset="auto_center"
+                    app:stl_customTabTextViewId="@+id/tab_text"
+                    app:stl_defaultTabTextColor="@color/colorWhite"
+                    app:stl_defaultTabTextHorizontalPadding="@dimen/margin_default"
+                    app:stl_dividerColor="@android:color/transparent"
+                    app:stl_dividerThickness="0dp"
+                    app:stl_indicatorColor="@color/colorPrimaryDark"
+                    app:stl_indicatorCornerRadius="@dimen/margin_default"
+                    app:stl_indicatorGravity="center"
+                    app:stl_indicatorInterpolation="smart"
+                    app:stl_indicatorThickness="36dp"
+                    app:stl_underlineColor="@android:color/transparent"
+                    app:stl_underlineThickness="0dp" />
+
+        </LinearLayout>
+        
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.viewpager.widget.ViewPager
+            android:overScrollMode="never"
+            android:id="@+id/view_pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:overScrollMode="never"
-            app:dialogDividerLeftPadding="0dp"
-            app:dialogMessageTextSize="17sp"
-            app:dialogTitleTextStyle="bold"
-            app:dialogUnreadBubbleBackgroundColor="@color/colorLightRed"
-            app:dialogUnreadItemBackground="@color/colorTwiceLightGray"
-            app:dialogUnreadTitleTextStyle="bold"/>
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
             android:id="@+id/fab"
@@ -26,8 +58,9 @@
             android:text="@string/start_chatting"
             android:textColor="@color/colorWhite"
             android:fontFamily="@font/nanumgothic"
+            android:backgroundTint="@color/colorPrimary"
             app:icon="@drawable/ic_add_primary_24dp"
             app:iconTint="@color/colorWhite"
-            android:backgroundTint="@color/colorPrimary" />
+            app:layout_anchorGravity="bottom|right|end"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -4,6 +4,7 @@ import com.stfalcon.chatkit.commons.models.IMessage
 import com.stfalcon.chatkit.commons.models.MessageContentType
 import com.sungbin.autoreply.bot.three.dto.chat.Content
 import com.sungbin.autoreply.bot.three.dto.chat.ContentType
+import com.sungbin.autoreply.bot.three.dto.chat.MessageType
 import java.util.*
 
 class Message(
@@ -22,6 +23,9 @@ class Message(
 
     val dialogId: String
         get() = dialogIdString
+
+    val content: Content?
+        get() = messageContent
 
     override fun getId(): String {
         return id

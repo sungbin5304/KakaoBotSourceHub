@@ -1,6 +1,7 @@
 package com.sungbin.autoreply.bot.three.dto.chat.item
 
 import com.sungbin.autoreply.bot.three.dto.chat.Content
+import com.sungbin.autoreply.bot.three.dto.chat.MessageType
 import java.util.*
 
 class MessageItem {

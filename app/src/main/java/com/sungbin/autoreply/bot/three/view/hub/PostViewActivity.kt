@@ -39,6 +39,7 @@ import java.lang.Exception
 import kotlin.collections.ArrayList
 
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class PostViewActivity : AppCompatActivity() {
 
     private var adapter: CommentListAdapter? = null
@@ -62,7 +63,7 @@ class PostViewActivity : AppCompatActivity() {
         viewer = findViewById<WebView>(R.id.viewer)
 
         val uid = Utils.readData(applicationContext, "uid", "null")!!
-        val uuid = intent.getStringExtra("uuid")
+        val uuid = intent.getStringExtra("uuid")!!
         reference.child("Board").child(uuid).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 boardDataItem = dataSnapshot.getValue(BoardDataItem::class.java)

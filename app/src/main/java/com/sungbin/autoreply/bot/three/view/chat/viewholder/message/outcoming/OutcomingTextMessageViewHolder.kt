@@ -1,4 +1,4 @@
-package com.sungbin.autoreply.bot.three.view.chat.viewholder.message.incoming.outcoming
+package com.sungbin.autoreply.bot.three.view.chat.viewholder.message.outcoming
 
 import android.view.View
 import android.widget.TextView
@@ -14,7 +14,8 @@ class OutcomingTextMessageViewHolder(
     itemView,
     payload
 ) {
-    private  val messageDate: TextView = itemView!!.findViewById(R.id.messageDate)
+    private val context = itemView!!.context
+    private val messageDate: TextView = itemView!!.findViewById(R.id.messageDate)
     override fun onBind(message: Message) {
         super.onBind(message)
         messageDate.text = FormatUtils.createDate(message.createdAt)

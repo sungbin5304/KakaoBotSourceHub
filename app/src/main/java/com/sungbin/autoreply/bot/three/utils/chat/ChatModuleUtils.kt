@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.provider.Settings
 import android.util.Log
+import com.sungbin.autoreply.bot.three.dto.chat.item.UserItem
 import com.sungbin.autoreply.bot.three.dto.chat.model.Dialog
 import com.sungbin.autoreply.bot.three.dto.chat.model.User
 import java.lang.Exception
@@ -46,6 +47,11 @@ object ChatModuleUtils {
         } catch (e: Exception){
             null
         }
+    }
+
+    fun createUserItem(user: User): UserItem{
+        return UserItem(user.id, user.name,
+            user.avatar, user.online, user.rooms, user.friends)
     }
 
     fun getAllUser(): ArrayList<User>{

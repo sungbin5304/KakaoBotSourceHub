@@ -140,6 +140,7 @@ object ApiClass{
 
             @JvmStatic
             @JSStaticFunction
+            @Suppress("UNUSED_PARAMETER")
             fun getHtml(link: String, fromJsoup: Boolean = true): String? {
                 return com.sungbin.autoreply.bot.three.api.Api.getHtmlFromJava(link)
             }
@@ -319,6 +320,7 @@ object ApiClass{
 
             @JvmStatic
             @JSStaticFunction
+            @Suppress("UNUSED_PARAMETER")
             fun getHtml(link: String, fromJsoup: Boolean = true): String? {
                 return com.sungbin.autoreply.bot.three.api.Api.getHtmlFromJava(link).toString()
             }

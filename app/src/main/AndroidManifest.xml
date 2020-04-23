@@ -29,32 +29,35 @@
             </intent-filter>
         </activity>
         <activity
+                android:name=".view.activity.imageview.ui.activity.DetailActivity"
+                android:theme="@style/ImageViewDetailActivity"></activity>
+        <activity
                 android:name=".view.chat.DialogsActivity"
                 android:theme="@style/AppThemeMaterial"></activity>
         <activity
                 android:name=".view.chat.MessagesActivity"
-                android:theme="@style/AppTheme"></activity>
+                android:theme="@style/AppThemeWhiteStatusBar"></activity>
         <activity
                 android:name=".view.hub.PostViewActivity"
-                android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
+                android:theme="@style/AppThemeWhiteStatusBar.NoActionBar"></activity>
         <activity
                 android:name=".view.activity.ScriptEditActivity"
-                android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
+                android:theme="@style/AppThemeWhiteStatusBar.NoActionBar"></activity>
         <activity
                 android:name=".view.activity.DashboardActivity"
-                android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
+                android:theme="@style/AppThemeWhiteStatusBar.NoActionBar"></activity>
         <activity
                 android:name=".view.activity.PermissionActivity"
-                android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
+                android:theme="@style/AppThemeWhiteStatusBar.NoActionBar"></activity>
         <activity
                 android:name=".view.activity.LoginActivity"
-                android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
+                android:theme="@style/AppThemeWhiteStatusBar.NoActionBar"></activity>
         <activity
                 android:name=".view.hub.PostActivity"
-                android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
+                android:theme="@style/AppThemeWhiteStatusBar.NoActionBar"></activity>
         <activity
                 android:name=".view.hub.MainActivity"
-                android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
+                android:theme="@style/AppThemeWhiteStatusBar.NoActionBar"></activity>
 
         <meta-data
                 android:name="com.kakao.sdk.AppKey"

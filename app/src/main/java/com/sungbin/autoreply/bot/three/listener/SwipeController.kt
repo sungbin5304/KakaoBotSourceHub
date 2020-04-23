@@ -12,6 +12,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 
+@Suppress("NAME_SHADOWING", "UNUSED_PARAMETER")
 @SuppressLint("ClickableViewAccessibility")
 internal class SwipeController(buttonsActions: SwipeControllerActions) : ItemTouchHelper.Callback() {
 

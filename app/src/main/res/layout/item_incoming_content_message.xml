@@ -2,8 +2,9 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/main_layout"
-        android:layout_marginEnd="@dimen/margin_default"
+        android:layout_marginTop="@dimen/margin_default"
         android:layout_marginStart="@dimen/margin_default"
+        android:layout_marginEnd="@dimen/margin_default"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:ignore="RtlHardcoded,SmallSp" >
@@ -20,6 +21,7 @@
             app:civ_border_color="@color/transparent" />
 
     <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_marginEnd="@dimen/margin_twice_half"
             android:id="@+id/onlineIndicator"
             android:layout_width="12dp"
             android:layout_height="12dp"
@@ -50,6 +52,7 @@
             android:orientation="vertical">
 
         <TextView
+                android:visibility="gone"
                 android:id="@id/messageText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -57,19 +60,35 @@
                 android:textSize="15sp"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
+
+        <net.wujingchao.android.view.SimpleTagImageView
+                android:contentDescription="@string/chat_image_description"
+                android:id="@id/image"
+                android:scaleType="fitXY"
+                android:transitionName="tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:simple_tag_textSize="18sp"
+                app:simple_corner_distance="@dimen/margin_default"
+                app:simple_tag_text="gif"
+                app:simple_tag_background_color="@color/colorGray"
+                app:simple_tag_orientation="right_bottom"
+                app:simple_tag_width="@dimen/margin_default"
+                app:simple_tag_textColor="@color/colorWhite"
+                app:simple_tag_enable="false"
+                app:simple_tag_round_radius="20dp"
+                tools:src="@drawable/icon"/>
+
     </LinearLayout>
 
     <TextView
-            android:id="@id/messageTime"
+            android:id="@+id/messageDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/bubble"
             android:layout_alignRight="@id/bubble"
             android:layout_marginTop="@dimen/margin_twice_half"
             android:layout_marginEnd="@dimen/margin_twice_half"
-            android:textSize="10sp"
-            tools:text="@string/preview_message_date"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/black" />
+            tools:text="@string/preview_message_date" />
 
 </RelativeLayout>

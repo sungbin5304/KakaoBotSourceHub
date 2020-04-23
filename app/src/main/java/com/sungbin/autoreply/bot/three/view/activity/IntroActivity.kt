@@ -31,7 +31,7 @@ class IntroActivity : AppCompatActivity() {
 
         PermissionUtils.request(this,
             "권한줘!!!", arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE))
-        PermissionUtils.requestReadNotification(this)
+        //PermissionUtils.requestReadNotification(this)
 
         val fadein = AlphaAnimation(0.0f, 1.0f)
         fadein.duration = 1000

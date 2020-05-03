@@ -60,23 +60,14 @@
                 android:textSize="15sp"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
-
-        <net.wujingchao.android.view.SimpleTagImageView
+        <com.sungbin.sungbintool.ui.TagableRoundImageView
                 android:contentDescription="@string/chat_image_description"
                 android:id="@id/image"
                 android:scaleType="fitXY"
                 android:transitionName="tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:simple_tag_textSize="18sp"
-                app:simple_corner_distance="@dimen/margin_default"
-                app:simple_tag_text="gif"
-                app:simple_tag_background_color="@color/colorGray"
-                app:simple_tag_orientation="right_bottom"
-                app:simple_tag_width="@dimen/margin_default"
-                app:simple_tag_textColor="@color/colorWhite"
-                app:simple_tag_enable="false"
-                app:simple_tag_round_radius="20dp"
+                app:triv_tagRadius="@dimen/margin_half"
                 tools:src="@drawable/icon"/>
 
     </LinearLayout>

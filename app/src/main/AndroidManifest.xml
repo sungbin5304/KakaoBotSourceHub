@@ -30,6 +30,7 @@
         </activity>
         <activity
                 android:name=".view.activity.imageview.ui.activity.DetailActivity"
+                android:configChanges="orientation|keyboardHidden|screenSize"
                 android:theme="@style/ImageViewDetailActivity"></activity>
         <activity
                 android:name=".view.chat.DialogsActivity"
@@ -51,7 +52,7 @@
                 android:theme="@style/AppThemeWhiteStatusBar.NoActionBar"></activity>
         <activity
                 android:name=".view.activity.LoginActivity"
-                android:theme="@style/AppThemeWhiteStatusBar.NoActionBar"></activity>
+                android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
                 android:name=".view.hub.PostActivity"
                 android:theme="@style/AppThemeWhiteStatusBar.NoActionBar"></activity>

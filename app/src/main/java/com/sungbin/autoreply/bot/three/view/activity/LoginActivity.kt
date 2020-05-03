@@ -53,6 +53,10 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.content_login)
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.statusBarColor = ContextCompat.getColor(applicationContext, R.color.colorWhite)
+        }
+
         deviceId = ChatModuleUtils.getDeviceId(applicationContext)
         /*UserManagement.getInstance()
             .requestLogout(object : LogoutResponseCallback() {

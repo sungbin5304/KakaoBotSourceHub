@@ -44,10 +44,6 @@ class Message(
     }
 
     override fun getImageUrl(): String? {
-        return if(messageContent != null){
-            if(messageContent.type == ContentType.IMAGE){
-                messageContent.url
-            } else null
-        } else null
+        return messageContent?.url
     }
 }

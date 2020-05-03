@@ -45,8 +45,8 @@ import com.sungbin.autoreply.bot.three.dto.chat.item.UserItem
 import com.sungbin.autoreply.bot.three.dto.chat.model.Dialog
 import com.sungbin.autoreply.bot.three.dto.chat.model.Message
 import com.sungbin.autoreply.bot.three.dto.chat.model.User
-import com.sungbin.autoreply.bot.three.utils.ui.ImageUtils
 import com.sungbin.autoreply.bot.three.utils.chat.ChatModuleUtils
+import com.sungbin.autoreply.bot.three.utils.ui.ImageUtils
 import com.sungbin.autoreply.bot.three.view.chat.viewholder.message.incoming.IncomingImageMessageViewHolder
 import com.sungbin.autoreply.bot.three.view.chat.viewholder.message.incoming.IncomingTextMessageViewHolder
 import com.sungbin.autoreply.bot.three.view.chat.viewholder.message.outcoming.OutcomingImageMessageViewHolder
@@ -57,8 +57,12 @@ import gun0912.tedimagepicker.builder.TedImagePicker
 import gun0912.tedimagepicker.builder.type.MediaType
 import kotlinx.android.synthetic.main.activity_custom_holder_messages.*
 import java.io.File
+import java.net.URLDecoder
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.log10
+import kotlin.math.pow
 
 
 @Suppress("DEPRECATION")
@@ -228,7 +232,7 @@ class MessagesActivity : AppCompatActivity(),
             TedImagePicker.with(this)
                 .mediaType(MediaType.VIDEO)
                 .start { uri ->
-                    addPicture(uri.toString())
+                    addVideo(uri.toString())
                 }
         }
 
@@ -358,11 +362,61 @@ class MessagesActivity : AppCompatActivity(),
         isAnimatied = true
     }
 
+    @Suppress("NAME_SHADOWING")
+    private fun addVideo(linkString: String){
+        val link = URLDecoder.decode(linkString.replaceFirst("file:///", ""), "UTF-8")
+        val pDialog = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
+        pDialog.progressHelper.barColor = ContextCompat.getColor(applicationContext,
+            R.color.colorAccent)
+        pDialog.titleText = getString(R.string.uploading_image)
+        pDialog.setCancelable(false)
+        pDialog.show()
+
+        val myUserData = ChatModuleUtils.getUser(deviceId!!)!!
+        val user = UserItem(deviceId!!, myUserData.name, myUserData.avatar, true,
+            myUserData.rooms, myUserData.friends)
+        val file = Uri.fromFile(File(link))
+        val storageRef = FirebaseStorage.getInstance().reference
+        val messageId = (lastMessageId + 1).toString()
+        val videoRef = storageRef.child("Chat/${dialog!!.id}/Video/$messageId.mp4")
+        val videoUploadTask = videoRef.putFile(file)
+        videoUploadTask.addOnFailureListener {
+            val item = MessageItem(messageId, dialog!!.id,
+                user, "비디오 업로드에 실패했습니다.\n\n${it.message}",
+                Date(), MessageState.SENT,
+                null
+            )
+            reference.child(messageId).setValue(item)
+            pDialog.cancel()
+        }.addOnProgressListener { taskSnapshot ->
+            pDialog.contentText = "${getFileSize(taskSnapshot.bytesTransferred.toInt())} / " +
+                    getFileSize(taskSnapshot.totalByteCount.toInt())
+        }.addOnSuccessListener {
+            videoRef.downloadUrl.addOnSuccessListener {
+                val item = MessageItem(messageId, dialog!!.id,
+                    user, file.lastPathSegment, Date(), MessageState.SENT,
+                    Content(it.toString(), ContentType.VIDEO)
+                )
+                reference.child(messageId).setValue(item)
+                pDialog.cancel()
+            }
+            videoRef.downloadUrl.addOnFailureListener {
+                val item = MessageItem(messageId, dialog!!.id,
+                    user, "비디오 다운로드 링크 추출에 실패했습니다.\n\n${it.message}",
+                    Date(), MessageState.SENT,
+                    null
+                )
+                reference.child(messageId).setValue(item)
+                pDialog.cancel()
+            }
+        }
+
+        doAnimated()
+    }
+
     private fun addPicture(linkString: String){
-        Log.d("address", linkString)
-        val link = if(linkString.startsWith("file://")) {
-            linkString.replaceFirst("file://", "")
-        } else linkString
+        val link = URLDecoder.decode(linkString.replaceFirst("file:///", ""), "UTF-8")
+        Log.d("video link", link)
         val pDialog = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
         pDialog.progressHelper.barColor = ContextCompat.getColor(applicationContext,
             R.color.colorAccent)
@@ -388,6 +442,9 @@ class MessagesActivity : AppCompatActivity(),
             )
             reference.child(messageId).setValue(item)
             pDialog.cancel()
+        }.addOnProgressListener { taskSnapshot ->
+            pDialog.contentText = "${getFileSize(taskSnapshot.bytesTransferred.toInt())} / " +
+                    getFileSize(taskSnapshot.totalByteCount.toInt())
         }.addOnSuccessListener {
             riversRef.downloadUrl.addOnSuccessListener {
                 val item = MessageItem(messageId, dialog!!.id,
@@ -399,7 +456,8 @@ class MessagesActivity : AppCompatActivity(),
             }
             riversRef.downloadUrl.addOnFailureListener {
                 val item = MessageItem(messageId, dialog!!.id,
-                    user, "이미지 다운로드 링크 추출에 실패했습니다.\n\n${it.message}", Date(), MessageState.SENT,
+                    user, "이미지 다운로드 링크 추출에 실패했습니다.\n\n${it.message}",
+                    Date(), MessageState.SENT,
                     null
                 )
                 reference.child(messageId).setValue(item)
@@ -407,6 +465,20 @@ class MessagesActivity : AppCompatActivity(),
             }
         }
 
+        doAnimated()
+    }
+
+    fun getFileSize(size: Int): String {
+        if (size <= 0) return "0"
+        val units = arrayOf("B", "KB", "MB", "GB", "TB")
+        val digitGroups =
+            (log10(size.toDouble()) / log10(1000.0)).toInt()
+        return DecimalFormat("#,##0.#").format(
+            size / 1000.0.pow(digitGroups.toDouble())
+        ).toString() + " " + units[digitGroups]
+    }
+
+    private fun doAnimated(){
         inputLayout!!.visibility = View.VISIBLE
         YoYo.with(Techniques.SlideInUp)
             .duration(500)

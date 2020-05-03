@@ -1,7 +1,8 @@
 package com.sungbin.autoreply.bot.three.view.activity.imageview.ui.activity
 
 import android.animation.Animator
-import android.animation.ValueAnimator
+import android.media.MediaMetadataRetriever
+import android.net.Uri
 import android.os.Bundle
 import android.transition.Transition
 import android.transition.TransitionSet
@@ -18,7 +19,7 @@ import com.sungbin.autoreply.bot.three.view.activity.imageview.ui.transition.Sim
 import com.sungbin.autoreply.bot.three.view.activity.imageview.ui.transition.SimpleTransitionListener
 import com.sungbin.autoreply.bot.three.view.activity.imageview.ui.view.CircleSwipeLayout
 import com.sungbin.autoreply.bot.three.view.activity.imageview.ui.view.RoundedImageView
-import kotlinx.android.synthetic.main.activity_imageview_detail.*
+import kotlinx.android.synthetic.main.activity_contentview_detail.*
 import pl.droidsonroids.gif.GifDrawable
 import java.io.File
 
@@ -29,29 +30,15 @@ class DetailActivity : AppCompatActivity() {
     private var sharedElementEnterRadius: Int = 0
     private var isInformationUiHidden = false
     private var isFlingSwiped = false
-    private var progressAnimator: ValueAnimator? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initializeViews(savedInstanceState)
     }
 
-    override fun onPause() {
-        super.onPause()
-
-        pauseProgress()
-    }
-
     override fun onStart() {
         super.onStart()
-
         initializeTransitionCallback()
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        resumeProgress()
     }
 
     override fun onAttachedToWindow() {
@@ -62,15 +49,24 @@ class DetailActivity : AppCompatActivity() {
 
     @Suppress("UNUSED_PARAMETER")
     private fun initializeViews(savedInstanceState: Bundle?) {
-        setContentView(R.layout.activity_imageview_detail)
+        setContentView(R.layout.activity_contentview_detail)
 
-        val gifPath = ImageUtils.getDownloadFilePath(intent.getStringExtra("image")!!)
-        if(gifPath.contains(".gif")) {
-            val gifFile = File(gifPath)
-            val gifFromFile = GifDrawable(gifFile)
-            image.setImageDrawable(gifFromFile)
+        val path = ImageUtils.getDownloadFilePath(intent.getStringExtra("image")!!)
+        when {
+            path.contains(".gif") -> {
+                val gifFile = File(path)
+                val gifFromFile = GifDrawable(gifFile)
+                image.setImageDrawable(gifFromFile)
+            }
+            path.contains("mp4") -> {
+                image.visibility = View.GONE
+                videoView.visibility = View.VISIBLE
+
+                videoView.setVideoURI(Uri.parse(intent.getStringExtra("image")!!))
+                videoView.start()
+            }
+            else -> ImageUtils.set(path, image, applicationContext)
         }
-        else ImageUtils.set(gifPath, image, applicationContext)
         Glide.set(applicationContext, intent.getStringExtra("avatar")!!, imageViewUser)
         name.text = intent.getStringExtra("name")
 
@@ -80,15 +76,12 @@ class DetailActivity : AppCompatActivity() {
 
         swipeLayout.listener = object : CircleSwipeLayout.Listener {
             override fun onSwipeStarted() {
-                pauseProgress()
             }
 
             override fun onSwipeCancelled() {
             }
 
             override fun onSwiped() {
-                pauseProgress()
-
                 swipeLayout.autoReset = false
                 startExitAnimation()
             }
@@ -100,8 +93,6 @@ class DetailActivity : AppCompatActivity() {
             override fun onSwipeReset() {
                 if (isFlingSwiped)
                     supportFinishAfterTransition()
-                else
-                    resumeProgress()
             }
         }
         swipeLayout.setOnClickListener {
@@ -111,13 +102,6 @@ class DetailActivity : AppCompatActivity() {
                 } else {
                     swipeLayout.swipeEnabled = true
                     isInformationUiHidden = false
-
-                    showInformationUi().setListener(object : SimpleAnimationListener() {
-                        override fun onAnimationEnd(animator: Animator) {
-                            super.onAnimationEnd(animator)
-                            resumeProgress()
-                        }
-                    })
                 }
             }
         }
@@ -125,8 +109,6 @@ class DetailActivity : AppCompatActivity() {
             if (!swipeLayout.isTransitionPresent()) {
                 swipeLayout.swipeEnabled = false
                 isInformationUiHidden = true
-
-                pauseProgress()
                 hideInformationUi()
             }
 
@@ -185,14 +167,6 @@ class DetailActivity : AppCompatActivity() {
     private fun initializeSystemUi() {
         window!!.decorView.systemUiVisibility += (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
-    }
-
-    private fun pauseProgress() {
-        progressAnimator?.pause()
-    }
-
-    private fun resumeProgress() {
-        progressAnimator?.resume()
     }
 
     private fun showInformationUi(): ViewPropertyAnimator {

@@ -3,6 +3,7 @@
     <declare-styleable name="RoundedImageView">
         <attr name="radius" format="dimension" />
     </declare-styleable>
+
     <declare-styleable name="RoundedImageTransition">
         <attr name="fromRadius" format="dimension" />
         <attr name="toRadius" format="dimension" />

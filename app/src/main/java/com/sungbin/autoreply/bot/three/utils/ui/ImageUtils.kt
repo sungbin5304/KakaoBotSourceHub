@@ -108,7 +108,7 @@ object ImageUtils {
             } catch (e: Exception) {
                 Log.e("image error", e.toString())
                 StorageUtils.createFolder("KTBH Error")
-                StorageUtils.save("KTBH Error/${e.stackTrace[0]}.text",  e.toString())
+                StorageUtils.save("KTBH Error/${e.stackTrace[0]}.log",  e.toString())
             }
             return null
         }

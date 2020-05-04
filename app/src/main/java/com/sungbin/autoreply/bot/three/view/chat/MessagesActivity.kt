@@ -28,6 +28,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageException
 import com.stfalcon.chatkit.commons.ImageLoader
 import com.stfalcon.chatkit.messages.MessageHolders
 import com.stfalcon.chatkit.messages.MessageInput
@@ -224,7 +225,10 @@ class MessagesActivity : AppCompatActivity(),
             TedImagePicker.with(this)
                 .mediaType(MediaType.IMAGE)
                 .start { uri ->
-                    addPicture(uri.toString())
+                    ToastUtils.show(applicationContext,
+                        "선택된 경로 : $uri\n\n컨텐츠 공유는 파일 저정소 서버 활당량 초과로 임시 비활성화 되었습니다.",
+                        ToastUtils.SHORT, ToastUtils.WARNING)
+                    //addPicture(uri.toString())
                 }
         }
 
@@ -232,14 +236,20 @@ class MessagesActivity : AppCompatActivity(),
             TedImagePicker.with(this)
                 .mediaType(MediaType.VIDEO)
                 .start { uri ->
-                    addVideo(uri.toString())
+                    ToastUtils.show(applicationContext,
+                        "선택된 경로 : $uri\n\n컨텐츠 공유는 파일 저정소 서버 활당량 초과로 임시 비활성화 되었습니다.",
+                        ToastUtils.SHORT, ToastUtils.WARNING)
+                    //addVideo(uri.toString())
                 }
         }
 
         val photoAdapter = PhotoListAdapter(getPathOfAllImages(-1), this)
         photoAdapter.setOnItemClickListener(object : PhotoListAdapter.OnItemClickListener {
             override fun onItemClick(imageUrl: String) {
-                addPicture(imageUrl)
+                ToastUtils.show(applicationContext,
+                    "선택된 경로 : $imageUrl\n\n컨텐츠 공유는 파일 저정소 서버 활당량 초과로 임시 비활성화 되었습니다.",
+                    ToastUtils.SHORT, ToastUtils.WARNING)
+                //addPicture(imageUrl)
             }
         })
         rvPhoto!!.layoutManager = GridLayoutManager(this, 3)
@@ -435,8 +445,9 @@ class MessagesActivity : AppCompatActivity(),
         val riversRef = storageRef.child("Chat/${dialog!!.id}/Picture/$messageId.$prefix")
         val uploadTask = riversRef.putFile(file)
         uploadTask.addOnFailureListener {
+            val exception = it as StorageException
             val item = MessageItem(messageId, dialog!!.id,
-                user, "이미지 업로드에 실패했습니다.\n\n${it.message}",
+                user, "이미지 업로드에 실패했습니다.\n\n${exception.errorCode}",
                 Date(), MessageState.SENT,
                 null
             )
@@ -455,8 +466,9 @@ class MessagesActivity : AppCompatActivity(),
                 pDialog.cancel()
             }
             riversRef.downloadUrl.addOnFailureListener {
+                val exception = it as StorageException
                 val item = MessageItem(messageId, dialog!!.id,
-                    user, "이미지 다운로드 링크 추출에 실패했습니다.\n\n${it.message}",
+                    user, "이미지 다운로드 링크 추출에 실패했습니다.\n\n${exception.message}",
                     Date(), MessageState.SENT,
                     null
                 )

@@ -1,5 +1,6 @@
 package com.sungbin.autoreply.bot.three.view.activity
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -19,20 +20,21 @@ import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.kakao.auth.ISessionCallback
 import com.kakao.auth.Session
 import com.kakao.network.ErrorResult
 import com.kakao.usermgmt.UserManagement
-import com.kakao.usermgmt.callback.LogoutResponseCallback
 import com.kakao.usermgmt.callback.MeV2ResponseCallback
 import com.kakao.usermgmt.response.MeV2Response
 import com.kakao.util.exception.KakaoException
 import com.sungbin.autoreply.bot.three.R
 import com.sungbin.autoreply.bot.three.dto.chat.item.UserItem
-import com.sungbin.autoreply.bot.three.dto.chat.model.Message
 import com.sungbin.autoreply.bot.three.dto.chat.model.User
 import com.sungbin.autoreply.bot.three.utils.chat.ChatModuleUtils
 import com.sungbin.autoreply.bot.three.view.chat.DialogsActivity
+import com.sungbin.sungbintool.DialogUtils
 import com.sungbin.sungbintool.ToastUtils
 import com.sungbin.sungbintool.Utils
 import kotlinx.android.synthetic.main.content_login.*
@@ -53,8 +55,16 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.content_login)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.statusBarColor = ContextCompat.getColor(applicationContext, R.color.colorWhite)
+        val remoteConfig = FirebaseRemoteConfig.getInstance()
+        remoteConfig.fetch(60).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                remoteConfig.fetchAndActivate()
+            } else {
+                ToastUtils.show(applicationContext,
+                    "서버에서 데이터를 불러오는데 오류가 발생했습니다.\n\n${task.exception}",
+                    ToastUtils.SHORT, ToastUtils.ERROR)
+            }
+            checkNewVersion(remoteConfig)
         }
 
         deviceId = ChatModuleUtils.getDeviceId(applicationContext)
@@ -189,6 +199,19 @@ class LoginActivity : AppCompatActivity() {
                         }
                     }
             }
+        }
+    }
+
+    private fun getAppVersionName(): String{
+        return packageManager.getPackageInfo(packageName, 0).versionName
+    }
+
+    private fun checkNewVersion(remoteConfig: FirebaseRemoteConfig){
+        val lastVersion = remoteConfig.getString("last_version")
+        if(lastVersion != getAppVersionName()){
+            DialogUtils.show(this, "앱 업데이트 필요",
+                "사용중이신 KakaoTalkBotHub의 버전이 낮아서 더 이상 사용하실 수 없습니다.\n계속해서 사용하시려면 업데이트를 해 주새요.",
+                DialogInterface.OnClickListener { _, _ -> finish() }, false)
         }
     }
 

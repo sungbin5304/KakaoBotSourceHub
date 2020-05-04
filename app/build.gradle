@@ -9,8 +9,8 @@ android {
         applicationId "com.sungbin.autoreply.bot.three"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 4
-        versionName "0.1.6"
+        versionCode 5
+        versionName "1.0.0"
         renderscriptTargetApi 17
         renderscriptSupportModeEnabled false
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -78,7 +78,7 @@ dependencies {
 
     implementation 'com.ogaclejapan.smarttablayout:library:1.7.0@aar'
 
-    implementation 'com.github.sungbin5304:AndroidUtils:3.0.0'
+    implementation 'com.github.sungbin5304:AndroidUtils:3.0.1'
     implementation 'com.github.ibrahimsn98:SmoothBottomBar:1.7'
 
     implementation 'com.makeramen:roundedimageview:2.3.0'

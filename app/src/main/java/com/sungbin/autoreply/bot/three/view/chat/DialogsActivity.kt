@@ -170,6 +170,10 @@ class DialogsActivity : AppCompatActivity() {
         tab.setViewPager(view_pager)
 
         fab.setOnClickListener {
+            ToastUtils.show(applicationContext,
+                "채팅방 추가 기능은 파일 저정소 서버 활당량 초과로 임시 비활성화 되었습니다.",
+                ToastUtils.SHORT, ToastUtils.WARNING)
+            return@setOnClickListener
             try {
                 var isClickMessageType = 0
                 var imageUrl = ""

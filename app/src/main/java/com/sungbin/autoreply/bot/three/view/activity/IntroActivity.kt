@@ -25,10 +25,6 @@ class IntroActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.content_intro)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.statusBarColor = ContextCompat.getColor(applicationContext, R.color.colorWhite)
-        }
-
         PermissionUtils.request(this,
             "권한줘!!!", arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE))
         //PermissionUtils.requestReadNotification(this)

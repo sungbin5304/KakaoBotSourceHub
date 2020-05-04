@@ -9,9 +9,6 @@ Bot production methods include programming in JavaScript and setting simple keyw
 # Preview Images
 Preparing...
 
-# Developer
-![Image](https://raw.githubusercontent.com/sungbin5304/NewAutoReplyBot-Helper/master/IMAGE/sungbin.png)
-
 # Main Function
 ``` JavaScript
 function response(room, msg, sender, isGroupChat, replier, ImageDB, package) {

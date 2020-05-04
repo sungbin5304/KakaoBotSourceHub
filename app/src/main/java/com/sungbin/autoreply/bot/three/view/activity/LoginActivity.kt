@@ -207,7 +207,8 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun checkNewVersion(remoteConfig: FirebaseRemoteConfig){
-        val lastVersion = remoteConfig.getString("last_version")
+        val lastVersion = remoteConfig.getString("last_version").replace("\"", "")
+        Log.d("VERSION", "${getAppVersionName()} / $lastVersion")
         if(lastVersion != getAppVersionName()){
             DialogUtils.show(this, "앱 업데이트 필요",
                 "사용중이신 KakaoTalkBotHub의 버전이 낮아서 더 이상 사용하실 수 없습니다.\n계속해서 사용하시려면 업데이트를 해 주새요.",

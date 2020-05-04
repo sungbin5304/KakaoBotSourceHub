@@ -155,12 +155,6 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, package) {
 
 -----
 
-## Official Cafe
-[[Cafe]](https://cafe.naver.com/nameyee)
-
-## Official Discord
-[[Discord]](https://discord.gg/2measTZ)
-
 ## Functions of Hub
 1. Upload, edit and delete posts
 2. Write, edit and delete comments

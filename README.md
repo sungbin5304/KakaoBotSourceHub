@@ -6,8 +6,8 @@
 KakaotalkBotHub is an application that supports KakaoTalk Bot and Hub(similar to a GitHub) for KakaoTalk Bot.<br>
 Bot production methods include programming in JavaScript and setting simple keyword auto-response.
 
-# Preview Images
-Preparing...
+# Preview
+You can see Preview apk & image at [Google Playstore](https://play.google.com/store/apps/details?id=com.sungbin.autoreply.bot.three)
 
 # Main Function
 ``` JavaScript

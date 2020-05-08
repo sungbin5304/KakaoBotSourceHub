@@ -6,11 +6,8 @@
 KakaotalkBotHub is an application that supports KakaoTalk Bot and Hub(similar to a GitHub) for KakaoTalk Bot.<br>
 Bot production methods include programming in JavaScript and setting simple keyword auto-response.
 
-# Preview Images
-Preparing...
-
-# Developer
-![Image](https://raw.githubusercontent.com/sungbin5304/NewAutoReplyBot-Helper/master/IMAGE/sungbin.png)
+# Preview
+You can see preview apk & image at [Google Playstore](https://play.google.com/store/apps/details?id=com.sungbin.autoreply.bot.three)
 
 # Main Function
 ``` JavaScript
@@ -157,12 +154,6 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB, package) {
 5. Facebook Message
 
 -----
-
-## Official Cafe
-[[Cafe]](https://cafe.naver.com/nameyee)
-
-## Official Discord
-[[Discord]](https://discord.gg/2measTZ)
 
 ## Functions of Hub
 1. Upload, edit and delete posts

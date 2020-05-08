@@ -24,6 +24,7 @@ import com.sungbin.autoreply.bot.three.dto.bot.ScriptListItem
 import com.sungbin.autoreply.bot.three.utils.bot.BotPowerUtils
 import com.sungbin.autoreply.bot.three.utils.bot.PrimitiveWrapFactory
 import com.sungbin.autoreply.bot.three.utils.bot.PicturePathManager
+import com.sungbin.autoreply.bot.three.utils.bot.RunTimeUtils
 import com.sungbin.autoreply.bot.three.utils.bot.StackUtils.jsScope
 import com.sungbin.autoreply.bot.three.utils.bot.StackUtils.jsScripts
 import com.sungbin.autoreply.bot.three.utils.bot.StackUtils.sessions
@@ -164,9 +165,9 @@ class KakaoTalkListener : NotificationListenerService() {
     ) {
         try {
             val sdcard = Environment.getExternalStorageDirectory().absolutePath
-            val jsPath = "$sdcard/AutoReply Bot/Bots/JavaScript/"
+            val jsPath = "$sdcard/KakaoTalkBotHub/Bots/JavaScript/"
             val jsList = File(jsPath).listFiles()
-            val simplePath = "$sdcard/AutoReply Bot/Bots/AutoReply/"
+            val simplePath = "$sdcard/KakaoTalkBotHub/Bots/AutoReply/"
             val simpleList = File(simplePath).listFiles()
             val scriptList = ArrayList<ScriptListItem>()
 
@@ -379,7 +380,7 @@ class KakaoTalkListener : NotificationListenerService() {
                     val sdcard =
                         Environment.getExternalStorageDirectory().absolutePath
                     val scriptFile =
-                        File("$sdcard/AutoReply Bot/Bots/JavaScript/$name")
+                        File("$sdcard/KakaoTalkBotHub/Bots/JavaScript/$name")
                     if (!scriptFile.exists()) return ctx!!.getString(R.string.script_file_gone)
                     val parseContext =
                         RhinoAndroidHelper().enterContext()
@@ -446,6 +447,7 @@ class KakaoTalkListener : NotificationListenerService() {
             profileImage: Bitmap,
             packageName: String?
         ): Boolean {
+            RunTimeUtils.save(applicationContext, name)
             val parseContext = RhinoAndroidHelper().enterContext()
             parseContext.languageVersion = org.mozilla.javascript.Context.VERSION_ES6
             val responder = jsScripts[name]

@@ -1,4 +1,4 @@
-package com.sungbin.autoreply.bot.three.adapter
+package com.sungbin.autoreply.bot.three.adapter.bot
 
 import android.app.Activity
 import android.content.Context
@@ -66,6 +66,11 @@ class ScriptListAdapter(private val list: ArrayList<ScriptListItem>?, private va
             BotPowerUtils.setOnOff(ctx!!, originName, tf)
         }
 
+        if(onoff) {
+            viewholder.state.background = ContextCompat.getDrawable(ctx!!,
+                R.drawable.reload_done_view)
+        }
+
         viewholder.type.setImageResource(image)
         viewholder.lastTime.text = lastTime
         viewholder.title.text = name
@@ -98,7 +103,7 @@ class ScriptListAdapter(private val list: ArrayList<ScriptListItem>?, private va
                                 Intent(act, ScriptEditActivity::class.java)
                                     .putExtra("name", name)
                                     .putExtra("script",
-                                        StorageUtils.read("AutoReply Bot/Bots/JavaScript/$name.js",
+                                        StorageUtils.read("KakaoTalkBotHub/Bots/JavaScript/$name.js",
                                             """
                             function response(room, msg, sender, isGroupChat, replier, ImageDB, package) {
                                 /*
@@ -153,7 +158,7 @@ class ScriptListAdapter(private val list: ArrayList<ScriptListItem>?, private va
                         callback = {
                             beforeDeleteItem = list[position]
                             beforeDeleteIndex = list.indexOf(beforeDeleteItem!!)
-                            beforeDeleteSource = StorageUtils.read("AutoReply Bot/Bots/JavaScript/$name.js",
+                            beforeDeleteSource = StorageUtils.read("KakaoTalkBotHub/Bots/JavaScript/$name.js",
                                 """
                             function response(room, msg, sender, isGroupChat, replier, ImageDB, package) {
                                 /*
@@ -167,13 +172,13 @@ class ScriptListAdapter(private val list: ArrayList<ScriptListItem>?, private va
                             }    
                             """.trimIndent())
 
-                            StorageUtils.delete("AutoReply Bot/Bots/JavaScript/$name.js")
+                            StorageUtils.delete("KakaoTalkBotHub/Bots/JavaScript/$name.js")
                             list.remove(list[position])
                             notifyDataSetChanged()
                             val bar = Snackbar.make(view, "$name 스크립트가 삭제되었습니다.", 3000)
                                 .setActionTextColor(ContextCompat.getColor(ctx!!, R.color.colorPrimaryDark))
                                 .setAction("되돌리기") {
-                                    StorageUtils.save("AutoReply Bot/Bots/JavaScript/$name.js", beforeDeleteSource)
+                                    StorageUtils.save("KakaoTalkBotHub/Bots/JavaScript/$name.js", beforeDeleteSource)
                                     list.add(beforeDeleteIndex, beforeDeleteItem!!)
                                     notifyDataSetChanged()
                                 }

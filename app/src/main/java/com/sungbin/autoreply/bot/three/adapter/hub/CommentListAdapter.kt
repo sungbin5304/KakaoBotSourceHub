@@ -1,11 +1,9 @@
-package com.sungbin.autoreply.bot.three.adapter
+package com.sungbin.autoreply.bot.three.adapter.hub
 
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.text.*
-import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +13,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.FirebaseDatabase
 import com.sungbin.autoreply.bot.three.R

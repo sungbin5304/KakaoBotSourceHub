@@ -23,9 +23,11 @@ object AppUtils {
                     ToastUtils.SHORT, ToastUtils.ERROR)
             }
         }
+        remoteConfig.fetchAndActivate()
     }
 
     fun getConfigData(name: String): String{
+        remoteConfig.fetchAndActivate()
         return remoteConfig.getString(name).replace("\"", "")
     }
 }

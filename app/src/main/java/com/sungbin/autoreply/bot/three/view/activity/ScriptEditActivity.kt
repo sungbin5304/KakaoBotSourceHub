@@ -152,7 +152,7 @@ class ScriptEditActivity : AppCompatActivity() {
                         labelRes = R.string.string_save
                         icon = R.drawable.ic_save_white_24dp
                         callback = {
-                            StorageUtils.save("AutoReply Bot/Bots/JavaScript/$scriptName.js",
+                            StorageUtils.save("KakaoTalkBotHub/Bots/JavaScript/$scriptName.js",
                                 editText.text.toString())
                             ToastUtils.show(applicationContext,
                                 getString(R.string.save_success),

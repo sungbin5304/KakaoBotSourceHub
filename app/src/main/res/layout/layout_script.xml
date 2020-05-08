@@ -72,7 +72,9 @@
                         android:layout_height="wrap_content"
                         android:text="@string/script_name_preview"
                         android:textStyle="bold"
+                        android:ellipsize="end"
                         android:maxLines="1"
+                        android:singleLine="true"
                         android:textSize="15sp"
                         android:textColor="#000"/>
 

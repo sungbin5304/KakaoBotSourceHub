@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:orientation="horizontal"
         android:focusableInTouchMode="true"
         android:layout_marginTop="@dimen/margin_twice_half"
-        tools:ignore="ContentDescription,UselessParent">
+        tools:ignore="MissingConstraints,RtlSymmetry,ContentDescription,UselessParent">
 
     <ImageView
             android:layout_marginTop="@dimen/margin_twice_half"
@@ -25,16 +26,36 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-        <TextView
-                android:fontFamily="@font/nanumgothic"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:id="@+id/tv_content"
-                android:layout_width="wrap_content"
+        <RelativeLayout
+                android:layout_marginEnd="@dimen/margin_twice_half"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/script_content_preview"/>
-        
-        <LinearLayout
+                android:orientation="horizontal">
+
+            <TextView
+                    android:paddingEnd="25dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:fontFamily="@font/nanumgothic"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:id="@+id/tv_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/script_content_preview" />
+
+            <ImageView
+                    android:layout_alignParentEnd="true"
+                    android:id="@+id/iv_menu"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/ic_menu_white_24dp"
+                    android:tint="@color/colorGray"/>
+
+        </RelativeLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_marginEnd="@dimen/margin_twice_half"
                 android:layout_marginTop="@dimen/margin_twice_half"
                 android:orientation="horizontal"
@@ -42,23 +63,28 @@
                 android:layout_height="match_parent">
 
             <TextView
-                    android:fontFamily="@font/nanumgothic"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:singleLine="true"
                     android:id="@+id/tv_name"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanumgothic"
                     android:text="@string/script_name_preview"
-                    android:textColor="@color/colorGray"/>
+                    android:textColor="@color/colorGray"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_time"
+                    app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
-                    android:fontFamily="@font/nanumgothic"
                     android:id="@+id/tv_time"
-                    android:gravity="end"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanumgothic"
                     android:text="@string/log_time_preview"
-                    android:textColor="@color/colorGray"/>
+                    android:textColor="@color/colorGray"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
 

@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.*
 import com.sungbin.autoreply.bot.three.R
-import com.sungbin.autoreply.bot.three.adapter.BoardListAdapter
+import com.sungbin.autoreply.bot.three.adapter.hub.BoardListAdapter
 import com.sungbin.autoreply.bot.three.dto.hub.BoardActionItem
 import com.sungbin.autoreply.bot.three.dto.hub.BoardDataItem
 import com.sungbin.autoreply.bot.three.dto.hub.BoardListItem
@@ -45,7 +45,12 @@ class BoardList : Fragment() {
         items = ArrayList()
         badBoardList = ArrayList()
         goodBoardList = ArrayList()
-        adapter = BoardListAdapter(items, goodBoardList, badBoardList, activity)
+        adapter = BoardListAdapter(
+            items,
+            goodBoardList,
+            badBoardList,
+            activity
+        )
         boardCash = ArrayList<BoardDataItem>()
 
         val view = inflater.inflate(R.layout.fragment_board_list, null)

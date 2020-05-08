@@ -1,10 +1,9 @@
-package com.sungbin.autoreply.bot.three.adapter
+package com.sungbin.autoreply.bot.three.adapter.chat
 
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,9 +20,9 @@ import com.sungbin.autoreply.bot.three.view.chat.MessagesActivity
 import com.sungbin.autoreply.bot.three.view.chat.viewholder.dialog.DialogViewHolder
 import com.sungbin.sungbintool.ToastUtils
 
-class DialogViewPagerAdapter constructor(act: Activity, chatList: ArrayList<Dialog>?,
-                                         openChatList: ArrayList<Dialog>?,
-                                         fabItem: ExtendedFloatingActionButton)
+class DialogListAdapter constructor(act: Activity, chatList: ArrayList<Dialog>?,
+                                    openChatList: ArrayList<Dialog>?,
+                                    fabItem: ExtendedFloatingActionButton)
     : PagerAdapter(), DialogsListAdapter.OnDialogClickListener<Dialog?>,
     DialogsListAdapter.OnDialogLongClickListener<Dialog?> {
 

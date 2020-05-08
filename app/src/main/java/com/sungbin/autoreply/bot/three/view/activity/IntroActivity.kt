@@ -25,10 +25,6 @@ class IntroActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.content_intro)
 
-        PermissionUtils.request(this,
-            "권한줘!!!", arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE))
-        //PermissionUtils.requestReadNotification(this)
-
         val fadein = AlphaAnimation(0.0f, 1.0f)
         fadein.duration = 1000
         fadein.setAnimationListener(object : Animation.AnimationListener{

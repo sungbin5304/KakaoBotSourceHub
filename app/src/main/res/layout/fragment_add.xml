@@ -27,8 +27,8 @@
                 app:cornerRadius="5dp"
                 app:inactiveBgColor="@color/colorWhite"
                 app:inactiveTextColor="#000"
-                app:textToggleLeft="간편\n자동응답 설정"
-                app:textToggleRight="자바스크립트\n프로그래밍"
+                app:textToggleLeft="@string/simple_reply_enter"
+                app:textToggleRight="@string/string_javscript"
                 app:toggleWidth="125dp" />
 
     </FrameLayout>

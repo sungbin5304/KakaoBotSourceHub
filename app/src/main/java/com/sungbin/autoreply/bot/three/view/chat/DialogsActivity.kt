@@ -19,7 +19,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.sungbin.autoreply.bot.three.R
-import com.sungbin.autoreply.bot.three.adapter.DialogViewPagerAdapter
+import com.sungbin.autoreply.bot.three.adapter.chat.DialogListAdapter
 import com.sungbin.autoreply.bot.three.dto.chat.MessageState
 import com.sungbin.autoreply.bot.three.dto.chat.MessageType
 import com.sungbin.autoreply.bot.three.dto.chat.item.DialogItem
@@ -87,7 +87,13 @@ class DialogsActivity : AppCompatActivity() {
 
                     if(!openItems.contains(dialog)) openItems.add(dialog)
 
-                    val viewPagerAdapter = DialogViewPagerAdapter(act, groupItems, openItems, fab)
+                    val viewPagerAdapter =
+                        DialogListAdapter(
+                            act,
+                            groupItems,
+                            openItems,
+                            fab
+                        )
                     viewPagerAdapter.notifyDataSetChanged()
                     viewPagerAdapter.refresh()
                     view_pager.adapter = viewPagerAdapter
@@ -139,7 +145,13 @@ class DialogsActivity : AppCompatActivity() {
 
                     if(!groupItems.contains(dialog)) groupItems.add(dialog)
 
-                    val viewPagerAdapter = DialogViewPagerAdapter(act, groupItems, openItems, fab)
+                    val viewPagerAdapter =
+                        DialogListAdapter(
+                            act,
+                            groupItems,
+                            openItems,
+                            fab
+                        )
                     viewPagerAdapter.notifyDataSetChanged()
                     viewPagerAdapter.refresh()
                     view_pager.adapter = viewPagerAdapter
@@ -166,7 +178,13 @@ class DialogsActivity : AppCompatActivity() {
             }
         })
 
-        val viewPagerAdapter = DialogViewPagerAdapter(act, openItems, openItems, fab)
+        val viewPagerAdapter =
+            DialogListAdapter(
+                act,
+                openItems,
+                openItems,
+                fab
+            )
         viewPagerAdapter.notifyDataSetChanged()
         viewPagerAdapter.refresh()
         view_pager.adapter = viewPagerAdapter

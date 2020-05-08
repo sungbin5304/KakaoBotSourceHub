@@ -30,7 +30,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageException
 import com.stfalcon.chatkit.commons.ImageLoader
-import com.stfalcon.chatkit.commons.models.MessageContentType
 import com.stfalcon.chatkit.messages.MessageHolders
 import com.stfalcon.chatkit.messages.MessageInput
 import com.stfalcon.chatkit.messages.MessageInput.TypingListener
@@ -38,11 +37,10 @@ import com.stfalcon.chatkit.messages.MessagesList
 import com.stfalcon.chatkit.messages.MessagesListAdapter
 import com.stfalcon.chatkit.utils.DateFormatter
 import com.sungbin.autoreply.bot.three.R
-import com.sungbin.autoreply.bot.three.adapter.PhotoListAdapter
+import com.sungbin.autoreply.bot.three.adapter.chat.PhotoListAdapter
 import com.sungbin.autoreply.bot.three.dto.chat.Content
 import com.sungbin.autoreply.bot.three.dto.chat.ContentType
 import com.sungbin.autoreply.bot.three.dto.chat.MessageState
-import com.sungbin.autoreply.bot.three.dto.chat.MessageType
 import com.sungbin.autoreply.bot.three.dto.chat.item.MessageItem
 import com.sungbin.autoreply.bot.three.dto.chat.item.UserItem
 import com.sungbin.autoreply.bot.three.dto.chat.model.Dialog
@@ -250,7 +248,11 @@ class MessagesActivity : AppCompatActivity(),
                 }
         }
 
-        val photoAdapter = PhotoListAdapter(getPathOfAllImages(-1), this)
+        val photoAdapter =
+            PhotoListAdapter(
+                getPathOfAllImages(-1),
+                this
+            )
         photoAdapter.setOnItemClickListener(object : PhotoListAdapter.OnItemClickListener {
             override fun onItemClick(imageUrl: String) {
                 addPicture(imageUrl)

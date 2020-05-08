@@ -23,8 +23,7 @@ class RhinoUtils constructor(ctx: android.content.Context) {
     fun runJs(source: String): String{
         return try {
             val rhino: Context = RhinoAndroidHelper().enterContext()
-            rhino.wrapFactory =
-                PrimitiveWrapFactory()
+            rhino.wrapFactory = PrimitiveWrapFactory()
             rhino.languageVersion =  Context.VERSION_ES6
             rhino.optimizationLevel = -1
             val scope: Scriptable = rhino.initSafeStandardObjects()

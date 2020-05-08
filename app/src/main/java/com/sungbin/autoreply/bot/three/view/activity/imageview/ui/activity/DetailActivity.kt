@@ -20,7 +20,6 @@ import com.sungbin.autoreply.bot.three.view.activity.imageview.ui.transition.Sim
 import com.sungbin.autoreply.bot.three.view.activity.imageview.ui.view.CircleSwipeLayout
 import com.sungbin.autoreply.bot.three.view.activity.imageview.ui.view.RoundedImageView
 import kotlinx.android.synthetic.main.activity_contentview_detail.*
-import pl.droidsonroids.gif.GifDrawable
 import java.io.File
 
 
@@ -53,11 +52,6 @@ class DetailActivity : AppCompatActivity() {
 
         val path = ImageUtils.getDownloadFilePath(intent.getStringExtra("image")!!)
         when {
-            path.contains(".gif") -> {
-                val gifFile = File(path)
-                val gifFromFile = GifDrawable(gifFile)
-                image.setImageDrawable(gifFromFile)
-            }
             path.contains("mp4") -> {
                 image.visibility = View.GONE
                 videoView.visibility = View.VISIBLE

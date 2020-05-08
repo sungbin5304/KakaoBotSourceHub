@@ -12,7 +12,6 @@ import androidx.fragment.app.FragmentManager
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.sungbin.autoreply.bot.three.R
 import com.sungbin.autoreply.bot.three.utils.AppUtils
-import com.sungbin.autoreply.bot.three.utils.AppUtils.getAppVersionName
 import com.sungbin.autoreply.bot.three.utils.chat.ChatModuleUtils
 import com.sungbin.autoreply.bot.three.view.activity.fragment.AddFragment
 import com.sungbin.autoreply.bot.three.view.activity.fragment.DashboardFragment
@@ -40,9 +39,9 @@ class DashboardActivity  : AppCompatActivity() {
             }
 
             AppUtils.loadFetch(applicationContext)
-            StorageUtils.createFolder("AutoReply Bot/Bots/AutoReply")
-            StorageUtils.createFolder("AutoReply Bot/Bots/JavaScript")
-            StorageUtils.createFolder("AutoReply Bot/Bots/Log")
+            StorageUtils.createFolder("KakaoTalkBotHub/Bots/AutoReply")
+            StorageUtils.createFolder("KakaoTalkBotHub/Bots/JavaScript")
+            StorageUtils.createFolder("KakaoTalkBotHub/Bots/Log")
 
             val title = findViewById<TextView>(R.id.tv_dashboard)
             fragmentManager.beginTransaction().add(R.id.framelayout, DashboardFragment()).commit()
@@ -76,10 +75,14 @@ class DashboardActivity  : AppCompatActivity() {
                 }
             }
 
+            val nowVersion = AppUtils.getAppVersionName(this)
             val lastVersion = AppUtils.getConfigData("last_version")
-            if(lastVersion != getAppVersionName(this)){
+            if(lastVersion != nowVersion){
                 DialogUtils.show(this, "앱 업데이트 필요",
-                    "사용중이신 KakaoTalkBotHub의 버전이 낮아서 더 이상 사용하실 수 없습니다.\n계속해서 사용하시려면 업데이트를 해 주새요.",
+                    "사용중이신 KakaoTalkBotHub의 버전이 낮아서 더 이상 사용하실 수 없습니다." +
+                            "\n계속해서 사용하시려면 업데이트를 해 주새요.\n\n" +
+                            "현재 버전 : $nowVersion\n" +
+                            "최신 버전 : $lastVersion",
                     DialogInterface.OnClickListener { _, _ -> finish() }, false)
             }
 

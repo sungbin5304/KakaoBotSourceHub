@@ -1,4 +1,4 @@
-package com.sungbin.autoreply.bot.three.adapter
+package com.sungbin.autoreply.bot.three.adapter.bot
 
 import android.app.Activity
 import android.content.Context

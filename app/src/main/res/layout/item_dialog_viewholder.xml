@@ -1,6 +1,7 @@
 <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@id/dialogRootLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -12,11 +13,12 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <com.sungbin.sungbintool.ui.TagableRoundImageView
                 android:id="@id/dialogAvatar"
                 android:layout_width="@dimen/dialog_avatar_width"
                 android:layout_height="@dimen/dialog_avatar_height"
-                android:layout_margin="16dp"/>
+                android:layout_margin="16dp"
+                app:triv_imageRadius="40dp"/>
 
         <TextView
                 android:id="@id/dialogName"

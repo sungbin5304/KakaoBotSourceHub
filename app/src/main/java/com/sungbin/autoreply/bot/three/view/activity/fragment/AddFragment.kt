@@ -56,7 +56,7 @@ class AddFragment
                 fragmentTransaction.replace(view, DashboardFragment()).commit()
                 bottombar.setActiveItem(0)
                 if(isJsBot){
-                    StorageUtils.save("AutoReply Bot/Bots/JavaScript/$botNameText.js",
+                    StorageUtils.save("KakaoTalkBotHub/Bots/JavaScript/$botNameText.js",
                     """
                         function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName) {
                             /*
@@ -71,7 +71,7 @@ class AddFragment
                     """.trimIndent())
                 }
                 else {
-                    StorageUtils.save("AutoReply Bot/Bots/AutoReply/$botNameText.bot", "")
+                    StorageUtils.save("KakaoTalkBotHub/Bots/AutoReply/$botNameText.bot", "")
                 }
                 ToastUtils.show(
                     context!!,

@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sungbin.autoreply.bot.three.R
-import com.sungbin.autoreply.bot.three.adapter.DebugListAdapter
+import com.sungbin.autoreply.bot.three.adapter.bot.DebugListAdapter
 import com.sungbin.autoreply.bot.three.dto.bot.DebugListItem
 import com.sungbin.autoreply.bot.three.utils.RhinoUtils
 
@@ -34,7 +34,10 @@ class SandboxFragment : Fragment() {
         etRoomName= view.findViewById(R.id.roomName)
         etSenderName = view.findViewById(R.id.senderName)
 
-        adapter = DebugListAdapter(items, activity!!)
+        adapter = DebugListAdapter(
+            items,
+            activity!!
+        )
         return view
     }
 

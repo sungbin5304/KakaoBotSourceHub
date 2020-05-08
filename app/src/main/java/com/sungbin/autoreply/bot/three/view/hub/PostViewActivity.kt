@@ -15,7 +15,6 @@ import kotlinx.android.synthetic.main.activity_board_view.*
 import kotlinx.android.synthetic.main.activity_board_view.toolbar
 import kotlinx.android.synthetic.main.content_board_view.*
 import android.view.Gravity
-import android.view.View
 import android.webkit.WebView
 import android.widget.EditText
 import android.widget.LinearLayout
@@ -23,7 +22,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.*
-import com.sungbin.autoreply.bot.three.adapter.CommentListAdapter
+import com.sungbin.autoreply.bot.three.adapter.hub.CommentListAdapter
 import com.sungbin.autoreply.bot.three.dto.hub.BoardActionItem
 import com.sungbin.autoreply.bot.three.dto.hub.CommentListItem
 import com.sungbin.autoreply.bot.three.utils.FirebaseUtils
@@ -265,7 +264,11 @@ class PostViewActivity : AppCompatActivity() {
         }
 
         items = ArrayList()
-        adapter = CommentListAdapter(items, this@PostViewActivity, uuid)
+        adapter = CommentListAdapter(
+            items,
+            this@PostViewActivity,
+            uuid
+        )
         list.layoutManager = LinearLayoutManager(applicationContext)
         list.adapter = adapter
 

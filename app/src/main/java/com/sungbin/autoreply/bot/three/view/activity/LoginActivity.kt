@@ -56,13 +56,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.content_login)
 
         deviceId = ChatModuleUtils.getDeviceId(applicationContext)
-        /*UserManagement.getInstance()
-            .requestLogout(object : LogoutResponseCallback() {
-                override fun onCompleteLogout() {
-                }
-            })*/
-
-       reference.addChildEventListener(object : ChildEventListener {
+        reference.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
                 try {
                     val item = dataSnapshot.getValue(UserItem::class.java)!!
@@ -108,6 +102,7 @@ class LoginActivity : AppCompatActivity() {
                         finish()
                         //startActivity(Intent(applicationContext, PermissionActivity::class.java))
                         startActivity(Intent(applicationContext, DialogsActivity::class.java))
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                     }
 
                     override fun onSessionClosed(errorResult: ErrorResult) {
@@ -191,19 +186,6 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun getAppVersionName(): String{
-        return packageManager.getPackageInfo(packageName, 0).versionName
-    }
-
-    private fun checkNewVersion(remoteConfig: FirebaseRemoteConfig){
-        val lastVersion = remoteConfig.getString("last_version").replace("\"", "")
-        if(lastVersion != getAppVersionName()){
-            DialogUtils.show(this, "앱 업데이트 필요",
-                "사용중이신 KakaoTalkBotHub의 버전이 낮아서 더 이상 사용하실 수 없습니다.\n계속해서 사용하시려면 업데이트를 해 주새요.",
-                DialogInterface.OnClickListener { _, _ -> finish() }, false)
-        }
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         Session.getCurrentSession().removeCallback(sessionCallback)
@@ -226,6 +208,7 @@ class LoginActivity : AppCompatActivity() {
 
                     finish()
                     startActivity(Intent(applicationContext, PermissionActivity::class.java))
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 } else {
                     Utils.error(applicationContext, task.exception!!, "Google Login")
                 }

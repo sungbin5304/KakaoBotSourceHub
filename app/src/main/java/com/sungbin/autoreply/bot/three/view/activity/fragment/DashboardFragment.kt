@@ -3,6 +3,7 @@
 package com.sungbin.autoreply.bot.three.view.activity.fragment
 
 import android.animation.Animator
+import android.graphics.Color
 import android.graphics.Rect
 import android.os.Bundle
 import android.os.Environment
@@ -15,21 +16,25 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
 import com.sungbin.autoreply.bot.three.R
-import com.sungbin.autoreply.bot.three.adapter.DatabaseListAdapter
-import com.sungbin.autoreply.bot.three.adapter.LogListAdapter
-import com.sungbin.autoreply.bot.three.adapter.ScriptListAdapter
+import com.sungbin.autoreply.bot.three.adapter.bot.DatabaseListAdapter
+import com.sungbin.autoreply.bot.three.adapter.bot.LogListAdapter
+import com.sungbin.autoreply.bot.three.adapter.bot.ScriptListAdapter
 import com.sungbin.autoreply.bot.three.dto.bot.DatabaseListItem
 import com.sungbin.autoreply.bot.three.dto.bot.LogListItem
 import com.sungbin.autoreply.bot.three.dto.bot.ScriptListItem
 import com.sungbin.autoreply.bot.three.utils.bot.BotPowerUtils
 import com.sungbin.autoreply.bot.three.utils.bot.LogUtils
+import com.sungbin.autoreply.bot.three.utils.bot.RunTimeUtils
+import com.sungbin.sungbintool.ToastUtils
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import java.io.File
 import java.util.*
@@ -122,9 +127,9 @@ class DashboardFragment : Fragment() {
         val logItem = ArrayList<LogListItem>()
         val databaseItem = ArrayList<DatabaseListItem>()
 
-        val jsPath = "$sdcard/AutoReply Bot/Bots/JavaScript/"
-        val simplePath = "$sdcard/AutoReply Bot/Bots/AutoReply/"
-        val logPath = "$sdcard/AutoReply Bot/Log/"
+        val jsPath = "$sdcard/KakaoTalkBotHub/Bots/JavaScript/"
+        val simplePath = "$sdcard/KakaoTalkBotHub/Bots/AutoReply/"
+        val logPath = "$sdcard/KakaoTalkBotHub/Log/"
 
         val jsList = File(jsPath).listFiles()
         val simpleList = File(simplePath).listFiles()
@@ -139,7 +144,7 @@ class DashboardFragment : Fragment() {
                         name,
                         onOff,
                         1,
-                        "마지막작동: ??",
+                        RunTimeUtils.get(context!!, name),
                         R.drawable.ic_textsms_blue_24dp
                     )
                 )
@@ -154,7 +159,7 @@ class DashboardFragment : Fragment() {
                         name,
                         onOff,
                         0,
-                        "마지막작동: ??",
+                        RunTimeUtils.get(context!!, name),
                         R.drawable.ic_javascript
                     )
                 )
@@ -178,7 +183,6 @@ class DashboardFragment : Fragment() {
                     type
                 )
                 logItem.add(item)
-                Log.d("SIZE", i.toString())
             }
         }
 
@@ -190,6 +194,7 @@ class DashboardFragment : Fragment() {
             scriptsNoneTv!!.visibility = View.INVISIBLE
             scriptsRc!!.visibility = View.VISIBLE
         }
+
         if (logItem.isEmpty()) {
             logsNoneTv!!.visibility = View.VISIBLE
             logsRc!!.visibility = View.INVISIBLE
@@ -198,6 +203,7 @@ class DashboardFragment : Fragment() {
             logsNoneTv!!.visibility = View.INVISIBLE
             logsRc!!.visibility = View.VISIBLE
         }
+
         if (databaseItem.isEmpty()){
             databasesNoneTv!!.visibility = View.VISIBLE
             databasesRc!!.visibility = View.INVISIBLE
@@ -208,16 +214,17 @@ class DashboardFragment : Fragment() {
         }
 
         val scriptListAdapter = ScriptListAdapter(scriptItem, activity!!)
+        val logListAdapter = LogListAdapter(logItem, activity!!)
+        val databaseListAdapter = DatabaseListAdapter(databaseItem, activity!!)
+
         scriptsRc!!.layoutManager = layoutManagerHorizontal
         scriptsRc!!.adapter = scriptListAdapter
         scriptsRc!!.addItemDecoration(ListDecoration()) //아이템 간격
 
-        val logListAdapter = LogListAdapter(logItem, activity!!)
         logsRc!!.layoutManager = layoutManagerVertical
         logsRc!!.adapter = logListAdapter
         logsRc!!.addItemDecoration(DividerItemDecoration(activity!!, 1)) //아이템 구분선
 
-        val databaseListAdapter = DatabaseListAdapter(databaseItem, activity!!)
         databasesRc!!.layoutManager = layoutManagerVertical2
         databasesRc!!.adapter = databaseListAdapter
 

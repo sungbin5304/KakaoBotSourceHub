@@ -16,12 +16,12 @@
             android:orientation="horizontal"
             tools:ignore="UselessParent">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <com.sungbin.sungbintool.ui.TagableRoundImageView
                 android:id="@+id/iv_icon"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                app:riv_corner_radius="@dimen/margin_default"
-                android:src="@drawable/icon"/>
+                android:src="@drawable/icon"
+                app:triv_imageRadius="@dimen/margin_default"/>
 
         <LinearLayout
                 android:layout_gravity="center"

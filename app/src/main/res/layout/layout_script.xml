@@ -14,17 +14,17 @@
         android:focusableInTouchMode="true"
         tools:ignore="ContentDescription,UselessParent">
 
-    <com.makeramen.roundedimageview.RoundedImageView
+    <com.sungbin.sungbintool.ui.TagableRoundImageView
             android:id="@+id/iv_type"
             android:layout_marginTop="@dimen/margin_half"
             android:layout_marginBottom="@dimen/margin_half"
             android:layout_marginStart="13dp"
-            android:elevation="8dp"
+            android:elevation="@dimen/margin_half"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/ic_javascript"
-            app:elevation="8dp"
-            app:riv_corner_radius="8dp"/>
+            app:elevation="@dimen/margin_half"
+            app:triv_imageRadius="@dimen/margin_half"/>
 
     <androidx.cardview.widget.CardView
             android:layout_marginTop="30dp"

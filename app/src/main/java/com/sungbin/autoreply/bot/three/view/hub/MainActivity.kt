@@ -11,8 +11,8 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.sungbin.autoreply.bot.three.R
 import com.sungbin.autoreply.bot.three.utils.FirebaseUtils
-import com.sungbin.autoreply.bot.three.utils.Utils
 import com.sungbin.autoreply.bot.three.view.hub.fragment.BoardList
+import com.sungbin.sungbintool.DataUtils
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -63,10 +63,11 @@ class MainActivity : AppCompatActivity() {
         FirebaseUtils.subscribe("new_comment", applicationContext)
 
         val reference = FirebaseDatabase.getInstance().reference.child("User Nickname")
-        reference.child(Utils.readData(applicationContext,
-            "uid", "null")!!).addValueEventListener(object : ValueEventListener {
+        reference.child(
+            DataUtils.readData(applicationContext,
+            "uid", "null")).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                Utils.saveData(applicationContext,
+                DataUtils.saveData(applicationContext,
                     "nickname", dataSnapshot.value.toString())
             }
             override fun onCancelled(databaseError: DatabaseError) {

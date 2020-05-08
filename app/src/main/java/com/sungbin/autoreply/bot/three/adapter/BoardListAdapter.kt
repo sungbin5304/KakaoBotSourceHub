@@ -11,11 +11,10 @@ import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import com.shashank.sony.fancytoastlib.FancyToast
 import com.sungbin.autoreply.bot.three.R
 import com.sungbin.autoreply.bot.three.dto.hub.BoardListItem
-import com.sungbin.autoreply.bot.three.utils.Utils
 import com.sungbin.autoreply.bot.three.view.hub.PostViewActivity
+import com.sungbin.sungbintool.ToastUtils
 
 class BoardListAdapter(private val list: ArrayList<BoardListItem>?,
                        private val good: ArrayList<String>?,
@@ -55,12 +54,14 @@ class BoardListAdapter(private val list: ArrayList<BoardListItem>?,
         if(bad!!.contains(uuid)) viewholder.bad_count.setTypeface(null, Typeface.BOLD)
 
         viewholder.view.setOnClickListener {
-            Utils.toast(ctx!!,
+            ToastUtils.show(ctx!!,
                 act!!.getString(R.string.string_loading),
-                FancyToast.LENGTH_SHORT, FancyToast.INFO)
+                ToastUtils.SHORT, ToastUtils.INFO
+            )
             ctx!!.startActivity(Intent(ctx, PostViewActivity::class.java)
                 .putExtra("uuid", uuid)
-                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            )
         }
     }
     override fun getItemCount(): Int {

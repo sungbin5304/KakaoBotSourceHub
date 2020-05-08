@@ -2,7 +2,7 @@ package com.sungbin.autoreply.bot.three.notification
 
 import com.google.firebase.messaging.RemoteMessage
 import com.sungbin.autoreply.bot.three.R
-import com.sungbin.autoreply.bot.three.utils.Utils
+import com.sungbin.sungbintool.DataUtils
 
 class FirebaseMessagingService : com.google.firebase.messaging.FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
@@ -16,7 +16,7 @@ class FirebaseMessagingService : com.google.firebase.messaging.FirebaseMessaging
     }
 
     override fun onNewToken(token: String) {
-        Utils.saveData(applicationContext, "fcmToken", token)
+        DataUtils.saveData(applicationContext, "fcmToken", token)
     }
 
 }

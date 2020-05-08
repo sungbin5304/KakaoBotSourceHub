@@ -55,18 +55,6 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.content_login)
 
-        val remoteConfig = FirebaseRemoteConfig.getInstance()
-        remoteConfig.fetch(60).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                remoteConfig.fetchAndActivate()
-            } else {
-                ToastUtils.show(applicationContext,
-                    "서버에서 데이터를 불러오는데 오류가 발생했습니다.\n\n${task.exception}",
-                    ToastUtils.SHORT, ToastUtils.ERROR)
-            }
-            checkNewVersion(remoteConfig)
-        }
-
         deviceId = ChatModuleUtils.getDeviceId(applicationContext)
         /*UserManagement.getInstance()
             .requestLogout(object : LogoutResponseCallback() {
@@ -103,7 +91,7 @@ class LoginActivity : AppCompatActivity() {
             override fun onCancelled(databaseError: DatabaseError) {
 
             }
-        })
+       })
 
         sessionCallback = object : ISessionCallback {
             override fun onSessionOpened() {
@@ -181,6 +169,7 @@ class LoginActivity : AppCompatActivity() {
 
                             finish()
                             startActivity(Intent(applicationContext, PermissionActivity::class.java))
+                            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                         } else {
                             ToastUtils.show(applicationContext, getString(R.string.register_account),
                                 ToastUtils.SHORT, ToastUtils.INFO)
@@ -208,7 +197,6 @@ class LoginActivity : AppCompatActivity() {
 
     private fun checkNewVersion(remoteConfig: FirebaseRemoteConfig){
         val lastVersion = remoteConfig.getString("last_version").replace("\"", "")
-        Log.d("VERSION", "${getAppVersionName()} / $lastVersion")
         if(lastVersion != getAppVersionName()){
             DialogUtils.show(this, "앱 업데이트 필요",
                 "사용중이신 KakaoTalkBotHub의 버전이 낮아서 더 이상 사용하실 수 없습니다.\n계속해서 사용하시려면 업데이트를 해 주새요.",

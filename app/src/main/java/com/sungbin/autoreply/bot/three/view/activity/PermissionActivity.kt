@@ -20,6 +20,8 @@ class PermissionActivity : AppCompatActivity() {
         btn_continue.setOnClickListener {
             finish()
             startActivity(Intent(this, DashboardActivity::class.java))
+
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }
     }
 }

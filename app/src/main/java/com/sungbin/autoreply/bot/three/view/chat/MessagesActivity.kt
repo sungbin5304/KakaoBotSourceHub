@@ -30,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageException
 import com.stfalcon.chatkit.commons.ImageLoader
+import com.stfalcon.chatkit.commons.models.MessageContentType
 import com.stfalcon.chatkit.messages.MessageHolders
 import com.stfalcon.chatkit.messages.MessageInput
 import com.stfalcon.chatkit.messages.MessageInput.TypingListener
@@ -41,11 +42,13 @@ import com.sungbin.autoreply.bot.three.adapter.PhotoListAdapter
 import com.sungbin.autoreply.bot.three.dto.chat.Content
 import com.sungbin.autoreply.bot.three.dto.chat.ContentType
 import com.sungbin.autoreply.bot.three.dto.chat.MessageState
+import com.sungbin.autoreply.bot.three.dto.chat.MessageType
 import com.sungbin.autoreply.bot.three.dto.chat.item.MessageItem
 import com.sungbin.autoreply.bot.three.dto.chat.item.UserItem
 import com.sungbin.autoreply.bot.three.dto.chat.model.Dialog
 import com.sungbin.autoreply.bot.three.dto.chat.model.Message
 import com.sungbin.autoreply.bot.three.dto.chat.model.User
+import com.sungbin.autoreply.bot.three.utils.AppUtils
 import com.sungbin.autoreply.bot.three.utils.chat.ChatModuleUtils
 import com.sungbin.autoreply.bot.three.utils.ui.ImageUtils
 import com.sungbin.autoreply.bot.three.view.chat.viewholder.message.incoming.IncomingImageMessageViewHolder
@@ -66,7 +69,7 @@ import kotlin.math.log10
 import kotlin.math.pow
 
 
-@Suppress("DEPRECATION")
+@Suppress("DEPRECATION", "UNUSED_VALUE")
 class MessagesActivity : AppCompatActivity(),
     MessagesListAdapter.SelectionListener,
     MessagesListAdapter.OnMessageLongClickListener<Message?>, MessageInput.InputListener,
@@ -94,6 +97,8 @@ class MessagesActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_custom_holder_messages)
+
+        AppUtils.loadFetch(applicationContext)
 
         ivCode = iv_code
         ivVideo = iv_video
@@ -186,15 +191,23 @@ class MessagesActivity : AppCompatActivity(),
                     if(lastMessageId < item.id!!.toInt())
                         lastMessageId = item.id!!.toInt()
 
-                    if(lastMessage == item.text){
-                        return
-                    }
+                    if(lastMessage == item.text) return
                     else lastMessage = item.text!!
 
                     val messageUser = item.user!!
                     val user = User(messageUser.id!!, messageUser.name!!, messageUser.avatar!!,
                         messageUser.isOnline!!, messageUser.roomList, messageUser.friendsList)
-                    val message = Message(item.id!!, item.dialogIdString!!, user, item.text!!,
+
+                    var message: Message
+
+                    if(item.messageContent != null &&
+                        !AppUtils.getConfigData("can_storage").toBoolean()) {
+                        message = Message(item.id!!, item.dialogIdString!!, user,
+                            "컨텐츠 보기 기능은 파일 저정소 서버 할당량 초과로 임시 비활성화 되었습니다.",
+                            item.createdAt!!, item.messageStatue!!, null)
+                    }
+
+                    message = Message(item.id!!, item.dialogIdString!!, user, item.text!!,
                         item.createdAt!!, item.messageStatue!!, item.messageContent)
                     messagesAdapter!!.addToStart(message, isAutoScroll)
                 }
@@ -225,10 +238,7 @@ class MessagesActivity : AppCompatActivity(),
             TedImagePicker.with(this)
                 .mediaType(MediaType.IMAGE)
                 .start { uri ->
-                    ToastUtils.show(applicationContext,
-                        "선택된 경로 : $uri\n\n컨텐츠 공유는 파일 저정소 서버 활당량 초과로 임시 비활성화 되었습니다.",
-                        ToastUtils.SHORT, ToastUtils.WARNING)
-                    //addPicture(uri.toString())
+                    addPicture(uri.toString())
                 }
         }
 
@@ -236,20 +246,14 @@ class MessagesActivity : AppCompatActivity(),
             TedImagePicker.with(this)
                 .mediaType(MediaType.VIDEO)
                 .start { uri ->
-                    ToastUtils.show(applicationContext,
-                        "선택된 경로 : $uri\n\n컨텐츠 공유는 파일 저정소 서버 활당량 초과로 임시 비활성화 되었습니다.",
-                        ToastUtils.SHORT, ToastUtils.WARNING)
-                    //addVideo(uri.toString())
+                    addVideo(uri.toString())
                 }
         }
 
         val photoAdapter = PhotoListAdapter(getPathOfAllImages(-1), this)
         photoAdapter.setOnItemClickListener(object : PhotoListAdapter.OnItemClickListener {
             override fun onItemClick(imageUrl: String) {
-                ToastUtils.show(applicationContext,
-                    "선택된 경로 : $imageUrl\n\n컨텐츠 공유는 파일 저정소 서버 활당량 초과로 임시 비활성화 되었습니다.",
-                    ToastUtils.SHORT, ToastUtils.WARNING)
-                //addPicture(imageUrl)
+                addPicture(imageUrl)
             }
         })
         rvPhoto!!.layoutManager = GridLayoutManager(this, 3)
@@ -374,6 +378,12 @@ class MessagesActivity : AppCompatActivity(),
 
     @Suppress("NAME_SHADOWING")
     private fun addVideo(linkString: String){
+        if(!AppUtils.getConfigData("can_storage").toBoolean()){
+            ToastUtils.show(applicationContext,
+                "컨텐츠 첨부 기능은 파일 저정소 서버 할당량 초과로 임시 비활성화 되었습니다.",
+                ToastUtils.SHORT, ToastUtils.WARNING)
+            return
+        }
         val link = URLDecoder.decode(linkString.replaceFirst("file:///", ""), "UTF-8")
         val pDialog = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
         pDialog.progressHelper.barColor = ContextCompat.getColor(applicationContext,
@@ -425,6 +435,12 @@ class MessagesActivity : AppCompatActivity(),
     }
 
     private fun addPicture(linkString: String){
+        if(!AppUtils.getConfigData("can_storage").toBoolean()){
+            ToastUtils.show(applicationContext,
+                "컨텐츠 첨부 기능은 파일 저정소 서버 할당량 초과로 임시 비활성화 되었습니다.",
+                ToastUtils.SHORT, ToastUtils.WARNING)
+            return
+        }
         val link = URLDecoder.decode(linkString.replaceFirst("file:///", ""), "UTF-8")
         Log.d("video link", link)
         val pDialog = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)

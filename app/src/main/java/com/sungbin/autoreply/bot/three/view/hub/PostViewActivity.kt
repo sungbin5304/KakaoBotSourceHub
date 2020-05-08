@@ -9,11 +9,8 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import com.shashank.sony.fancytoastlib.FancyToast
 import com.sungbin.autoreply.bot.three.R
 import com.sungbin.autoreply.bot.three.dto.hub.BoardDataItem
-import com.sungbin.autoreply.bot.three.utils.Utils
-
 import kotlinx.android.synthetic.main.activity_board_view.*
 import kotlinx.android.synthetic.main.activity_board_view.toolbar
 import kotlinx.android.synthetic.main.content_board_view.*
@@ -26,16 +23,16 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.*
-import com.mancj.slideup.SlideUp
-import com.mancj.slideup.SlideUpBuilder
 import com.sungbin.autoreply.bot.three.adapter.CommentListAdapter
 import com.sungbin.autoreply.bot.three.dto.hub.BoardActionItem
 import com.sungbin.autoreply.bot.three.dto.hub.CommentListItem
-import com.sungbin.autoreply.bot.three.utils.ui.DialogUtils
 import com.sungbin.autoreply.bot.three.utils.FirebaseUtils
+import com.sungbin.autoreply.bot.three.utils.chat.ChatModuleUtils
+import com.sungbin.sungbintool.LayoutUtils
+import com.sungbin.sungbintool.ToastUtils
+import com.sungbin.sungbintool.Utils
 import kotlinx.android.synthetic.main.content_comment_page.*
 import org.apache.commons.lang3.StringUtils
-import java.lang.Exception
 import kotlin.collections.ArrayList
 
 
@@ -45,7 +42,6 @@ class PostViewActivity : AppCompatActivity() {
     private var adapter: CommentListAdapter? = null
     private var items: ArrayList<CommentListItem>? = null
     private val reference = FirebaseDatabase.getInstance().reference
-    private var slideUp: SlideUp? = null
     private var boardDataItem: BoardDataItem? = null
     private var isGood = false
     private var isBad = false
@@ -60,9 +56,9 @@ class PostViewActivity : AppCompatActivity() {
         toolbar.title = ""
         setSupportActionBar(toolbar)
 
-        viewer = findViewById<WebView>(R.id.viewer)
+        viewer = findViewById(R.id.viewer)
 
-        val uid = Utils.readData(applicationContext, "uid", "null")!!
+        val uid = ChatModuleUtils.getDeviceId(applicationContext)
         val uuid = intent.getStringExtra("uuid")!!
         reference.child("Board").child(uuid).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -82,9 +78,10 @@ class PostViewActivity : AppCompatActivity() {
                 board_bad_count.text = boardDataItem!!.bad_count.toString()
             }
             override fun onCancelled(databaseError: DatabaseError) {
-                Utils.toast(applicationContext,
-                    databaseError.message,
-                    FancyToast.LENGTH_SHORT, FancyToast.ERROR)
+                ToastUtils.show(applicationContext,
+                    "Error at DatabaseError\n\n${databaseError.message}",
+                    ToastUtils.SHORT, ToastUtils.ERROR
+                )
             }
         })
 
@@ -93,7 +90,7 @@ class PostViewActivity : AppCompatActivity() {
         webSettings.javaScriptEnabled = true
         webSettings.setSupportZoom(false)
 
-        slideUp = SlideUpBuilder(view_comment_list)
+        /*slideUp = SlideUpBuilder(view_comment_list)
             .withListeners(object : SlideUp.Listener.Events {
                 override fun onSlide(percent: Float) {
                     viewer!!.alpha = percent / 100
@@ -111,9 +108,10 @@ class PostViewActivity : AppCompatActivity() {
             .withStartGravity(Gravity.BOTTOM)
             .withStartState(SlideUp.State.HIDDEN)
             .withSlideFromOtherView(layout_post_view)
-            .build()
+            .build()*/
 
-        reference.child("User Action").child(uid).child("board_good")
+        reference.child("User Action")
+            .child(uid).child("board_good")
             .addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
                 try {
@@ -177,23 +175,24 @@ class PostViewActivity : AppCompatActivity() {
             })
 
 
-        information_view.setOnClickListener {
-            slideUp!!.hide()
-        }
-
-        frame_view.setOnClickListener {
-            slideUp!!.hide()
-        }
-
-        main_view.setOnClickListener {
-            slideUp!!.hide()
-        }
+//        information_view.setOnClickListener {
+//            slideUp!!.hide()
+//        }
+//
+//        frame_view.setOnClickListener {
+//            slideUp!!.hide()
+//        }
+//
+//        main_view.setOnClickListener {
+//            slideUp!!.hide()
+//        }
 
         board_good.setOnClickListener {
             if(isGood) {
-                Utils.toast(applicationContext,
+                ToastUtils.show(applicationContext,
                     getString(R.string.already_post_good),
-                    FancyToast.LENGTH_SHORT, FancyToast.WARNING)
+                    ToastUtils.SHORT, ToastUtils.INFO
+                )
             }
             else {
                 val good_count = (boardDataItem!!.good_count)?.plus(1)
@@ -226,9 +225,10 @@ class PostViewActivity : AppCompatActivity() {
 
         board_bad.setOnClickListener {
             if(isBad) {
-                Utils.toast(applicationContext,
+                ToastUtils.show(applicationContext,
                     getString(R.string.already_post_bad),
-                    FancyToast.LENGTH_SHORT, FancyToast.WARNING)
+                    ToastUtils.SHORT, ToastUtils.INFO
+                )
             }
             else {
                 val bad_count = (boardDataItem!!.bad_count)?.plus(1)
@@ -260,7 +260,7 @@ class PostViewActivity : AppCompatActivity() {
         }
 
         comment.setOnClickListener {
-            slideUp!!.show()
+            //slideUp!!.show()
             toolbar_title.text = boardDataItem!!.title + " - 댓글"
         }
 
@@ -291,8 +291,8 @@ class PostViewActivity : AppCompatActivity() {
             override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {
                 /*val commentDataItem = dataSnapshot.getValue(CommentListItem::class.java)
                 Log.d("SSS", commentDataItem!!.comment)*/
-                Utils.toast(applicationContext, "댓글이 수정되었습니다.\n게시글을 다시 로드하시면 반영됩니다.",
-                    FancyToast.LENGTH_SHORT, FancyToast.SUCCESS)
+                /*Utils.toast(applicationContext, "댓글이 수정되었습니다.\n게시글을 다시 로드하시면 반영됩니다.",
+                    FancyToast.LENGTH_SHORT, FancyToast.SUCCESS)*/
             }
 
             override fun onChildRemoved(dataSnapshot: DataSnapshot) {
@@ -303,8 +303,8 @@ class PostViewActivity : AppCompatActivity() {
                 Log.d("SSS", items!!.contains(commentDataItem).toString())
                 //adapter!!.deleteItem(items!!.indexOf(commentDataItem))
                 adapter!!.notifyDataSetChanged()*/
-                Utils.toast(applicationContext, "댓글이 삭제되었습니다.\n게시글을 다시 로드하시면 반영됩니다.",
-                    FancyToast.LENGTH_SHORT, FancyToast.SUCCESS)
+               /* Utils.toast(applicationContext, "댓글이 삭제되었습니다.\n게시글을 다시 로드하시면 반영됩니다.",
+                    FancyToast.LENGTH_SHORT, FancyToast.SUCCESS)*/
             }
 
             override fun onChildMoved(dataSnapshot: DataSnapshot, s: String?) {
@@ -312,9 +312,8 @@ class PostViewActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                Utils.toast(applicationContext,
-                    databaseError.message,
-                    FancyToast.LENGTH_SHORT, FancyToast.ERROR)
+                ToastUtils.show(applicationContext, databaseError.message,
+                    ToastUtils.SHORT, ToastUtils.ERROR)
             }
         })
 
@@ -338,8 +337,7 @@ class PostViewActivity : AppCompatActivity() {
             layout.addView(input)
 
             dialog.setView(
-                DialogUtils.makeMarginLayout(
-                    resources,
+                LayoutUtils.putMargin(
                     ctx, layout
                 )
             )
@@ -347,20 +345,22 @@ class PostViewActivity : AppCompatActivity() {
             dialog.setPositiveButton(getString(R.string.post_complete)) { _, _ ->
                 val comment = input.text.toString()
                 if(StringUtils.isBlank(comment)){
-                    Utils.toast(ctx,
+                    ToastUtils.show(applicationContext,
                         getString(R.string.please_input_comment),
-                        FancyToast.LENGTH_SHORT, FancyToast.WARNING)
+                        ToastUtils.SHORT, ToastUtils.WARNING
+                    )
                 }
                 else {
                     val data =
                         CommentListItem(
-                            Utils.readData(applicationContext, "nickname", "User"),
+                            ChatModuleUtils.getUser(uid)!!.name,
                             comment, uuid, uid, key
                         )
                     reference.child("Board Comment").child(uuid).child(key).setValue(data)
-                    Utils.toast(applicationContext,
+                    ToastUtils.show(applicationContext,
                         getString(R.string.comment_post_success),
-                        FancyToast.LENGTH_SHORT, FancyToast.SUCCESS)
+                        ToastUtils.SHORT, ToastUtils.SUCCESS
+                    )
                     FirebaseUtils.showNoti(applicationContext,
                         getString(R.string.new_comment),
                         boardDataItem!!.title + "에 댓글이 작성되었습니다.",
@@ -372,11 +372,11 @@ class PostViewActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if(slideUp!!.isVisible) {
+        /*if(slideUp!!.isVisible) {
             slideUp!!.hide()
             toolbar_title.text = boardDataItem!!.title
         }
-        else super.onBackPressed()
+        else*/ super.onBackPressed()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -415,8 +415,7 @@ class PostViewActivity : AppCompatActivity() {
             layout.addView(input)
 
             dialog.setView(
-                DialogUtils.makeMarginLayout(
-                    resources,
+                LayoutUtils.putMargin(
                     ctx, layout
                 )
             )
@@ -440,22 +439,23 @@ class PostViewActivity : AppCompatActivity() {
                             board_good_count.text = boardDataItem!!.good_count.toString()
                             board_bad_count.text = boardDataItem!!.bad_count.toString()
 
-                            Utils.toast(
-                                applicationContext,
+                            ToastUtils.show(applicationContext,
                                 getString(R.string.load_version_success),
-                                FancyToast.LENGTH_SHORT, FancyToast.SUCCESS
+                                ToastUtils.SHORT, ToastUtils.SUCCESS
                             )
                         }
                         catch(e: Exception){
-                            Utils.toast(applicationContext!!,
+                            ToastUtils.show(applicationContext,
                                 getString(R.string.cant_load_version),
-                                FancyToast.LENGTH_SHORT, FancyToast.WARNING)
+                                ToastUtils.SHORT, ToastUtils.ERROR
+                            )
                         }
                     }
                     override fun onCancelled(databaseError: DatabaseError) {
-                        Utils.toast(applicationContext,
+                        ToastUtils.show(applicationContext,
                             databaseError.message,
-                            FancyToast.LENGTH_SHORT, FancyToast.ERROR)
+                            ToastUtils.SHORT, ToastUtils.ERROR
+                        )
                     }
                 })
             }
@@ -474,13 +474,14 @@ class PostViewActivity : AppCompatActivity() {
             //view.text = JsHighlighter().apply(SpannableStringBuilder("function test(){\nreturn \"\t\t\t\tThis is making function...\"\n}"))
             layout.addView(view)
 
-            dialog.setView(
-                DialogUtils.makeMarginLayout(resources,
-                ctx, layout))
+            dialog.setView(LayoutUtils.putMargin(
+                ctx, layout
+            ))
             dialog.show()
-            Utils.toast(ctx,
+            ToastUtils.show(applicationContext,
                 getString(R.string.is_making),
-                FancyToast.LENGTH_SHORT, FancyToast.INFO)
+                ToastUtils.SHORT, ToastUtils.INFO
+            )
         }
 
         return super.onOptionsItemSelected(item)

@@ -27,7 +27,7 @@
                 app:layout_constraintTop_toTopOf="@id/imageViewUser"
                 tools:ignore="ContentDescription" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <com.sungbin.sungbintool.ui.TagableRoundImageView
                 android:id="@+id/imageViewUser"
                 android:layout_width="40dp"
                 android:layout_height="40dp"

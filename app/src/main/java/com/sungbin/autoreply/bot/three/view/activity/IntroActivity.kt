@@ -66,6 +66,8 @@ class IntroActivity : AppCompatActivity() {
         findViewById<Button>(R.id.btn_continue).setOnClickListener {
             finish()
             startActivity(Intent(this, LoginActivity::class.java))
+
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }
     }
 }

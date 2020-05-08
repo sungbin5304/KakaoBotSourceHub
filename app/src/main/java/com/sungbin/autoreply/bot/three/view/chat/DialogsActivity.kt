@@ -27,12 +27,13 @@ import com.sungbin.autoreply.bot.three.dto.chat.item.MessageItem
 import com.sungbin.autoreply.bot.three.dto.chat.model.Dialog
 import com.sungbin.autoreply.bot.three.dto.chat.model.Message
 import com.sungbin.autoreply.bot.three.dto.chat.model.User
+import com.sungbin.autoreply.bot.three.utils.AppUtils
 import com.sungbin.autoreply.bot.three.utils.ui.ImageUtils
 import com.sungbin.autoreply.bot.three.utils.chat.ChatModuleUtils
 import com.sungbin.autoreply.bot.three.utils.ui.Glide
 import com.sungbin.sungbintool.ToastUtils
 import com.sungbin.sungbintool.Utils
-import de.hdodenhof.circleimageview.CircleImageView
+import com.sungbin.sungbintool.ui.TagableRoundImageView
 import gun0912.tedimagepicker.builder.TedImagePicker
 import gun0912.tedimagepicker.builder.type.MediaType
 import kotlinx.android.synthetic.main.activity_custom_holder_dialogs.*
@@ -49,6 +50,8 @@ class DialogsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_custom_holder_dialogs)
+
+        AppUtils.loadFetch(applicationContext)
 
         val deviceId = ChatModuleUtils.getDeviceId(applicationContext)
         val reference = FirebaseDatabase.getInstance().reference.child("Chat").child("Dialogs")
@@ -170,17 +173,19 @@ class DialogsActivity : AppCompatActivity() {
         tab.setViewPager(view_pager)
 
         fab.setOnClickListener {
-            ToastUtils.show(applicationContext,
-                "채팅방 추가 기능은 파일 저정소 서버 활당량 초과로 임시 비활성화 되었습니다.",
-                ToastUtils.SHORT, ToastUtils.WARNING)
-            return@setOnClickListener
             try {
+                if(!AppUtils.getConfigData("can_storage").toBoolean()){
+                    ToastUtils.show(applicationContext,
+                        "채팅방 추가 기능은 파일 저정소 서버 활당량 초과로 임시 비활성화 되었습니다.",
+                        ToastUtils.SHORT, ToastUtils.WARNING)
+                    return@setOnClickListener
+                }
                 var isClickMessageType = 0
                 var imageUrl = ""
                 val inflater = LayoutInflater.from(applicationContext)
                     .inflate(R.layout.layout_dialog_add, null, false)
                 val view = inflater.findViewById<LinearLayout>(R.id.layout)
-                val imageView = view.findViewById<CircleImageView>(R.id.iv_icon)
+                val imageView = view.findViewById<TagableRoundImageView>(R.id.iv_icon)
                 val done = view.findViewById<Button>(R.id.btn_add)
                 val input = view.findViewById<EditText>(R.id.et_name)
                 val rgLayout = view.findViewById<RadioGroup>(R.id.rg_layout)

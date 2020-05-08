@@ -1,5 +1,6 @@
 package com.sungbin.autoreply.bot.three.view.activity
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -8,14 +9,19 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.sungbin.autoreply.bot.three.R
+import com.sungbin.autoreply.bot.three.utils.AppUtils
+import com.sungbin.autoreply.bot.three.utils.AppUtils.getAppVersionName
 import com.sungbin.autoreply.bot.three.utils.chat.ChatModuleUtils
 import com.sungbin.autoreply.bot.three.view.activity.fragment.AddFragment
 import com.sungbin.autoreply.bot.three.view.activity.fragment.DashboardFragment
 import com.sungbin.autoreply.bot.three.view.activity.fragment.SandboxFragment
 import com.sungbin.autoreply.bot.three.view.activity.fragment.SettingFragment
 import com.sungbin.autoreply.bot.three.view.hub.MainActivity
+import com.sungbin.sungbintool.DialogUtils
 import com.sungbin.sungbintool.StorageUtils
+import com.sungbin.sungbintool.ToastUtils
 import kotlinx.android.synthetic.main.content_dashboard.*
 
 
@@ -33,11 +39,10 @@ class DashboardActivity  : AppCompatActivity() {
                 window.statusBarColor = ContextCompat.getColor(applicationContext, R.color.colorWhite)
             }
 
+            AppUtils.loadFetch(applicationContext)
             StorageUtils.createFolder("AutoReply Bot/Bots/AutoReply")
             StorageUtils.createFolder("AutoReply Bot/Bots/JavaScript")
             StorageUtils.createFolder("AutoReply Bot/Bots/Log")
-
-            Log.d("데이터!", ChatModuleUtils.getUser(ChatModuleUtils.getDeviceId(applicationContext))!!.name)
 
             val title = findViewById<TextView>(R.id.tv_dashboard)
             fragmentManager.beginTransaction().add(R.id.framelayout, DashboardFragment()).commit()
@@ -70,6 +75,14 @@ class DashboardActivity  : AppCompatActivity() {
                     }
                 }
             }
+
+            val lastVersion = AppUtils.getConfigData("last_version")
+            if(lastVersion != getAppVersionName(this)){
+                DialogUtils.show(this, "앱 업데이트 필요",
+                    "사용중이신 KakaoTalkBotHub의 버전이 낮아서 더 이상 사용하실 수 없습니다.\n계속해서 사용하시려면 업데이트를 해 주새요.",
+                    DialogInterface.OnClickListener { _, _ -> finish() }, false)
+            }
+
         } catch (e: Exception) {
             Log.e("Error", e.toString())
         }

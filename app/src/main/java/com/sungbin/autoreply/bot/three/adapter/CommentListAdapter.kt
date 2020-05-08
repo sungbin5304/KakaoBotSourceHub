@@ -18,11 +18,12 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.FirebaseDatabase
-import com.shashank.sony.fancytoastlib.FancyToast
 import com.sungbin.autoreply.bot.three.R
 import com.sungbin.autoreply.bot.three.dto.hub.CommentListItem
-import com.sungbin.autoreply.bot.three.utils.ui.DialogUtils
-import com.sungbin.autoreply.bot.three.utils.Utils
+import com.sungbin.autoreply.bot.three.utils.chat.ChatModuleUtils
+import com.sungbin.sungbintool.LayoutUtils
+import com.sungbin.sungbintool.ReadMoreUtils
+import com.sungbin.sungbintool.ToastUtils
 import org.apache.commons.lang3.StringUtils
 import kotlin.collections.ArrayList
 
@@ -53,15 +54,16 @@ class CommentListAdapter(private val list: ArrayList<CommentListItem>?,
         val uuid = list[position].uuid
         val uid = list[position].uid
         val key = list[position].key
-        val myUid = Utils.readData(ctx!!, "uid", "")
 
         viewholder.sender.text = name
-        setReadMore(viewholder.comment, content!!, 3)
+        ReadMoreUtils.setReadMoreLine(viewholder.comment, content!!, 3)
 
         viewholder.view.setOnLongClickListener {
-            if(uid != myUid) {
-                Utils.toast(act, act.getString(R.string.can_action_my_comment),
-                    FancyToast.LENGTH_SHORT, FancyToast.WARNING)
+            if(uid != ChatModuleUtils.getDeviceId(ctx!!)) {
+                ToastUtils.show(ctx!!,
+                    act.getString(R.string.can_action_my_comment),
+                    ToastUtils.SHORT, ToastUtils.WARNING
+                )
                 return@setOnLongClickListener false
             }
             val dialog = AlertDialog.Builder(act)
@@ -72,7 +74,7 @@ class CommentListAdapter(private val list: ArrayList<CommentListItem>?,
             dialog.setSingleChoiceItems(action, -1) { _, which ->
                 alert!!.cancel()
                 when(which){
-                    0 ->{ //수정
+                    0 -> { //수정
                         val builder = AlertDialog.Builder(act)
                         dialog.setTitle(act.getString(R.string.string_edit_comment))
 
@@ -91,8 +93,7 @@ class CommentListAdapter(private val list: ArrayList<CommentListItem>?,
                         layout.addView(input)
 
                         builder.setView(
-                            DialogUtils.makeMarginLayout(
-                                act.resources,
+                            LayoutUtils.putMargin(
                                 ctx!!, layout
                             )
                         )
@@ -100,9 +101,10 @@ class CommentListAdapter(private val list: ArrayList<CommentListItem>?,
                         builder.setPositiveButton(act.getString(R.string.post_complete)) { _, _ ->
                             val comment = input.text.toString()
                             if(StringUtils.isBlank(comment)){
-                                Utils.toast(ctx!!,
+                                ToastUtils.show(ctx!!,
                                     act.getString(R.string.please_input_comment),
-                                    FancyToast.LENGTH_SHORT, FancyToast.WARNING)
+                                    ToastUtils.SHORT, ToastUtils.WARNING
+                                )
                             }
                             else {
                                 val item =
@@ -111,73 +113,27 @@ class CommentListAdapter(private val list: ArrayList<CommentListItem>?,
                                         comment, uuid, uid, key
                                     )
                                 reference.child(key!!).setValue(item)
-                                Utils.toast(ctx!!,
+                                ToastUtils.show(ctx!!,
                                     act.getString(R.string.comment_edit_success),
-                                    FancyToast.LENGTH_SHORT, FancyToast.SUCCESS)
+                                    ToastUtils.SHORT, ToastUtils.SUCCESS
+                                )
                             }
                         }
                         builder.show()
                     }
-                    1 ->{ //삭제
+                    1 -> { //삭제
                         reference.child(key!!).removeValue()
-                        Utils.toast(ctx!!,
+                        ToastUtils.show(ctx!!,
                             act.getString(R.string.comment_delete_success),
-                            FancyToast.LENGTH_SHORT, FancyToast.SUCCESS)
+                            ToastUtils.SHORT,
+                            ToastUtils.SUCCESS
+                        )
                     }
                 }
             }
             alert = dialog.create()
             alert!!.show()
             return@setOnLongClickListener false
-        }
-    }
-
-    private fun setReadMore(view: TextView, text: String, maxLine: Int) {
-        val context = view.context
-        val expanedText = " ... 더보기"
-
-        if (view.tag != null && view.tag == text) return
-        view.tag = text
-        view.text = text
-        view.post {
-            if (view.lineCount >= maxLine) {
-
-                val lineEndIndex = view.layout.getLineVisibleEnd(maxLine - 1)
-
-                val split = text.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                var splitLength = 0
-
-                var lessText = ""
-                for (item in split) {
-                    splitLength += item.length + 1
-                    if (splitLength >= lineEndIndex) {
-                        lessText += if (item.length >= expanedText.length) {
-                            item.substring(0, item.length - expanedText.length) + expanedText
-                        } else {
-                            item + expanedText
-                        }
-                        break
-                    }
-                    lessText += item + "\n"
-                }
-                val spannableString = SpannableString(lessText)
-                spannableString.setSpan(
-                    object : ClickableSpan() {
-                        override fun onClick(vew: View) {
-                            view.text = text
-                        }
-
-                        override fun updateDrawState(ds: TextPaint) {
-                            ds.color = ContextCompat.getColor(context, R.color.colorPrimary)
-                        }
-                    },
-                    spannableString.length - expanedText.length,
-                    spannableString.length,
-                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                )
-                view.text = spannableString
-                view.movementMethod = LinkMovementMethod.getInstance()
-            }
         }
     }
 

@@ -25,17 +25,18 @@ import com.gun0912.tedpermission.TedPermission
 import com.rarepebble.colorpicker.ColorPickerView
 import com.rustamg.filedialogs.FileDialog
 import com.rustamg.filedialogs.OpenFileDialog
-import com.shashank.sony.fancytoastlib.FancyToast
 import com.sungbin.autoreply.bot.three.R
 import com.sungbin.autoreply.bot.three.dto.hub.BoardDataItem
-import com.sungbin.autoreply.bot.three.utils.ui.DialogUtils
-import com.sungbin.autoreply.bot.three.utils.Utils
 import org.apache.commons.lang3.StringUtils
 
 import java.io.File
 
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.sungbin.autoreply.bot.three.utils.FirebaseUtils
+import com.sungbin.autoreply.bot.three.utils.chat.ChatModuleUtils
+import com.sungbin.sungbintool.LayoutUtils
+import com.sungbin.sungbintool.ToastUtils
+import com.sungbin.sungbintool.Utils
 import jp.wasabeef.richeditor.RichEditor
 
 @Suppress("DEPRECATION", "UNUSED_ANONYMOUS_PARAMETER")
@@ -89,13 +90,7 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
         toolbar.title = ""
         setSupportActionBar(toolbar)
 
-        nickname = Utils.readData(applicationContext, "nickname", "qwertyuiopqwert")
-        if(nickname == "qwertyuiopqwert"){
-            Utils.toast(applicationContext,
-                getString(R.string.please_app_refresh),
-                FancyToast.LENGTH_LONG, FancyToast.WARNING)
-            finish()
-        }
+        nickname = ChatModuleUtils.getUser(ChatModuleUtils.getDeviceId(applicationContext))!!.name
 
         upload = findViewById(R.id.uploadScript)
 
@@ -116,35 +111,14 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
         }
 
         upload!!.setOnClickListener { v ->
-            val permissionlistener = object : PermissionListener {
-                override fun onPermissionGranted() {
-                    Utils.toast(
-                        applicationContext,
-                        resources.getString(R.string.select_upload_script),
-                        FancyToast.LENGTH_SHORT,
-                        FancyToast.SUCCESS)
-                    val dialog = OpenFileDialog()
-                    val args = Bundle()
-                    args.putString(FileDialog.EXTENSION, "js")
-                    dialog.arguments = args
-                    dialog.show(supportFragmentManager, OpenFileDialog::class.java.name)
-                }
-
-                override fun onPermissionDenied(deniedPermissions: List<String>) {
-                    Utils.toast(
-                        applicationContext,
-                        getString(R.string.how_to_give_permission),
-                        FancyToast.LENGTH_SHORT, FancyToast.WARNING)
-                }
-            }
-            TedPermission.with(this)
-                .setPermissionListener(permissionlistener)
-                .setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                .setDeniedMessage(R.string.how_to_give_permission)
-                .setDeniedTitle(R.string.need_permission)
-                .setRationaleTitle(R.string.need_permission)
-                .setRationaleMessage(R.string.why_need_permission)
-                .check()
+            ToastUtils.show(applicationContext,
+                resources.getString(R.string.select_upload_script),
+                ToastUtils.LONG, ToastUtils.SUCCESS)
+            val dialog = OpenFileDialog()
+            val args = Bundle()
+            args.putString(FileDialog.EXTENSION, "js")
+            dialog.arguments = args
+            dialog.show(supportFragmentManager, OpenFileDialog::class.java.name)
         }
 
         findViewById<View>(R.id.action_undo).setOnClickListener { v -> mEditor!!.undo() }
@@ -200,10 +174,12 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
                 val adressStr = adress.text.toString()
 
                 if (StringUtils.isBlank(titleStr) || StringUtils.isBlank(adressStr)) {
-                    Utils.toast(ctx, getString(R.string.plz_input_all), FancyToast.SUCCESS, FancyToast.WARNING)
+                    ToastUtils.show(ctx, getString(R.string.plz_input_all),
+                        ToastUtils.SHORT, ToastUtils.WARNING)
                 } else {
                     mEditor!!.insertImage(adressStr, titleStr)
-                    Utils.toast(ctx, getString(R.string.success_insert), FancyToast.LENGTH_SHORT, FancyToast.SUCCESS)
+                    ToastUtils.show(ctx, getString(R.string.success_insert),
+                        ToastUtils.SHORT, ToastUtils.SUCCESS)
                 }
             }
             dialog.show()
@@ -226,8 +202,7 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
             layout.addView(adress)
 
             dialog.setView(
-                DialogUtils.makeMarginLayout(
-                    resources,
+                LayoutUtils.putMargin(
                     ctx, layout
                 )
             )
@@ -235,12 +210,13 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
             dialog.setPositiveButton("확인") { _, _ ->
                 val titleStr = title.text.toString()
                 val adressStr = adress.text.toString()
-
                 if (StringUtils.isBlank(titleStr) || StringUtils.isBlank(adressStr)) {
-                    Utils.toast(ctx, getString(R.string.plz_input_all), FancyToast.SUCCESS, FancyToast.WARNING)
+                    ToastUtils.show(ctx, getString(R.string.plz_input_all),
+                        ToastUtils.SHORT, ToastUtils.WARNING)
                 } else {
-                    mEditor!!.insertLink(adressStr, titleStr)
-                    Utils.toast(ctx, getString(R.string.success_insert), FancyToast.LENGTH_SHORT, FancyToast.SUCCESS)
+                    mEditor!!.insertImage(adressStr, titleStr)
+                    ToastUtils.show(ctx, getString(R.string.success_insert),
+                        ToastUtils.SHORT, ToastUtils.SUCCESS)
                 }
             }
             dialog.show()
@@ -283,9 +259,9 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
                             mEditor!!.html
                         )
                     root.setValue(boardDataItem)
-                    Utils.toast(ctx,
-                        getString(R.string.success_request),
-                        FancyToast.LENGTH_SHORT, FancyToast.SUCCESS)
+                    ToastUtils.show(ctx, getString(R.string.success_request),
+                        ToastUtils.SHORT, ToastUtils.SUCCESS
+                    )
                     FirebaseUtils.showNoti(applicationContext,
                         "새글 알림", inputTitle!!.text!!.toString(),
                         "NewPostNoti")
@@ -308,9 +284,9 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
                     input.filters = arrayOf(InputFilter.LengthFilter(3))
                     layout.addView(input)
 
-                    dialog.setView(
-                        DialogUtils.makeMarginLayout(resources,
-                        ctx, layout))
+                    dialog.setView(LayoutUtils.putMargin(
+                        ctx, layout
+                    ))
                     dialog.setNeutralButton(getString(R.string.cancel_script_upload)) { _, _ ->
                         val root = reference.child(key)
                         val boardDataItem =
@@ -320,17 +296,18 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
                                 version, key, nickname, mEditor!!.html
                             )
                         root.setValue(boardDataItem)
-                        Utils.toast(ctx,
+                        ToastUtils.show(applicationContext,
                             getString(R.string.upload_post_cancel_script),
-                            FancyToast.LENGTH_SHORT, FancyToast.SUCCESS)
+                            ToastUtils.SHORT, ToastUtils.SUCCESS
+                        )
                         finish()
                     }
                     dialog.setPositiveButton(getString(R.string.string_upload)) { _, _ ->
                         version = input.text.toString()
                         if (StringUtils.isBlank(version)) {
-                            Utils.toast(ctx,
-                                "스크립트 버전을 입력해 주세요.",
-                                FancyToast.LENGTH_SHORT, FancyToast.WARNING)
+                            ToastUtils.show(ctx,
+                                getString(R.string.please_input_script_version),
+                                ToastUtils.SHORT, ToastUtils.WARNING)
                         } else {
                             val pDialog = SweetAlertDialog(ctx, SweetAlertDialog.PROGRESS_TYPE)
                             pDialog.progressHelper.barColor = resources.getColor(R.color.colorPrimary)
@@ -342,17 +319,16 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
                             val riversRef = storageRef.child(key)
                             riversRef.putFile(file).addOnFailureListener { exception ->
                                 pDialog.dismissWithAnimation()
-                                Utils.toast(ctx,
+                                ToastUtils.show(ctx,
                                     "스크립트 업로드에 실패했습니다.\n\n" + exception.message,
-                                    FancyToast.LENGTH_SHORT,
-                                    FancyToast.ERROR)
+                                    ToastUtils.SHORT, ToastUtils.ERROR
+                                )
                             }.addOnSuccessListener { taskSnapshot ->
                                 pDialog.dismissWithAnimation()
-                                Utils.toast(ctx,
-                                    resources.getString(R.string.script_upload_done),
-                                    FancyToast.LENGTH_SHORT,
-                                    FancyToast.SUCCESS)
-
+                               ToastUtils.show(ctx,
+                                   resources.getString(R.string.script_upload_done),
+                                ToastUtils.SHORT, ToastUtils.SUCCESS
+                               )
                                 val root = reference.child(key)
                                 val boardDataItem =
                                     BoardDataItem(
@@ -370,9 +346,10 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
                     dialog.show()
                 }
             } else {
-                Utils.toast(applicationContext,
+                ToastUtils.show(applicationContext,
                     getString(R.string.plz_input_all),
-                    FancyToast.LENGTH_SHORT, FancyToast.WARNING)
+                    ToastUtils.SHORT, ToastUtils.WARNING
+                )
             }
         }
         return super.onOptionsItemSelected(item)
@@ -401,14 +378,15 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
         save.setOnClickListener { view ->
             val color = picker.color
             mEditor!!.setTextColor(color)
-            Utils.toast(ctx, getString(R.string.color_select), FancyToast.LENGTH_SHORT, FancyToast.SUCCESS)
+            ToastUtils.show(ctx, getString(R.string.color_select),
+                ToastUtils.SHORT, ToastUtils.SUCCESS
+            )
             alert!!.cancel()
         }
         layout.addView(save)
         dialog.setView(
-            DialogUtils.makeMarginLayout(
-                resources,
-                this@PostActivity, layout
+            LayoutUtils.putMargin(
+                ctx, layout
             )
         )
 
@@ -420,8 +398,9 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             val fileUri = data!!.data
-            Utils.toast(applicationContext, fileUri!!.toString(),
-                FancyToast.LENGTH_SHORT, FancyToast.INFO)
+            ToastUtils.show(applicationContext, fileUri!!.toString(),
+                ToastUtils.SHORT, ToastUtils.INFO
+            )
         }
     }
 

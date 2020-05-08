@@ -11,14 +11,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.*
-import com.shashank.sony.fancytoastlib.FancyToast
 import com.sungbin.autoreply.bot.three.R
 import com.sungbin.autoreply.bot.three.adapter.BoardListAdapter
 import com.sungbin.autoreply.bot.three.dto.hub.BoardActionItem
 import com.sungbin.autoreply.bot.three.dto.hub.BoardDataItem
 import com.sungbin.autoreply.bot.three.dto.hub.BoardListItem
-import com.sungbin.autoreply.bot.three.utils.Utils
+import com.sungbin.autoreply.bot.three.utils.chat.ChatModuleUtils
 import com.sungbin.autoreply.bot.three.view.hub.PostActivity
+import com.sungbin.sungbintool.ToastUtils
+import com.sungbin.sungbintool.Utils
 import java.lang.Exception
 import kotlin.collections.ArrayList
 
@@ -40,14 +41,13 @@ class BoardList : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
-        uid = Utils.readData(context!!, "uid", "null")!!
+        uid = ChatModuleUtils.getDeviceId(context!!)
         items = ArrayList()
         badBoardList = ArrayList()
         goodBoardList = ArrayList()
         adapter = BoardListAdapter(items, goodBoardList, badBoardList, activity)
         boardCash = ArrayList<BoardDataItem>()
 
-        val uid = Utils.readData(context!!, "uid", "null")!!
         val view = inflater.inflate(R.layout.fragment_board_list, null)
 
         boardListView = view.findViewById<RecyclerView>(R.id.list)
@@ -69,14 +69,16 @@ class BoardList : Fragment() {
 
 
         post_board.setOnClickListener {
-            Utils.toast(context!!,
+            ToastUtils.show(context!!,
                 getString(R.string.string_loading),
-                FancyToast.LENGTH_SHORT, FancyToast.INFO)
+                ToastUtils.SHORT, ToastUtils.INFO
+            )
             startActivity(Intent(context, PostActivity::class.java)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-            Utils.toast(context!!,
-                getString(R.string.press_long_sort_board),
-                FancyToast.LENGTH_SHORT, FancyToast.INFO)
+           ToastUtils.show(context!!,
+               getString(R.string.press_long_sort_board),
+                ToastUtils.SHORT, ToastUtils.INFO
+           )
         }
 
         post_board.setOnLongClickListener {
@@ -84,7 +86,7 @@ class BoardList : Fragment() {
             return@setOnLongClickListener false
         }
 
-        reference.child("User Action").child(uid).child("board_good")
+        reference.child("User Action").child(uid!!).child("board_good")
             .addChildEventListener(object : ChildEventListener {
                 override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
                     try {
@@ -111,7 +113,7 @@ class BoardList : Fragment() {
                 }
             })
 
-        reference.child("User Action").child(uid).child("board_bad")
+        reference.child("User Action").child(uid!!).child("board_bad")
             .addChildEventListener(object : ChildEventListener {
                 override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
                     try {
@@ -223,9 +225,10 @@ class BoardList : Fragment() {
                     alert!!.cancel()
                 }
             }*/
-            Utils.toast(context!!,
+            ToastUtils.show(context!!,
                 getString(R.string.string_making),
-                FancyToast.LENGTH_SHORT, FancyToast.INFO)
+                ToastUtils.SHORT, ToastUtils.INFO
+            )
         }
         alert = dialog.create()
         alert!!.show()

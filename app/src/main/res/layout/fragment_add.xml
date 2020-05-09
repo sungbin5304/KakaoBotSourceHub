@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -8,41 +9,26 @@
         android:focusableInTouchMode="true"
         tools:ignore="TextFields,MissingConstraints,RtlSymmetry,Autofill,LabelFor">
 
-    <FrameLayout
+    <com.savvyapps.togglebuttonlayout.ToggleButtonLayout
+            android:id="@+id/tbl_langauge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_half"
+            android:background="@color/colorWhite"
+            android:paddingTop="@dimen/margin_default"
+            app:cardCornerRadius="@dimen/margin_default"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="@dimen/margin_half"
-            android:id="@+id/ts_bot_type_layout"
-            android:layout_width="251.5dp"
-            android:layout_height="52dp"
-            android:background="@drawable/round_edittext_stroke">
-
-        <belka.us.androidtoggleswitch.widgets.ToggleSwitch
-                android:layout_gravity="center"
-                android:id="@+id/ts_bot_type"
-                android:layout_width="250dp"
-                android:layout_height="50dp"
-                app:activeBgColor="@color/colorLightGray"
-                app:activeTextColor="#000"
-                app:cornerRadius="5dp"
-                app:inactiveBgColor="@color/colorWhite"
-                app:inactiveTextColor="#000"
-                app:textToggleLeft="@string/simple_reply_enter"
-                app:textToggleRight="@string/string_javscript"
-                app:toggleWidth="125dp" />
-
-    </FrameLayout>
+            app:layout_constraintTop_toTopOf="parent"
+            app:menu="@menu/bot_language" />
 
     <FrameLayout
             android:id="@+id/input_name_layout"
             android:background="@drawable/round_edittext_stroke"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginTop="@dimen/margin_default"
-            android:layout_marginStart="@dimen/margin_default"
-            android:layout_marginEnd="@dimen/margin_default"
-            android:layout_marginBottom="@dimen/margin_default"
-            app:layout_constraintTop_toBottomOf="@+id/ts_bot_type_layout">
+            android:layout_margin="@dimen/margin_default"
+            app:layout_constraintTop_toBottomOf="@+id/tbl_langauge">
 
         <EditText
                 android:id="@+id/et_input_bot_name"
@@ -61,9 +47,10 @@
     </FrameLayout>
 
     <Button
+            android:enabled="false"
             android:id="@+id/btn_bot_add"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginStart="@dimen/margin_default"
             android:layout_marginEnd="@dimen/margin_default"
             android:layout_marginBottom="@dimen/margin_half"

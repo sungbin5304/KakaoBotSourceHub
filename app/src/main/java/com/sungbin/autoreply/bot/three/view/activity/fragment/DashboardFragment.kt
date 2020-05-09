@@ -127,9 +127,9 @@ class DashboardFragment : Fragment() {
         val logItem = ArrayList<LogListItem>()
         val databaseItem = ArrayList<DatabaseListItem>()
 
-        val jsPath = "$sdcard/KakaoTalkBotHub/Bots/JavaScript/"
-        val simplePath = "$sdcard/KakaoTalkBotHub/Bots/AutoReply/"
-        val logPath = "$sdcard/KakaoTalkBotHub/Log/"
+        val jsPath = "$sdcard/Android/data/com.sungbin.autoreply.bot.three/KakaoTalkBotHub/Bots/js/"
+        val simplePath = "$sdcard/Android/data/com.sungbin.autoreply.bot.three/KakaoTalkBotHub/Bots/simple/"
+        val logPath = "$sdcard/Android/data/com.sungbin.autoreply.bot.three/KakaoTalkBotHub/Log/"
 
         val jsList = File(jsPath).listFiles()
         val simpleList = File(simplePath).listFiles()

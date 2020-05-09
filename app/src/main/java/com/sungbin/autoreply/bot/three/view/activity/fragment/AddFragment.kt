@@ -1,6 +1,8 @@
 package com.sungbin.autoreply.bot.three.view.activity.fragment
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -8,9 +10,10 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.FrameLayout
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import belka.us.androidtoggleswitch.widgets.ToggleSwitch
+import com.savvyapps.togglebuttonlayout.ToggleButtonLayout
 import com.sungbin.autoreply.bot.three.R
 import com.sungbin.autoreply.bot.three.view.activity.DashboardActivity
 import com.sungbin.sungbintool.StorageUtils
@@ -24,14 +27,15 @@ class AddFragment
     val bottombar = bar
     val fragmentManagering = fragmentManage
     val view = v
-    var botTypeTs: ToggleSwitch? = null
+    var botTypeTs: ToggleButtonLayout? = null
     var inputBotNameEt: EditText? = null
     var addBotBtn: Button? = null
-    var isJsBot = false
+    var isJsBot = true
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
+            View {
         val view = inflater.inflate(R.layout.fragment_add, container, false)
-        botTypeTs = view.findViewById(R.id.ts_bot_type)
+        botTypeTs = view.findViewById(R.id.tbl_langauge)
         inputBotNameEt = view.findViewById(R.id.et_input_bot_name)
         addBotBtn = view.findViewById(R.id.btn_bot_add)
         return view
@@ -39,25 +43,45 @@ class AddFragment
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        botTypeTs!!.setOnToggleSwitchChangeListener { position, _ ->
-            isJsBot = position != 0
+        botTypeTs!!.onToggledListener = { _, toggle, selected ->
+            if(toggle.id == R.id.simple && selected) isJsBot = false
+            else if(toggle.id == R.id.javascript && selected) isJsBot = true
         }
-        addBotBtn!!.setOnClickListener {
-            val botNameText = inputBotNameEt!!.text.toString()
+        inputBotNameEt!!.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(editable: Editable?) {
+                if(editable.toString().isNotBlank()){
+                    addBotBtn!!.backgroundTintList = ContextCompat.getColorStateList(context!!,
+                        R.color.colorPrimary)
+                    addBotBtn!!.isEnabled = true
+                }
+                else {
+                    addBotBtn!!.backgroundTintList = ContextCompat.getColorStateList(context!!,
+                        R.color.colorAccent)
+                    addBotBtn!!.isEnabled = false
+                }
+            }
 
-            if(botNameText.isEmpty()){
-                ToastUtils.show(context!!,
-                    getString(R.string.please_input_bot_name),
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+        })
+        addBotBtn!!.setOnClickListener {
+            if (botTypeTs!!.selectedToggles().isEmpty() && addBotBtn!!.isClickable) {
+                ToastUtils.show(context!!, getString(R.string.choose_bot_type),
                     ToastUtils.SHORT, ToastUtils.WARNING)
-                return@setOnClickListener
             }
             else {
+                val botNameText = inputBotNameEt!!.text.toString()
                 val fragmentTransaction = fragmentManagering.beginTransaction()
                 fragmentTransaction.replace(view, DashboardFragment()).commit()
                 bottombar.setActiveItem(0)
-                if(isJsBot){
-                    StorageUtils.save("KakaoTalkBotHub/Bots/JavaScript/$botNameText.js",
-                    """
+                if (isJsBot) {
+                    StorageUtils.save(
+                        "Android/data/com.sungbin.autoreply.bot.three/KakaoTalkBotHub/Bots/js/$botNameText.js",
+                        """
                         function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName) {
                             /*
                             @String room : 메세지를 받은 방 이름 리턴
@@ -68,10 +92,11 @@ class AddFragment
                             @String package : 메세지를 받은 어플의 패키지명 리턴
                             */
                         }    
-                    """.trimIndent())
+                    """.trimIndent()
+                    )
                 }
                 else {
-                    StorageUtils.save("KakaoTalkBotHub/Bots/AutoReply/$botNameText.bot", "")
+                    StorageUtils.createFolder("Android/data/com.sungbin.autoreply.bot.three/KakaoTalkBotHub/Bots/simple/$botNameText")
                 }
                 ToastUtils.show(
                     context!!,

@@ -12,9 +12,8 @@ object LogUtils {
     }
 
     private fun getPath(name: String, type: String): String{
-        val folderPath = "${StorageUtils.sdcard}/KakaoTalkBotHub/Log/$name"
-        File(folderPath).mkdirs()
-        return "KakaoTalkBotHub/Log/$name/$type.log"
+        StorageUtils.createFolder("Android/data/com.sungbin.autoreply.bot.three/KakaoTalkBotHub/Log/$name")
+        return "Android/data/com.sungbin.autoreply.bot.three/KakaoTalkBotHub/Log/$name/$type.log"
     }
 
     fun save(name: String, content: String, time: String, type: Int){

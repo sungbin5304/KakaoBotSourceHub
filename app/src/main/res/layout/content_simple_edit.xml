@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/margin_default"
+        android:overScrollMode="never"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:ignore="LabelFor,ContentDescription,SmallSp,MissingConstraints"
+        tools:showIn="@layout/activity_simple_edit">
+
+    <androidx.core.widget.NestedScrollView
+            android:layout_marginBottom="@dimen/margin_default"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:overScrollMode="never"
+            app:layout_constraintBottom_toTopOf="@+id/btn_setting_done"
+            app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <TextView
+                    android:id="@+id/tv_rqeuired"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanumgothic"
+                    android:gravity="center"
+                    android:text="@string/required_input"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                    android:textColor="@color/colorBlack"
+                    android:textStyle="bold" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/outlinedTextField"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_half"
+                    android:fontFamily="@font/nanumgothic"
+                    android:hint="@string/string_reply_message"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_rqeuired">
+
+                <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_reply"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nanumgothic"
+                        android:maxLines="1"
+                        android:singleLine="true" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                    android:id="@+id/tv_choose"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_triple_and_half"
+                    android:fontFamily="@font/nanumgothic"
+                    android:gravity="center"
+                    android:text="@string/choose_input"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                    android:textColor="@color/colorBlack"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@+id/outlinedTextField" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_message"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_half"
+                    android:background="@drawable/outline_round_layout"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_choose">
+
+                <TextView
+                        android:id="@+id/tv_message"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_half"
+                        android:layout_marginTop="@dimen/margin_half"
+                        android:layout_marginBottom="@dimen/margin_half"
+                        android:fontFamily="@font/nanumgothic"
+                        android:gravity="center"
+                        android:text="@string/string_message"
+                        android:textColor="@color/colorBlack"
+                        app:layout_constraintBottom_toTopOf="@id/et_message"
+                        app:layout_constraintEnd_toStartOf="@+id/iv_message_show"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                        android:id="@+id/iv_message_show"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_twice_half"
+                        android:layout_marginEnd="@dimen/margin_half"
+                        android:src="@drawable/ic_arrow_drop_down_black_24dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                        android:id="@+id/et_message"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_default"
+                        android:layout_marginTop="@dimen/margin_half"
+                        android:layout_marginEnd="@dimen/margin_default"
+                        android:layout_marginBottom="@dimen/margin_default"
+                        android:background="@null"
+                        android:fontFamily="@font/nanumgothic"
+                        android:hint="@string/string_input"
+                        android:importantForAutofill="no"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textSize="15sp"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_message" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_room"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_default"
+                    android:background="@drawable/outline_round_layout"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@+id/cl_message">
+
+                <TextView
+                        android:id="@+id/tv_room"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_half"
+                        android:layout_marginTop="@dimen/margin_half"
+                        android:layout_marginBottom="@dimen/margin_half"
+                        android:fontFamily="@font/nanumgothic"
+                        android:gravity="center"
+                        android:text="@string/room_name"
+                        android:textColor="@color/colorBlack"
+                        app:layout_constraintBottom_toTopOf="@id/et_room"
+                        app:layout_constraintEnd_toStartOf="@+id/iv_room_show"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                        android:id="@+id/iv_room_show"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_twice_half"
+                        android:layout_marginEnd="@dimen/margin_half"
+                        android:src="@drawable/ic_arrow_drop_down_black_24dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                        android:id="@+id/et_room"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_default"
+                        android:layout_marginTop="@dimen/margin_half"
+                        android:layout_marginEnd="@dimen/margin_default"
+                        android:layout_marginBottom="@dimen/margin_default"
+                        android:background="@null"
+                        android:fontFamily="@font/nanumgothic"
+                        android:hint="@string/string_input"
+                        android:importantForAutofill="no"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textSize="15sp"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_room" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_sender"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_default"
+                    android:background="@drawable/outline_round_layout"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@+id/cl_room">
+
+                <TextView
+                        android:id="@+id/tv_sender"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_half"
+                        android:layout_marginTop="@dimen/margin_half"
+                        android:layout_marginBottom="@dimen/margin_half"
+                        android:fontFamily="@font/nanumgothic"
+                        android:gravity="center"
+                        android:text="@string/sender_name"
+                        android:textColor="@color/colorBlack"
+                        app:layout_constraintBottom_toTopOf="@id/et_sender"
+                        app:layout_constraintEnd_toStartOf="@+id/iv_sender_show"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                        android:id="@+id/iv_sender_show"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_twice_half"
+                        android:layout_marginEnd="@dimen/margin_half"
+                        android:src="@drawable/ic_arrow_drop_down_black_24dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                <EditText
+                        android:id="@+id/et_sender"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_default"
+                        android:layout_marginTop="@dimen/margin_half"
+                        android:layout_marginEnd="@dimen/margin_default"
+                        android:layout_marginBottom="@dimen/margin_default"
+                        android:background="@null"
+                        android:fontFamily="@font/nanumgothic"
+                        android:hint="@string/string_input"
+                        android:importantForAutofill="no"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textSize="15sp"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_sender" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_group"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_default"
+                    android:background="@drawable/outline_round_layout"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@+id/cl_sender">
+
+                <TextView
+                        android:id="@+id/tv_group"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_half"
+                        android:layout_marginTop="@dimen/margin_half"
+                        android:layout_marginBottom="@dimen/margin_half"
+                        android:fontFamily="@font/nanumgothic"
+                        android:gravity="center"
+                        android:text="@string/room_type"
+                        android:textColor="@color/colorBlack"
+                        app:layout_constraintBottom_toTopOf="@id/tbl_group"
+                        app:layout_constraintEnd_toStartOf="@+id/iv_group_show"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                        android:id="@+id/iv_group_show"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_twice_half"
+                        android:layout_marginEnd="@dimen/margin_half"
+                        android:src="@drawable/ic_arrow_drop_down_black_24dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                <com.savvyapps.togglebuttonlayout.ToggleButtonLayout
+                        android:id="@+id/tbl_group"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin_half"
+                        android:layout_marginBottom="@dimen/margin_default"
+                        android:background="@null"
+                        android:fontFamily="@font/nanumgothic"
+                        android:importantForAutofill="no"
+                        android:inputType="text"
+                        android:text="@string/preview_room_name"
+                        android:textSize="15sp"
+                        android:visibility="gone"
+                        app:cardCornerRadius="@dimen/margin_default"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/tv_group"
+                        app:menu="@menu/room_type" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <Button
+            android:enabled="false"
+            android:id="@+id/btn_setting_done"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:backgroundTint="@color/colorAccent"
+            android:textColor="@color/colorWhite"
+            android:textStyle="bold"
+            android:background="@drawable/round_button_lightgray"
+            android:fontFamily="@font/nanumgothic"
+            android:text="@string/setting_done"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

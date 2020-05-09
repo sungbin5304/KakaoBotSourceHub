@@ -27,7 +27,6 @@ import com.rustamg.filedialogs.FileDialog
 import com.rustamg.filedialogs.OpenFileDialog
 import com.sungbin.autoreply.bot.three.R
 import com.sungbin.autoreply.bot.three.dto.hub.BoardDataItem
-import org.apache.commons.lang3.StringUtils
 
 import java.io.File
 
@@ -171,13 +170,13 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
             dialog.setNegativeButton("취소", null)
             dialog.setPositiveButton("확인") { dialogInterface, i ->
                 val titleStr = title.text.toString()
-                val adressStr = adress.text.toString()
+                val addressStr = adress.text.toString()
 
-                if (StringUtils.isBlank(titleStr) || StringUtils.isBlank(adressStr)) {
+                if (titleStr.isBlank() || addressStr.isBlank()) {
                     ToastUtils.show(ctx, getString(R.string.plz_input_all),
                         ToastUtils.SHORT, ToastUtils.WARNING)
                 } else {
-                    mEditor!!.insertImage(adressStr, titleStr)
+                    mEditor!!.insertImage(addressStr, titleStr)
                     ToastUtils.show(ctx, getString(R.string.success_insert),
                         ToastUtils.SHORT, ToastUtils.SUCCESS)
                 }
@@ -209,12 +208,12 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
             dialog.setNegativeButton("취소", null)
             dialog.setPositiveButton("확인") { _, _ ->
                 val titleStr = title.text.toString()
-                val adressStr = adress.text.toString()
-                if (StringUtils.isBlank(titleStr) || StringUtils.isBlank(adressStr)) {
+                val addressStr = adress.text.toString()
+                if (titleStr.isBlank() || addressStr.isBlank()) {
                     ToastUtils.show(ctx, getString(R.string.plz_input_all),
                         ToastUtils.SHORT, ToastUtils.WARNING)
                 } else {
-                    mEditor!!.insertImage(adressStr, titleStr)
+                    mEditor!!.insertImage(addressStr, titleStr)
                     ToastUtils.show(ctx, getString(R.string.success_insert),
                         ToastUtils.SHORT, ToastUtils.SUCCESS)
                 }
@@ -238,9 +237,9 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
         val id = item.itemId
 
         if (id == 1) {
-            if (!StringUtils.isBlank(inputTitle!!.text!!.toString())
-                && !StringUtils.isBlank(inputDesc!!.text!!.toString())
-                && !StringUtils.isBlank(mEditor!!.html)) {
+            if (!inputTitle!!.text!!.toString().isBlank()
+                && !inputDesc!!.text!!.toString().isBlank()
+                && !mEditor!!.html.isBlank()) {
 
                 val ctx: Context = this@PostActivity
                 var key = Utils.makeRandomUUID()
@@ -304,7 +303,7 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
                     }
                     dialog.setPositiveButton(getString(R.string.string_upload)) { _, _ ->
                         version = input.text.toString()
-                        if (StringUtils.isBlank(version)) {
+                        if (version.isBlank()) {
                             ToastUtils.show(ctx,
                                 getString(R.string.please_input_script_version),
                                 ToastUtils.SHORT, ToastUtils.WARNING)

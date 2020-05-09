@@ -14,7 +14,7 @@
             android:id="@id/messageUserAvatar"
             android:layout_width="45dp"
             android:layout_height="45dp"
-            tools:src="@mipmap/ic_launcher"
+            tools:src="@drawable/icon"
             android:transitionName="tag"
             android:layout_marginRight="10dp"/>
 

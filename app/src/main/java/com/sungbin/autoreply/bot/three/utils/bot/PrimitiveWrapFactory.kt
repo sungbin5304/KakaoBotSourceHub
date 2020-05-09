@@ -7,12 +7,10 @@ import org.mozilla.javascript.WrapFactory
 class PrimitiveWrapFactory : WrapFactory() {
 
     override fun wrap(cx: Context?, scope: Scriptable?, obj: Any?, staticType: Class<*>?): Any? {
-        if (obj is String || obj is Number ||
-                obj is Boolean) {
+        if (obj is String || obj is Number || obj is Boolean) {
             return obj
         } else if (obj is Char) {
-            val a = charArrayOf(obj)
-            return String(a)
+            return String(charArrayOf(obj))
         }
         return super.wrap(cx, scope, obj, staticType)
     }

@@ -6,7 +6,6 @@ import android.content.Context
 import android.text.Html
 import com.sungbin.autoreply.bot.three.listener.KakaoTalkListener
 import com.sungbin.sungbintool.Utils
-import org.apache.commons.lang3.StringUtils
 import org.apache.http.NameValuePair
 import org.apache.http.client.entity.UrlEncodedFormEntity
 import org.apache.http.client.methods.HttpPost
@@ -19,7 +18,7 @@ import java.util.*
 
 object Api {
     var result: String? = null
-    var showAll: String = StringUtils.repeat("\u200b", 500)
+    var showAll: String = "\u200b".repeat(500)
     private var ctx: Context? = null
     private const val USER_AGENT =
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36"

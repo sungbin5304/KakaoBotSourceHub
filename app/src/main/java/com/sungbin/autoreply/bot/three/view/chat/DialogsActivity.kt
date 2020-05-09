@@ -37,7 +37,6 @@ import com.sungbin.sungbintool.ui.TagableRoundImageView
 import gun0912.tedimagepicker.builder.TedImagePicker
 import gun0912.tedimagepicker.builder.type.MediaType
 import kotlinx.android.synthetic.main.activity_custom_holder_dialogs.*
-import org.apache.commons.lang3.StringUtils
 import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
@@ -87,8 +86,7 @@ class DialogsActivity : AppCompatActivity() {
 
                     if(!openItems.contains(dialog)) openItems.add(dialog)
 
-                    val viewPagerAdapter =
-                        DialogListAdapter(
+                    val viewPagerAdapter = DialogListAdapter(
                             act,
                             groupItems,
                             openItems,
@@ -230,7 +228,7 @@ class DialogsActivity : AppCompatActivity() {
                 }
 
                 done.setOnClickListener {
-                    if(StringUtils.isBlank(input.text.toString())){
+                    if(input.text.toString().isBlank()){
                         ToastUtils.show(applicationContext, "방 이름을 입력해 주세요.",
                             ToastUtils.SHORT, ToastUtils.WARNING)
                     }

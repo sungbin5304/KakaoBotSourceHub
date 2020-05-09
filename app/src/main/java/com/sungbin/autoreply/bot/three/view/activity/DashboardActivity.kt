@@ -39,9 +39,9 @@ class DashboardActivity  : AppCompatActivity() {
             }
 
             AppUtils.loadFetch(applicationContext)
-            StorageUtils.createFolder("KakaoTalkBotHub/Bots/AutoReply")
-            StorageUtils.createFolder("KakaoTalkBotHub/Bots/JavaScript")
-            StorageUtils.createFolder("KakaoTalkBotHub/Bots/Log")
+            StorageUtils.createFolder("Android/data/com.sungbin.autoreply.bot.three/KakaoTalkBotHub/Bots/js")
+            StorageUtils.createFolder("Android/data/com.sungbin.autoreply.bot.three/KakaoTalkBotHub/Bots/simple")
+            StorageUtils.createFolder("Android/data/com.sungbin.autoreply.bot.three/KakaoTalkBotHub/Log")
 
             val title = findViewById<TextView>(R.id.tv_dashboard)
             fragmentManager.beginTransaction().add(R.id.framelayout, DashboardFragment()).commit()

@@ -21,7 +21,6 @@ import com.sungbin.autoreply.bot.three.utils.chat.ChatModuleUtils
 import com.sungbin.sungbintool.LayoutUtils
 import com.sungbin.sungbintool.ReadMoreUtils
 import com.sungbin.sungbintool.ToastUtils
-import org.apache.commons.lang3.StringUtils
 import kotlin.collections.ArrayList
 
 class CommentListAdapter(private val list: ArrayList<CommentListItem>?,
@@ -97,7 +96,7 @@ class CommentListAdapter(private val list: ArrayList<CommentListItem>?,
                         builder.setNegativeButton(act.getString(R.string.string_cancel), null)
                         builder.setPositiveButton(act.getString(R.string.post_complete)) { _, _ ->
                             val comment = input.text.toString()
-                            if(StringUtils.isBlank(comment)){
+                            if(comment.isBlank()){
                                 ToastUtils.show(ctx!!,
                                     act.getString(R.string.please_input_comment),
                                     ToastUtils.SHORT, ToastUtils.WARNING

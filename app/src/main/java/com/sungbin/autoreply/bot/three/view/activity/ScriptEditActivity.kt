@@ -21,7 +21,6 @@ import com.sungbin.sungbintool.ToastUtils
 import kotlinx.android.synthetic.main.activity_script_edit.*
 import kotlinx.android.synthetic.main.content_script_edit.*
 import me.testica.codeeditor.SyntaxHighlightRule
-import org.apache.commons.lang3.StringUtils
 import org.mozilla.javascript.CompilerEnvirons
 import org.mozilla.javascript.Context
 import org.mozilla.javascript.Parser
@@ -37,9 +36,11 @@ class ScriptEditActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_script_edit)
 
-        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
         val scriptName = intent.getStringExtra("name")!!
+        toolbar_title.text = scriptName
+
         val editText = editor.getEditText()
         val edittextHistoryManager =
             EdittextHistoryManager(
@@ -93,7 +94,6 @@ class ScriptEditActivity : AppCompatActivity() {
         }
         highlightRuleString = highlightRuleString.replaceFirst("|", "")
 
-        toolbar_title.text = scriptName
         action_left_slash.text = "\\"
 
         ib_menu.setOnClickListener {
@@ -152,11 +152,16 @@ class ScriptEditActivity : AppCompatActivity() {
                         labelRes = R.string.string_save
                         icon = R.drawable.ic_save_white_24dp
                         callback = {
-                            StorageUtils.save("KakaoTalkBotHub/Bots/JavaScript/$scriptName.js",
-                                editText.text.toString())
-                            ToastUtils.show(applicationContext,
+                            StorageUtils.save(
+                                "Android/data/com.sungbin.autoreply.bot.three/KakaoTalkBotHub/Bots/js/$scriptName.js",
+                                editText.text.toString()
+                            )
+                            ToastUtils.show(
+                                applicationContext,
                                 getString(R.string.save_success),
-                                ToastUtils.SHORT, ToastUtils.SUCCESS)
+                                ToastUtils.SHORT,
+                                ToastUtils.SUCCESS
+                            )
                         }
                     }
                 }
@@ -250,10 +255,9 @@ class ScriptEditActivity : AppCompatActivity() {
                                     }
                                 }
                             }
-                        } else if (suggestList.size != list.size &&
-                            !StringUtils.isBlank(
-                                all.split("\n")[layout.getLineForOffset(selectionStart)]
-                            )
+                        }
+                        else if (suggestList.size != list.size &&
+                            !all.split("\n")[layout.getLineForOffset(selectionStart)].isBlank()
                         ) {
                             append_auto.visibility = View.VISIBLE
                             append_auto.text = getString(R.string.auto_complete)
@@ -299,10 +303,6 @@ class ScriptEditActivity : AppCompatActivity() {
         }
         catch (e: Exception){
         }
-    }
-
-    private fun String.checkCharCount(find: String?): Int {
-        return StringUtils.countMatches(this, find)
     }
 
     private fun EditText.insert(tag: String?) {

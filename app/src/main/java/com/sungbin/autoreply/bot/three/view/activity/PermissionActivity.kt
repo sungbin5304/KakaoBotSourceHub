@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.sungbin.autoreply.bot.three.R
+import com.sungbin.sungbintool.DataUtils
 import com.sungbin.sungbintool.PermissionUtils
 import kotlinx.android.synthetic.main.content_permission.*
 
@@ -15,6 +16,8 @@ class PermissionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.content_permission)
+
+        DataUtils.saveData(applicationContext, "logined", "true")
 
         btn_request_storage.setOnClickListener {
             ActivityCompat.requestPermissions(this,

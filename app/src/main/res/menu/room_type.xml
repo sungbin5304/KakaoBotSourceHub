@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+            android:id="@+id/solo_chat"
+            android:title="@string/solo_room" />
+
+    <item
+            android:id="@+id/open_chat"
+            android:title="@string/open_room"/>
+</menu>

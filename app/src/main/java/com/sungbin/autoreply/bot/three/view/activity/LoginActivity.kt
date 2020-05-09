@@ -38,7 +38,6 @@ import com.sungbin.sungbintool.DialogUtils
 import com.sungbin.sungbintool.ToastUtils
 import com.sungbin.sungbintool.Utils
 import kotlinx.android.synthetic.main.content_login.*
-import org.apache.commons.lang3.StringUtils
 import java.util.*
 
 
@@ -136,8 +135,8 @@ class LoginActivity : AppCompatActivity() {
         }
 
         btn_login.setOnClickListener {
-            if(StringUtils.isBlank(et_id.text.toString()) ||
-                StringUtils.isBlank(et_pw.text.toString())){
+            if(et_id.text.toString().isBlank() ||
+                et_pw.text.toString().isBlank()){
                 ToastUtils.show(applicationContext, getString(R.string.please_input_all),
                     ToastUtils.SHORT, ToastUtils.WARNING)
             }

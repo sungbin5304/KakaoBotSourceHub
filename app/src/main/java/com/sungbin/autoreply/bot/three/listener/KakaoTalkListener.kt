@@ -12,25 +12,25 @@ import android.os.Environment
 import android.os.StrictMode
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
+import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.util.Base64
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.content.pm.PackageInfoCompat
 import androidx.core.text.HtmlCompat
 import com.faendir.rhino_android.RhinoAndroidHelper
 import com.sungbin.autoreply.bot.three.R
-import com.sungbin.autoreply.bot.three.api.ApiClass
+import com.sungbin.autoreply.bot.three.api.*
 import com.sungbin.autoreply.bot.three.dto.bot.ScriptListItem
-import com.sungbin.autoreply.bot.three.utils.bot.BotPowerUtils
-import com.sungbin.autoreply.bot.three.utils.bot.PrimitiveWrapFactory
-import com.sungbin.autoreply.bot.three.utils.bot.PicturePathManager
-import com.sungbin.autoreply.bot.three.utils.bot.RunTimeUtils
+import com.sungbin.autoreply.bot.three.utils.bot.*
 import com.sungbin.autoreply.bot.three.utils.bot.StackUtils.jsScope
 import com.sungbin.autoreply.bot.three.utils.bot.StackUtils.jsScripts
 import com.sungbin.autoreply.bot.three.utils.bot.StackUtils.sessions
 import com.sungbin.sungbintool.DataUtils
+import com.sungbin.sungbintool.StorageUtils.sdcard
 import com.sungbin.sungbintool.ToastUtils
-import org.apache.commons.lang3.StringUtils
+import kotlinx.android.synthetic.main.content_simple_edit.*
 import org.mozilla.javascript.Function
 import org.mozilla.javascript.ImporterTopLevel
 import org.mozilla.javascript.ScriptableObject
@@ -51,11 +51,11 @@ class KakaoTalkListener : NotificationListenerService() {
         ToastUtils.show(ctx!!, getString(R.string.power_on),
             ToastUtils.SHORT, ToastUtils.INFO)
 
-        com.sungbin.autoreply.bot.three.api.AppData.init(ctx)
-        com.sungbin.autoreply.bot.three.api.Api.init(ctx)
-        com.sungbin.autoreply.bot.three.api.Device.init(ctx)
-        com.sungbin.autoreply.bot.three.api.Utils.init(ctx)
-        com.sungbin.autoreply.bot.three.api.Black.init(ctx)
+        AppData.init(ctx)
+        Api.init(ctx)
+        Device.init(ctx)
+        Utils.init(ctx)
+        Black.init(ctx)
 
         ApiClass.setContext(ctx!!)
     }
@@ -69,9 +69,11 @@ class KakaoTalkListener : NotificationListenerService() {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         super.onNotificationPosted(sbn)
+        if(!DataUtils.readData(applicationContext, "BotOn", "true").toBoolean()) return
         var packageList = DataUtils.readData(
-            ctx!!, "PackageList", "com.kakao.talk")
-        if (StringUtils.isBlank(packageList)) packageList = "com.kakao.talk"
+            ctx!!, "PackageList", "com.kakao.talk"
+        )
+        if (packageList.isBlank()) packageList = "com.kakao.talk"
         if (packageList.split("\n").contains(sbn.packageName)) {
             val wExt =
                 Notification.WearableExtender(sbn.notification)
@@ -111,9 +113,9 @@ class KakaoTalkListener : NotificationListenerService() {
                             }
 
                             if(noKakaoTalk || packageName != "com.kakao.talk"
-                             || kakaotalkVersion < 1907310){
+                             || kakaotalkVersion < 1907310) {
                                 room = extras.getString("android.title")
-                                if(extras.get("android.text") !is String){
+                                if(extras.get("android.text") !is String) {
                                     val html = HtmlCompat.toHtml(extras.get("android.text")
                                             as Spanned, HtmlCompat.TO_HTML_PARAGRAPH_LINES_CONSECUTIVE)
                                     sender = HtmlCompat.fromHtml(html.split("<b>")[1].split("</b>")[0],
@@ -144,7 +146,8 @@ class KakaoTalkListener : NotificationListenerService() {
                             !blackSender.contains(sender!!)) {
                             chatHook(
                                 sender, msg!!, room, isGroupChat, act,
-                                ((sbn.notification.getLargeIcon()).loadDrawable(ctx) as BitmapDrawable).bitmap,
+                                ((sbn.notification.getLargeIcon())
+                                    .loadDrawable(ctx) as BitmapDrawable).bitmap,
                                 sbn.packageName
                             )
                         }
@@ -164,19 +167,20 @@ class KakaoTalkListener : NotificationListenerService() {
         packageName: String?
     ) {
         try {
-            val sdcard = Environment.getExternalStorageDirectory().absolutePath
-            val jsPath = "$sdcard/KakaoTalkBotHub/Bots/JavaScript/"
+            val jsPath = "$sdcard/Android/data/com.sungbin.autoreply.bot.three/KakaoTalkBotHub/Bots/js/"
+            val simplePath = "$sdcard/Android/data/com.sungbin.autoreply.bot.three/KakaoTalkBotHub/Bots/simple/"
             val jsList = File(jsPath).listFiles()
-            val simplePath = "$sdcard/KakaoTalkBotHub/Bots/AutoReply/"
             val simpleList = File(simplePath).listFiles()
             val scriptList = ArrayList<ScriptListItem>()
 
             if (simpleList != null) {
-                for (i in simpleList.indices) {
-                    //간편 자동응답
+                for (i in simpleList.indices) { //간편 자동응답
                     val name = simpleList[i].name
                     if(BotPowerUtils.getIsOn(applicationContext, name)) {
-
+                        callSimpleResponder(
+                            name, sender, msg, room,
+                            isGroupChat, session, profileImage, packageName
+                        )
                     }
                 }
             }
@@ -434,6 +438,33 @@ class KakaoTalkListener : NotificationListenerService() {
                     ToastUtils.show(ctx!!, e.toString(),
                         ToastUtils.LONG, ToastUtils.ERROR)
                 }
+            }
+        }
+
+        fun callSimpleResponder(
+            name: String,
+            sender: String?,
+            msg: String?,
+            room: String?,
+            isGroupChat: Boolean,
+            session: Notification.Action,
+            profileImage: Bitmap,
+            packageName: String?
+        ){
+            var simpleType = SimpleBotUtils.get(name, "type")
+            var simpleRoom = SimpleBotUtils.get(name, "room")
+            val simpleReply = SimpleBotUtils.get(name, "reply")
+            var simpleSender = SimpleBotUtils.get(name, "sender")
+            var simpleMessage = SimpleBotUtils.get(name, "message")
+
+            if(simpleType == "null") simpleType = isGroupChat.toString()
+            if(simpleRoom.isBlank()) simpleRoom = room!!
+            if(simpleSender.isBlank()) simpleSender = sender!!
+            if(simpleMessage.isBlank()) simpleMessage = msg!!
+
+            if(room == simpleRoom && sender == simpleSender
+                && msg == simpleMessage && isGroupChat.toString() == simpleType) {
+                reply(session, simpleReply)
             }
         }
 

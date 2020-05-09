@@ -65,6 +65,14 @@
         <item name="cornerSizeBottomLeft">0dp</item>
     </style>
 
+    <style name="FullScreen" parent="@android:style/Theme.NoTitleBar.Fullscreen">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
     <style name="ImageViewDetailActivity" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:fontFamily">@font/nanumgothic</item>
         <item name="android:statusBarColor">@android:color/transparent</item>

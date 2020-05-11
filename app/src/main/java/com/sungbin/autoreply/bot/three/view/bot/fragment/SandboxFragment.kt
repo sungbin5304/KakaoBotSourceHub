@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,13 +38,11 @@ import com.sungbin.sungbintool.ToastUtils
 import com.sungbin.sungbintool.ui.TagableRoundImageView
 import gun0912.tedimagepicker.builder.TedImagePicker
 
-
 @Suppress("DEPRECATION", "NAME_SHADOWING", "SENSELESS_COMPARISON")
 class SandboxFragment : Fragment() {
 
     private var rooms = ArrayList<String>()
     private var senders = ArrayList<String>()
-
 
     private lateinit var etRoom: EditText
     private lateinit var etInput: EditText

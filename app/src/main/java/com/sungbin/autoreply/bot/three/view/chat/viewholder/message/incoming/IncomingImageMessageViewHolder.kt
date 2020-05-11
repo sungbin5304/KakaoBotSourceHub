@@ -2,13 +2,12 @@ package com.sungbin.autoreply.bot.three.view.chat.viewholder.message.incoming
 
 import android.app.Activity
 import android.content.Intent
-import android.util.Log
 import android.view.View
 import androidx.core.app.ActivityOptionsCompat
 import com.sungbin.autoreply.bot.three.R
 import com.sungbin.autoreply.bot.three.dto.chat.model.Message
 import com.stfalcon.chatkit.messages.MessageHolders.IncomingImageMessageViewHolder
-import com.sungbin.autoreply.bot.three.view.activity.imageview.ui.activity.DetailActivity
+import com.sungbin.autoreply.bot.three.view.ui.imageview.activity.DetailImageActivity
 import com.sungbin.sungbintool.ui.TagableRoundImageView
 
 class IncomingImageMessageViewHolder(
@@ -41,7 +40,7 @@ class IncomingImageMessageViewHolder(
 
         imageView.setOnClickListener {
             val transitionName = context.getString(R.string.transition_name)
-            val intent = Intent(context, DetailActivity::class.java)
+            val intent = Intent(context, DetailImageActivity::class.java)
                 .putExtra("image", message.content!!.url.toString())
                 .putExtra("name", message.text).putExtra("avatar", message.user.avatar)
             val options = ActivityOptionsCompat.makeSceneTransitionAnimation(context as Activity,

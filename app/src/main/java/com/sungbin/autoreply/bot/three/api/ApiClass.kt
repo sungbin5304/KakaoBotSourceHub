@@ -4,10 +4,12 @@ import android.content.Context
 import com.sungbin.autoreply.bot.three.utils.bot.LogUtils
 import com.sungbin.autoreply.bot.three.utils.bot.StackUtils
 import com.sungbin.sungbintool.StorageUtils
+import org.mozilla.javascript.NativeArray
 import org.mozilla.javascript.ScriptableObject
 import org.mozilla.javascript.annotations.JSStaticFunction
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 object ApiClass{
 
@@ -140,33 +142,14 @@ object ApiClass{
 
             @JvmStatic
             @JSStaticFunction
-            @Suppress("UNUSED_PARAMETER")
-            fun getHtml(link: String, fromJsoup: Boolean = true): String? {
-                return com.sungbin.autoreply.bot.three.api.Api.getHtmlFromJava(link)
-            }
-
-            /*@JvmStatic
-            @JSStaticFunction
-            public static String post(String adress, String name, String data){
-                return com.sungbin.autoreply.bot.three.api.Api.post(adress, name, data);
+            fun replyRoom(room: String, msg: String): Boolean {
+                return com.sungbin.autoreply.bot.three.api.Api.replyRoom(room, msg)
             }
 
             @JvmStatic
             @JSStaticFunction
-            public static Boolean replyRoom(String room, String message){
-                return com.sungbin.autoreply.bot.three.api.Api.replyRoom(room, message);
-            }
-
-            @JvmStatic
-            @JSStaticFunction
-            public static Boolean replyRoomShowAll(String room, String msg1, String msg2){
-                return com.sungbin.autoreply.bot.three.api.Api.replyRoomShowAll(room, msg1, msg2);
-            }*/
-
-            @JvmStatic
-            @JSStaticFunction
-            fun deleteHtml(html: String): String {
-                return com.sungbin.autoreply.bot.three.api.Api.deleteHtml(html)
+            fun replyRoomShowAll(room: String, msg1: String, msg2: String): Boolean{
+                return com.sungbin.autoreply.bot.three.api.Api.replyRoomShowAll(room, msg1, msg2)
             }
         }
     }
@@ -231,27 +214,33 @@ object ApiClass{
         companion object {
             @JvmStatic
             @JSStaticFunction
-            fun read(path: String, _null: String): String {
+            fun read(path: String, _null: String?): String? {
                 return StorageUtils.read(path, _null)
             }
 
             @JvmStatic
             @JSStaticFunction
-            fun write(path: String, content: String) {
-                StorageUtils.save(path, content)
+            fun save(path: String, content: String): Boolean {
+                return StorageUtils.save(path, content)
             }
 
             @JvmStatic
             @JSStaticFunction
-            fun append(path: String, content: String) {
-                val string = "${StorageUtils.read(path, "")}\n$content"
-                write(path, string)
+            fun append(path: String, content: String): Boolean {
+                val string = "${StorageUtils.read(path, "")}$content"
+                return save(path, string)
             }
 
             @JvmStatic
             @JSStaticFunction
-            fun remove(path: String) {
-                StorageUtils.delete(path)
+            fun delete(path: String): Boolean{
+                return StorageUtils.delete(path)
+            }
+
+            @JvmStatic
+            @JSStaticFunction
+            fun deleteAll(path: String): Boolean{
+                return StorageUtils.deleteAll(path)
             }
         }
     }
@@ -320,9 +309,23 @@ object ApiClass{
 
             @JvmStatic
             @JSStaticFunction
-            @Suppress("UNUSED_PARAMETER")
             fun getHtml(link: String, fromJsoup: Boolean = true): String? {
-                return com.sungbin.autoreply.bot.three.api.Api.getHtmlFromJava(link).toString()
+                return if(!fromJsoup){
+                    com.sungbin.autoreply.bot.three.api.Api.getHtmlFromJava(link)
+                }
+                else com.sungbin.autoreply.bot.three.api.Api.getHtmlFromJsoup(link)
+            }
+
+            @JvmStatic
+            @JSStaticFunction
+            fun post(address: String, postName: NativeArray, postData: NativeArray): String{
+                return com.sungbin.autoreply.bot.three.api.Api.post(address, postName, postData)
+            }
+
+            @JvmStatic
+            @JSStaticFunction
+            fun deleteHtml(html: String): String {
+                return com.sungbin.autoreply.bot.three.api.Api.deleteHtml(html)
             }
 
             @JvmStatic

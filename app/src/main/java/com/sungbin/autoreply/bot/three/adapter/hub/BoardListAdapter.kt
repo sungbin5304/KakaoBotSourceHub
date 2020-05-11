@@ -13,7 +13,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.sungbin.autoreply.bot.three.R
 import com.sungbin.autoreply.bot.three.dto.hub.BoardListItem
-import com.sungbin.autoreply.bot.three.view.hub.PostViewActivity
+import com.sungbin.autoreply.bot.three.view.hub.activity.PostViewActivity
 import com.sungbin.sungbintool.ToastUtils
 
 class BoardListAdapter(private val list: ArrayList<BoardListItem>?,

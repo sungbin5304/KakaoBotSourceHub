@@ -12,7 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sungbin.autoreply.bot.three.R
 import com.sungbin.autoreply.bot.three.dto.bot.DatabaseListItem
 
-class DatabaseListAdapter(private val list: ArrayList<DatabaseListItem>?, private val act: Activity) :
+class DatabaseListAdapter(private val list: ArrayList<DatabaseListItem>?,
+                          private val act: Activity) :
         RecyclerView.Adapter<DatabaseListAdapter.DatabaseListViewHolder>() {
 
     private var ctx: Context? = null

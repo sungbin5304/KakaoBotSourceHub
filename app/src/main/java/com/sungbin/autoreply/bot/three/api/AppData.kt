@@ -57,18 +57,18 @@ object AppData {
         editor.apply()
     }
 
-    fun putBoolean(name: String, data: Boolean?) {
+    fun putBoolean(name: String, data: Boolean) {
         val sharedPreferences =
             ctx!!.getSharedPreferences(
                 "AppData",
                 Context.MODE_PRIVATE
             )
         val editor = sharedPreferences.edit()
-        editor.putBoolean(name, data!!)
+        editor.putBoolean(name, data)
         editor.apply()
     }
 
-    fun remove(name: String?) {
+    fun remove(name: String) {
         val sharedPreferences =
             ctx!!.getSharedPreferences(
                 "AppData",

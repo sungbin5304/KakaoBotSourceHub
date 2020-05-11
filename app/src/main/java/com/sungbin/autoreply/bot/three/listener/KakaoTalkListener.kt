@@ -8,20 +8,19 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.os.StrictMode
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
-import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.util.Base64
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.content.pm.PackageInfoCompat
 import androidx.core.text.HtmlCompat
+import com.balsikandar.crashreporter.CrashReporter
 import com.faendir.rhino_android.RhinoAndroidHelper
 import com.sungbin.autoreply.bot.three.R
 import com.sungbin.autoreply.bot.three.api.*
+import com.sungbin.autoreply.bot.three.dto.bot.DebugMessageItem
 import com.sungbin.autoreply.bot.three.dto.bot.ScriptListItem
 import com.sungbin.autoreply.bot.three.utils.bot.*
 import com.sungbin.autoreply.bot.three.utils.bot.StackUtils.jsScope
@@ -30,9 +29,7 @@ import com.sungbin.autoreply.bot.three.utils.bot.StackUtils.sessions
 import com.sungbin.sungbintool.DataUtils
 import com.sungbin.sungbintool.StorageUtils.sdcard
 import com.sungbin.sungbintool.ToastUtils
-import kotlinx.android.synthetic.main.content_simple_edit.*
 import org.mozilla.javascript.Function
-import org.mozilla.javascript.ImporterTopLevel
 import org.mozilla.javascript.ScriptableObject
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -48,8 +45,12 @@ class KakaoTalkListener : NotificationListenerService() {
         StrictMode.setThreadPolicy(
             StrictMode.ThreadPolicy.Builder().permitNetwork().build()
         )
-        ToastUtils.show(ctx!!, getString(R.string.power_on),
-            ToastUtils.SHORT, ToastUtils.INFO)
+        ToastUtils.show(
+            ctx!!,
+            getString(R.string.power_on),
+            ToastUtils.SHORT,
+            ToastUtils.INFO
+        )
 
         AppData.init(ctx)
         Api.init(ctx)
@@ -70,11 +71,9 @@ class KakaoTalkListener : NotificationListenerService() {
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         super.onNotificationPosted(sbn)
         if(!DataUtils.readData(applicationContext, "BotOn", "true").toBoolean()) return
-        var packageList = DataUtils.readData(
-            ctx!!, "PackageList", "com.kakao.talk"
-        )
-        if (packageList.isBlank()) packageList = "com.kakao.talk"
-        if (packageList.split("\n").contains(sbn.packageName)) {
+        var packages = DataUtils.readData(ctx!!, "packages", "com.kakao.talk").trim()
+        if(packages.isBlank()) packages = "com.kakao.talk"
+        if (packages.split("\n").contains(sbn.packageName)) {
             val wExt =
                 Notification.WearableExtender(sbn.notification)
             for (act in wExt.actions) {
@@ -145,10 +144,11 @@ class KakaoTalkListener : NotificationListenerService() {
                         if (!blackRoom.contains(room!!) ||
                             !blackSender.contains(sender!!)) {
                             chatHook(
-                                sender, msg!!, room, isGroupChat, act,
+                                sender!!, msg!!, room, isGroupChat, act,
                                 ((sbn.notification.getLargeIcon())
                                     .loadDrawable(ctx) as BitmapDrawable).bitmap,
-                                sbn.packageName
+                                sbn.packageName,
+                                ctx!!
                             )
                         }
                     }
@@ -157,55 +157,9 @@ class KakaoTalkListener : NotificationListenerService() {
         }
     }
 
-    fun chatHook(
-        sender: String?,
-        msg: String,
-        room: String?,
-        isGroupChat: Boolean,
-        session: Notification.Action,
-        profileImage: Bitmap,
-        packageName: String?
-    ) {
-        try {
-            val jsPath = "$sdcard/Android/data/com.sungbin.autoreply.bot.three/KakaoTalkBotHub/Bots/js/"
-            val simplePath = "$sdcard/Android/data/com.sungbin.autoreply.bot.three/KakaoTalkBotHub/Bots/simple/"
-            val jsList = File(jsPath).listFiles()
-            val simpleList = File(simplePath).listFiles()
-            val scriptList = ArrayList<ScriptListItem>()
-
-            if (simpleList != null) {
-                for (i in simpleList.indices) { //간편 자동응답
-                    val name = simpleList[i].name
-                    if(BotPowerUtils.getIsOn(applicationContext, name)) {
-                        callSimpleResponder(
-                            name, sender, msg, room,
-                            isGroupChat, session, profileImage, packageName
-                        )
-                    }
-                }
-            }
-            if (jsList != null) {
-                for (i in jsList.indices) {
-                    val name = jsList[i].name
-                    if(BotPowerUtils.getIsOn(applicationContext, name)) {
-                        callJsResponder(
-                            name, sender, msg, room,
-                            isGroupChat, session, profileImage, packageName
-                        )
-                    }
-                }
-            }
-        } catch (e: Exception) {
-            ToastUtils.show(ctx!!, e.toString(),
-                ToastUtils.LONG, ToastUtils.ERROR)
-        }
-    }
-
-    class Replier(action: Notification.Action?, context: Context) {
-        var session = action
-        var ctx = context
-
-        fun reply(value: String?) {
+    class Replier(private val session: Notification.Action?,
+                  private val ctx: Context) {
+        fun reply(msg1: String) {
             try {
                 if (session == null) {
                     ToastUtils.show(
@@ -217,129 +171,141 @@ class KakaoTalkListener : NotificationListenerService() {
                     val sendIntent = Intent()
                     val msg = Bundle()
 
-                    for (inputable in session!!.remoteInputs) {
-                        msg.putCharSequence(inputable.resultKey, value)
+                    for (inputable in session.remoteInputs) {
+                        msg.putCharSequence(inputable.resultKey, msg1)
                     }
 
                     RemoteInput.addResultsToIntent(
-                        session!!.remoteInputs, sendIntent, msg
+                        session.remoteInputs, sendIntent, msg
                     )
 
-                    session!!.actionIntent.send(ctx, 0, sendIntent)
-                }
-            }
-            catch (e: Exception){
-                ToastUtils.show(ctx,
-                    e.toString(),
-                    ToastUtils.LONG, ToastUtils.ERROR)
-            }
-        }
-
-        /*fun reply(room: String?, value: String?) {
-            try {
-                val session2: Notification.Action = actions.get(room)
-                if (session2 == null) {
-                    com.sungbin.reply.bot.utils.Utils.toast(
-                        ctx,
-                        "메세지를 전송할 방의 세션을 가져오지 못했습니다."
-                    )
-                    return
-                }
-                val sdf = SimpleDateFormat("MM월 dd일 hh:mm")
-                val time: String =
-                    sdf.format(Date(System.currentTimeMillis()))
-                val sendIntent = Intent()
-                val msg = Bundle()
-                for (inputable in session2.remoteInputs) msg.putCharSequence(
-                    inputable.resultKey,
-                    value
-                )
-                RemoteInput.addResultsToIntent(
-                    session2.remoteInputs,
-                    sendIntent,
-                    msg
-                )
-                session2.actionIntent.send(ctx, 0, sendIntent)
-                com.sungbin.reply.bot.utils.Utils.saveData(
-                    ctx, "$name.time",
-                    time
-                )
-            } catch (e: java.lang.Exception) {
-                com.sungbin.reply.bot.utils.Utils.error(ctx, e, "Replier")
-            }
-        }
-
-            fun replyShowAll(
-                room: String?,
-                value1: String,
-                value2: String
-            ) {
-                try {
-                    val session2: Notification.Action = actions.get(room)
-                    if (session2 == null) {
-                        com.sungbin.reply.bot.utils.Utils.toast(
-                            ctx,
-                            "메세지를 전송할 방의 세션을 가져오지 못했습니다."
-                        )
-                        return
-                    }
-                    val sdf = SimpleDateFormat("MM월 dd일 hh:mm")
-                    val time: String =
-                        sdf.format(Date(System.currentTimeMillis()))
-                    val sendIntent = Intent()
-                    val msg = Bundle()
-                    for (inputable in session2.remoteInputs) msg.putCharSequence(
-                        inputable.resultKey,
-                        value1 + com.sungbin.reply.bot.api.Api.showAll.toString() + value2
-                    )
-                    RemoteInput.addResultsToIntent(
-                        session2.remoteInputs,
-                        sendIntent,
-                        msg
-                    )
-                    session2.actionIntent.send(ctx, 0, sendIntent)
-                    com.sungbin.reply.bot.utils.Utils.saveData(
-                        ctx, "$name.time",
-                        time
-                    )
-                } catch (e: java.lang.Exception) {
-                    com.sungbin.reply.bot.utils.Utils.error(ctx, e, "Replier")
-                }
-            }
-
-            fun replyShowAll(value1: String, value2: String) {
-                try {
-                    if (session == null) {
-                        com.sungbin.reply.bot.utils.Utils.toast(
-                            ctx,
-                            "메세지를 전송할 방의 세션을 가져오지 못했습니다."
-                        )
-                        return
-                    }
-                    val sdf = SimpleDateFormat("MM월 dd일 hh:mm")
-                    val time: String =
-                        sdf.format(Date(System.currentTimeMillis()))
-                    val sendIntent = Intent()
-                    val msg = Bundle()
-                    for (inputable in session.remoteInputs) msg.putCharSequence(
-                        inputable.resultKey,
-                        value1 + com.sungbin.reply.bot.api.Api.showAll.toString() + value2
-                    )
-                    RemoteInput.addResultsToIntent(
-                        session.remoteInputs,
-                        sendIntent,
-                        msg
-                    )
                     session.actionIntent.send(ctx, 0, sendIntent)
-                    com.sungbin.reply.bot.utils.Utils.saveData(
-                        ctx, "$name.time",
-                        time
-                    )
-                } catch (e: java.lang.Exception) {
-                    com.sungbin.reply.bot.utils.Utils.error(ctx, e, "Replier")
                 }
+            } catch (e: Exception) {
+                ToastUtils.show(
+                    ctx,
+                    e.toString(),
+                    ToastUtils.LONG, ToastUtils.ERROR
+                )
             }
-        }*/
+        }
+
+        fun reply(room: String, msg1: String) {
+            try {
+                if (!sessions.containsKey(room)) {
+                    ToastUtils.show(
+                        ctx,
+                        ctx.getString(R.string.cant_load_session),
+                        ToastUtils.LONG,
+                        ToastUtils.WARNING
+                    )
+                }
+                else {
+                    val sendIntent = Intent()
+                    val msg = Bundle()
+
+                    for (inputable in sessions[room]!!.remoteInputs) {
+                        msg.putCharSequence(inputable.resultKey, msg1)
+                    }
+
+                    RemoteInput.addResultsToIntent(
+                        sessions[room]!!.remoteInputs, sendIntent, msg
+                    )
+
+                    sessions[room]!!.actionIntent.send(ctx, 0, sendIntent)
+                }
+            } catch (e: Exception) {
+                ToastUtils.show(
+                    ctx,
+                    e.toString(),
+                    ToastUtils.LONG, ToastUtils.ERROR
+                )
+            }
+        }
+
+        fun replyShowAll(msg1: String, msg2: String) {
+            try {
+                if (session == null) {
+                    ToastUtils.show(
+                        ctx,
+                        ctx.getString(R.string.cant_load_session),
+                        ToastUtils.LONG, ToastUtils.WARNING
+                    )
+                } else {
+                    val sendIntent = Intent()
+                    val msg = Bundle()
+
+                    for (inputable in session.remoteInputs) {
+                        msg.putCharSequence(inputable.resultKey, "$msg1$showAll$msg2")
+                    }
+
+                    RemoteInput.addResultsToIntent(
+                        session.remoteInputs, sendIntent, msg
+                    )
+
+                    session.actionIntent.send(ctx, 0, sendIntent)
+                }
+            } catch (e: Exception) {
+                ToastUtils.show(
+                    ctx,
+                    e.toString(),
+                    ToastUtils.LONG, ToastUtils.ERROR
+                )
+            }
+        }
+
+        fun replyShowAll(room: String, msg1: String, msg2: String) {
+            try {
+                if (!sessions.containsKey(room)) {
+                    ToastUtils.show(
+                        ctx,
+                        ctx.getString(R.string.cant_load_session),
+                        ToastUtils.LONG, ToastUtils.WARNING
+                    )
+                }
+                else {
+                    val sendIntent = Intent()
+                    val msg = Bundle()
+
+                    for (inputable in sessions[room]!!.remoteInputs) {
+                        msg.putCharSequence(inputable.resultKey, "$msg1$showAll$msg2")
+                    }
+
+                    RemoteInput.addResultsToIntent(
+                        sessions[room]!!.remoteInputs, sendIntent, msg
+                    )
+
+                    sessions[room]!!.actionIntent.send(ctx, 0, sendIntent)
+                }
+            } catch (e: Exception) {
+                ToastUtils.show(
+                    ctx,
+                    e.toString(),
+                    ToastUtils.LONG, ToastUtils.ERROR
+                )
+            }
+        }
+
+    }
+
+    class DebugReplier(private val room: String,
+                       private val sender: String) {
+        fun reply(msg1: String) {
+            DebugUtils.addMessage(this.room, DebugMessageItem(sender, msg1))
+        }
+
+        fun reply(room: String, msg1: String) {
+            DebugUtils.addMessage(room, DebugMessageItem(sender, msg1))
+        }
+
+        fun replyShowAll(msg1: String, msg2: String) {
+            DebugUtils.addMessage(this.room, DebugMessageItem(sender, "$msg1$showAll$msg2"))
+        }
+
+        fun replyShowAll(room: String, msg1: String, msg2: String) {
+            DebugUtils.addMessage(room, DebugMessageItem(sender, "$msg1$showAll$msg2"))
+        }
+
     }
 
     class ImageDB(bitmap: Bitmap?) {
@@ -358,98 +324,146 @@ class KakaoTalkListener : NotificationListenerService() {
         }
     }
 
-    /*class DebugReplier(sender: String) {
-        private val sender: String? = null
-        fun reply(value: String?) {
-            val mHandler = Handler(Looper.getMainLooper())
-            mHandler.postDelayed({
-                val item = DebugItem(sender, value, Gravity.LEFT)
-                items.add(item)
-                adapter.notifyDataSetChanged()
-                list.scrollToPosition(items.size() - 1)
-            }, 0)
+    class DebugImageDB(private val name: String) {
+        fun getProfileImage(): String {
+            return DebugUtils.getProfileBase64(name)
         }
 
-        init {
-            this.sender = sender
+        fun getLastPicture(): String{
+            return PicturePathManager.getLastPicture().toString()
         }
-    }*/
+    }
 
     companion object{
+        var showAll: String = "\u200b".repeat(500)
         private var ctx: Context? = null
 
-        fun initializeJavaScript(string: String): String? {
-                return try {
-                    val name = "$string.js"
-                    val sdcard =
-                        Environment.getExternalStorageDirectory().absolutePath
-                    val scriptFile =
-                        File("$sdcard/KakaoTalkBotHub/Bots/JavaScript/$name")
-                    if (!scriptFile.exists()) return ctx!!.getString(R.string.script_file_gone)
-                    val parseContext =
-                        RhinoAndroidHelper().enterContext()
-                    parseContext.wrapFactory =
-                        PrimitiveWrapFactory()
-                    parseContext.languageVersion = org.mozilla.javascript.Context.VERSION_ES6
-                    parseContext.optimizationLevel = -1
-                    val scope =
-                        parseContext.initStandardObjects(ImporterTopLevel(parseContext)) as ScriptableObject
-                    ScriptableObject.defineClass(scope, ApiClass.Log::class.java, false, true)
-                    ScriptableObject.defineClass(scope, ApiClass.AppData::class.java, false, true)
-                    ScriptableObject.defineClass(scope, ApiClass.Api::class.java, false, true)
-                    ScriptableObject.defineClass(scope, ApiClass.Device::class.java, false, true)
-                    ScriptableObject.defineClass(scope, ApiClass.Scope::class.java, false, true)
-                    ScriptableObject.defineClass(scope, ApiClass.File::class.java, false, true)
-                    ScriptableObject.defineClass(scope, ApiClass.Black::class.java, false, true)
-                    ScriptableObject.defineClass(scope, ApiClass.Utils::class.java, false, true)
-                    val script = parseContext.compileReader(FileReader(scriptFile), name, 0, null)
+        fun chatHook(
+            sender: String,
+            msg: String,
+            room: String,
+            isGroupChat: Boolean,
+            session: Notification.Action?,
+            profileImage: Bitmap?,
+            packageName: String,
+            context: Context,
+            isDebugMode: Boolean = false
+        ) {
+            try {
+                val jsPath = "$sdcard/${BotPathManager.JS}/"
+                val simplePath = "$sdcard/${BotPathManager.SIMPLE}/"
+                val jsList = File(jsPath).listFiles()
+                val simpleList = File(simplePath).listFiles()
+                val scriptList = ArrayList<ScriptListItem>()
 
-                    script.exec(parseContext, scope)
-                    val responder = scope["response", scope] as Function
-
-                    jsScripts[name] = responder
-                    jsScope[name] = scope
-
-                    org.mozilla.javascript.Context.exit()
-                    "true"
+                if (simpleList != null) {
+                    for (i in simpleList.indices) { //간편 자동응답
+                        val name = simpleList[i].name
+                        if(BotPowerUtils.getIsOn(context, name)) {
+                            callSimpleResponder(
+                                name, sender, msg, room,
+                                isGroupChat, session, profileImage,
+                                packageName, isDebugMode,
+                                context
+                            )
+                        }
+                    }
                 }
-                catch (e: Exception) {
-                    /*if (e.toString()
-                            .contains("java.lang.String android.content.Context.getPackageName()' on a null object reference")
-                    ) return "리로드 오류"
-                    if (e.toString()
-                            .contains("org.mozilla.javascript.UniqueTag cannot be cast to org.mozilla.javascript.Function")
-                    ) "리로드 오류" else e.message*/
-                    e.toString()
+                if (jsList != null) {
+                    for (i in jsList.indices) {
+                        val name = jsList[i].name
+                        if(BotPowerUtils.getIsOn(context, name)) {
+                            callJsResponder(
+                                name, sender, msg, room,
+                                isGroupChat, session, profileImage,
+                                packageName, isDebugMode,
+                                context
+                            )
+                        }
+                    }
                 }
+            } catch (e: Exception) {
+                ToastUtils.show(ctx!!, e.toString(),
+                    ToastUtils.LONG, ToastUtils.ERROR)
             }
+        }
 
-            fun reply(session: Notification.Action?, value: String?) {
-                val sendIntent = Intent()
-                val msg = Bundle()
-                for (inputable in session!!.remoteInputs) msg.putCharSequence(
-                    inputable.resultKey,
-                    value
-                )
-                RemoteInput.addResultsToIntent(session.remoteInputs, sendIntent, msg)
-                try {
-                    session.actionIntent.send(ctx, 0, sendIntent)
-                } catch (e: Exception) {
-                    ToastUtils.show(ctx!!, e.toString(),
-                        ToastUtils.LONG, ToastUtils.ERROR)
-                }
+        fun initializeJavaScript(string: String): String {
+            val name = "$string.js"
+            return try {
+                val scriptFile = File("$sdcard/${BotPathManager.JS}/$name")
+                if (!scriptFile.exists()) return ctx!!.getString(R.string.script_file_gone)
+                val rhino = RhinoAndroidHelper().enterContext()
+                rhino.languageVersion = org.mozilla.javascript.Context.VERSION_ES6
+                rhino.optimizationLevel = -1
+
+                val scope = rhino.initStandardObjects()
+                ScriptableObject.defineClass(scope, ApiClass.Log::class.java, false, true)
+                ScriptableObject.defineClass(scope, ApiClass.AppData::class.java, false, true)
+                ScriptableObject.defineClass(scope, ApiClass.Api::class.java, false, true)
+                ScriptableObject.defineClass(scope, ApiClass.Device::class.java, false, true)
+                ScriptableObject.defineClass(scope, ApiClass.Scope::class.java, false, true)
+                ScriptableObject.defineClass(scope, ApiClass.File::class.java, false, true)
+                ScriptableObject.defineClass(scope, ApiClass.Black::class.java, false, true)
+                ScriptableObject.defineClass(scope, ApiClass.Utils::class.java, false, true)
+
+                val script = rhino.compileReader(FileReader(scriptFile), name, 0, null)
+                script.exec(rhino, scope)
+
+                val responder = scope["response", scope] as Function
+                jsScripts[name] = responder
+                jsScope[name] = scope
+
+                org.mozilla.javascript.Context.exit()
+                "true"
             }
+            catch (e: Exception) {
+                /*if (e.toString()
+                        .contains("java.lang.String android.content.Context.getPackageName()' on a null object reference")
+                ) return "리로드 오류"
+                if (e.toString()
+                        .contains("org.mozilla.javascript.UniqueTag cannot be cast to org.mozilla.javascript.Function")
+                ) "리로드 오류" else e.message*/
+                if(!DataUtils.readData(ctx!!, "KeepScope", "false").toBoolean()){
+                    jsScripts.remove(name)
+                    jsScope.remove(name)
+                }
+                CrashReporter.logException(e)
+                e.toString()
+            }
+        }
+
+        fun reply(session: Notification.Action, value: String) {
+            val sendIntent = Intent()
+            val msg = Bundle()
+            for (inputable in session.remoteInputs) msg.putCharSequence(
+                inputable.resultKey,
+                value
+            )
+            RemoteInput.addResultsToIntent(session.remoteInputs, sendIntent, msg)
+            try {
+                session.actionIntent.send(ctx, 0, sendIntent)
+            } catch (e: Exception) {
+                ToastUtils.show(ctx!!, e.toString(),
+                    ToastUtils.LONG, ToastUtils.ERROR)
+            }
+        }
+
+        fun replyDebug(room: String, message: DebugMessageItem) {
+            DebugUtils.addMessage(room, message)
         }
 
         fun callSimpleResponder(
             name: String,
-            sender: String?,
-            msg: String?,
-            room: String?,
+            sender: String,
+            msg: String,
+            room: String,
             isGroupChat: Boolean,
-            session: Notification.Action,
-            profileImage: Bitmap,
-            packageName: String?
+            session: Notification.Action?,
+            profileImage: Bitmap?,
+            packageName: String,
+            isDebugMode: Boolean,
+            context: Context
         ){
             var simpleType = SimpleBotUtils.get(name, "type")
             var simpleRoom = SimpleBotUtils.get(name, "room")
@@ -458,175 +472,89 @@ class KakaoTalkListener : NotificationListenerService() {
             var simpleMessage = SimpleBotUtils.get(name, "message")
 
             if(simpleType == "null") simpleType = isGroupChat.toString()
-            if(simpleRoom.isBlank()) simpleRoom = room!!
-            if(simpleSender.isBlank()) simpleSender = sender!!
-            if(simpleMessage.isBlank()) simpleMessage = msg!!
+            if(simpleRoom.isBlank()) simpleRoom = room
+            if(simpleSender.isBlank()) simpleSender = sender
+            if(simpleMessage.isBlank()) simpleMessage = msg
 
             if(room == simpleRoom && sender == simpleSender
                 && msg == simpleMessage && isGroupChat.toString() == simpleType) {
-                reply(session, simpleReply)
+                if(!isDebugMode) {
+                    reply(session!!, simpleReply)
+                    RunTimeUtils.save(context, name)
+                }
+                else {
+                    replyDebug(room, DebugMessageItem(sender, simpleReply))
+                }
             }
         }
 
         fun callJsResponder(
             name: String,
-            sender: String?,
-            msg: String?,
-            room: String?,
+            sender: String,
+            msg: String,
+            room: String,
             isGroupChat: Boolean,
-            session: Notification.Action,
-            profileImage: Bitmap,
-            packageName: String?
-        ): Boolean {
-            RunTimeUtils.save(applicationContext, name)
+            session: Notification.Action?,
+            profileImage: Bitmap?,
+            packageName: String,
+            isDebugMode: Boolean,
+            context: Context
+        ) {
             val parseContext = RhinoAndroidHelper().enterContext()
             parseContext.languageVersion = org.mozilla.javascript.Context.VERSION_ES6
             val responder = jsScripts[name]
             val execScope = jsScope[name]
-            return try {
+            try {
                 if (responder == null || execScope == null) {
-                org.mozilla.javascript.Context.exit()
-                /*ToastUtils.show(ctx!!, ctx!!.getString(R.string.reload_script_first)
-                    .replace("{name}", name), ToastUtils.SHORT, ToastUtils.WARNING)*/
-                false
-            }
-            else {
-                responder.call(
-                    parseContext,
-                    execScope,
-                    execScope,
-                    arrayOf(room, msg, sender, isGroupChat,
-                        Replier(session, ctx!!), ImageDB(profileImage), packageName)
-                )
-                org.mozilla.javascript.Context.exit()
-                true
-            }
-        } catch (e: Exception) {
-            ToastUtils.show(ctx!!,
-                "$name 리로드중에 오류가 발생했습니다.\n\n오류 내용 : $e",
-                ToastUtils.LONG, ToastUtils.ERROR)
-            false
-        }
-    }
-
-    /*fun callDebugJsResponder(
-        name: String,
-        sender: String,
-        msg: String,
-        room: String,
-        isGroupChat: Boolean
-    ) {
-        val parseContext = RhinoAndroidHelper().enterContext()
-        parseContext.languageVersion = org.mozilla.javascript.Context.VERSION_ES6
-        val responder =
-            jsScripts[name]
-        val execScope = jsScope[name]
-        try {
-            if (responder == null || execScope == null) {
-                org.mozilla.javascript.Context.exit()
-                com.sungbin.reply.bot.utils.Utils.toast(
-                    ctx,
-                    ctx!!.getString(R.string.cant_read_script)
-                )
-            } else {
-                val r =
-                    ctx!!.resources
-                val bd = r.getDrawable(R.drawable.icon) as BitmapDrawable
-                val bitmap = bd.bitmap
-                responder.call(
-                    parseContext,
-                    execScope,
-                    execScope,
-                    arrayOf(
-                        room,
-                        msg,
-                        sender,
-                        isGroupChat,
-                        DebugReplier(sender),
-                        ImageDB(bitmap),
-                        "DebugActivity"
-                    )
-                )
-                org.mozilla.javascript.Context.exit()
-            }
-        } catch (e: Exception) {
-            com.sungbin.reply.bot.utils.Utils.toast(
-                ctx,
-                """
-                    ${name}을 실행하는데 오류가 발생했습니다.
-                    오류 내용 : $e
-                    """.trimIndent()
-            )
-        }
-    }
-
-    fun callSimpleResponder(
-        RoomType: String,
-        MsgType: String,
-        Room: String,
-        Sender: String,
-        Msg: String,
-        Reply: String?,
-        sender: String,
-        msg: String,
-        room: String,
-        isGroupChat: Boolean
-    ) {
-        var Room = Room
-        var Sender = Sender
-        var Msg = Msg
-        val act =
-            actions[room]
-        if (act == null) FancyToast.makeText(
-            ctx,
-            room + "방의 세션을 불러올 수 없습니다.",
-            FancyToast.LENGTH_LONG,
-            FancyToast.WARNING,
-            false
-        ).show()
-        if (Room == "null") Room = room
-        if (Sender == "null") Sender = sender
-        if (Msg == "") Msg = msg
-        if (RoomType == "true") { //단체 채팅
-            if (isGroupChat) {
-                if (MsgType == "equals") {
-                    if (msg == Msg && Sender == sender && Room == room) reply(
-                        act,
-                        Reply
-                    )
-                } else { //contains
-                    if (msg.contains(Msg) && Sender == sender && Room == room) reply(
-                        act,
-                        Reply
+                    org.mozilla.javascript.Context.exit()
+                    ToastUtils.show(
+                        ctx!!,
+                        ctx!!.getString(R.string.reload_script_first).replace("{name}", name),
+                        ToastUtils.SHORT,
+                        ToastUtils.WARNING
                     )
                 }
-            }
-        } else if (RoomType == "false") { //개인 채팅
-            if (!isGroupChat) {
-                if (MsgType == "equals") {
-                    if (msg == Msg && Sender == sender && Room == room) reply(
-                        act,
-                        Reply
-                    )
-                } else { //contains
-                    if (msg.contains(Msg) && Sender == sender && Room == room) reply(
-                        act,
-                        Reply
-                    )
+                else {
+                    if(!isDebugMode) {
+                        responder.call(
+                            parseContext,
+                            execScope,
+                            execScope,
+                            arrayOf(
+                                room, msg, sender, isGroupChat,
+                                Replier(session, ctx!!),
+                                ImageDB(profileImage), packageName
+                            )
+                        )
+                        RunTimeUtils.save(context, name)
+                    }
+                    else {
+                        responder.call(
+                            parseContext,
+                            execScope,
+                            execScope,
+                            arrayOf(
+                                room, msg, sender, isGroupChat,
+                                DebugReplier(room, sender),
+                                DebugImageDB(sender),
+                                packageName
+                            )
+                        )
+                    }
+                    org.mozilla.javascript.Context.exit()
                 }
             }
-        } else { //모두
-            if (MsgType == "equals") {
-                if (msg == Msg && Sender == sender && Room == room) reply(
-                    act,
-                    Reply
+            catch (e: Exception) {
+                ToastUtils.show(ctx!!,
+                    "$name 작동에 오류가 발생했습니다.\n\n오류 내용 : $e",
+                    ToastUtils.LONG,
+                    ToastUtils.ERROR
                 )
-            } else { //contains
-                if (msg.contains(Msg) && Sender == sender && Room == room) reply(
-                    act,
-                    Reply
-                )
+                if(DataUtils.readData(context, "ErrorBotOff", "false").toBoolean()){
+                    BotPowerUtils.setOnOff(context, name, false)
+                }
             }
         }
-    }*/
+
+    }
 }

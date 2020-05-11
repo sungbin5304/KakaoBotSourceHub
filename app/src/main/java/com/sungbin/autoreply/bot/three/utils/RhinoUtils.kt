@@ -1,9 +1,9 @@
 package com.sungbin.autoreply.bot.three.utils
 
+import com.balsikandar.crashreporter.CrashReporter
 import com.faendir.rhino_android.RhinoAndroidHelper
 import com.sungbin.autoreply.bot.three.api.*
 import com.sungbin.autoreply.bot.three.api.Utils
-import com.sungbin.autoreply.bot.three.utils.bot.PrimitiveWrapFactory
 import org.mozilla.javascript.Context
 import org.mozilla.javascript.Scriptable
 import org.mozilla.javascript.ScriptableObject
@@ -23,10 +23,10 @@ class RhinoUtils constructor(ctx: android.content.Context) {
     fun runJs(source: String): String{
         return try {
             val rhino: Context = RhinoAndroidHelper().enterContext()
-            rhino.wrapFactory = PrimitiveWrapFactory()
             rhino.languageVersion =  Context.VERSION_ES6
             rhino.optimizationLevel = -1
-            val scope: Scriptable = rhino.initSafeStandardObjects()
+
+            val scope = rhino.initStandardObjects()
             ScriptableObject.defineClass(scope, ApiClass.Log::class.java, false, true)
             ScriptableObject.defineClass(scope, ApiClass.AppData::class.java, false, true)
             ScriptableObject.defineClass(scope, ApiClass.Api::class.java, false, true)
@@ -35,9 +35,12 @@ class RhinoUtils constructor(ctx: android.content.Context) {
             ScriptableObject.defineClass(scope, ApiClass.File::class.java, false, true)
             ScriptableObject.defineClass(scope, ApiClass.Black::class.java, false, true)
             ScriptableObject.defineClass(scope, ApiClass.Utils::class.java, false, true)
+
             val result: Any = rhino.evaluateString(scope, source, "sandbox", 1, null)
+            Context.exit()
             result.toString()
         } catch (e: Exception) {
+            CrashReporter.logException(e)
             e.toString()
         }
     }

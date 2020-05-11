@@ -8,7 +8,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationManagerCompat
 import com.sungbin.autoreply.bot.three.R
-import com.sungbin.autoreply.bot.three.view.hub.MainActivity
+import com.sungbin.autoreply.bot.three.view.hub.activity.MainActivity
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL

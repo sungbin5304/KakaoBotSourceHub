@@ -13,13 +13,13 @@ object Black {
         ctx = context
     }
 
-    fun addSender(sender: String?) {
+    fun addSender(sender: String) {
         val preSenderList: String = readData(ctx!!, "SenderBlackList", "")
         val newSenderList = preSenderList + "\n" + sender
         saveData(ctx!!, "SenderBlackList", newSenderList)
     }
 
-    fun removeSender(sender: String?) {
+    fun removeSender(sender: String) {
         val preSenderList: String = readData(ctx!!, "SenderBlackList", "")
         val newSenderList = preSenderList.replace("\n" + sender, "")
         saveData(ctx!!, "SenderBlackList", newSenderList)
@@ -29,13 +29,13 @@ object Black {
         return readData(ctx!!, "SenderBlackList", "")
     }
 
-    fun addRoom(sender: String?) {
+    fun addRoom(sender: String) {
         val preSenderList: String = readData(ctx!!, "RoomBlackList", "")
         val newSenderList = preSenderList + "\n" + sender
         saveData(ctx!!, "RoomBlackList", newSenderList)
     }
 
-    fun removeRoom(sender: String?) {
+    fun removeRoom(sender: String) {
         val preSenderList: String = readData(ctx!!, "RoomBlackList", "")
         val newSenderList = preSenderList.replace("\n" + sender, "")
         saveData(ctx!!, "RoomBlackList", newSenderList)

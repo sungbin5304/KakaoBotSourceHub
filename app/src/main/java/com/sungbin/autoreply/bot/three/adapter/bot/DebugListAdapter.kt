@@ -8,12 +8,16 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.annotation.NonNull
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.sungbin.autoreply.bot.three.R
-import com.sungbin.autoreply.bot.three.dto.bot.DebugListItem
+import com.sungbin.autoreply.bot.three.dto.bot.DebugMessageItem
+import com.sungbin.sungbintool.ReadMoreUtils
 import com.sungbin.sungbintool.Utils
 
-class DebugListAdapter (private val list: ArrayList<DebugListItem>?, private val act: Activity) :
+class DebugListAdapter (private val message: ArrayList<DebugMessageItem>?,
+                        private val myName: String,
+                        private val act: Activity) :
     RecyclerView.Adapter<DebugListAdapter.DebugListViewHolder>() {
 
     private var ctx: Context? = null
@@ -37,33 +41,46 @@ class DebugListAdapter (private val list: ArrayList<DebugListItem>?, private val
     }
 
     override fun onBindViewHolder(@NonNull viewholder: DebugListViewHolder, position: Int) {
-        val sender = list!![position].sender
-        val gravity = list[position].gravity
-        val message = list[position].message!!
+        if(message != null) {
+            val sender = message[position].sender
+            val message = message[position].message
 
-        if(gravity == 0){ //나
-            viewholder.sender_R.text = sender
-            viewholder.msg_R.text = message
-            viewholder.view_R.setOnLongClickListener {
-                Utils.copy(act, message)
-                return@setOnLongClickListener false
+            if (myName == sender) { //나
+                viewholder.sender_R.text = sender
+                ReadMoreUtils.setReadMoreLength(
+                    viewholder.msg_R,
+                    message,
+                    500,
+                    ctx!!.getString(R.string.show_all),
+                    ContextCompat.getColor(ctx!!, R.color.colorPrimary)
+                )
+                viewholder.view_R.setOnLongClickListener {
+                    Utils.copy(act, message)
+                    return@setOnLongClickListener false
+                }
             }
-        }
-        else { //봇
-            viewholder.content_R.visibility = View.GONE
-            viewholder.content_L.visibility = View.VISIBLE
+            else { //봇
+                viewholder.content_R.visibility = View.GONE
+                viewholder.content_L.visibility = View.VISIBLE
 
-            viewholder.sender_L.text = sender
-            viewholder.msg_L.text = message
-            viewholder.view_L.setOnLongClickListener {
-                Utils.copy(act, message)
-                return@setOnLongClickListener false
+                viewholder.sender_L.text = sender
+                ReadMoreUtils.setReadMoreLength(
+                    viewholder.msg_L,
+                    message,
+                    500,
+                    ctx!!.getString(R.string.show_all),
+                    ContextCompat.getColor(ctx!!, R.color.colorPrimary)
+                )
+                viewholder.view_L.setOnLongClickListener {
+                    Utils.copy(act, message)
+                    return@setOnLongClickListener false
+                }
             }
         }
     }
 
     override fun getItemCount(): Int {
-        return list?.size ?: 0
+        return message?.size ?: 0
     }
 
     override fun getItemId(position: Int): Long {
@@ -74,8 +91,8 @@ class DebugListAdapter (private val list: ArrayList<DebugListItem>?, private val
         return position
     }
 
-    fun getItem(position: Int): DebugListItem {
-        return list!![position]
+    fun getItem(position: Int): DebugMessageItem {
+        return message!![position]
     }
 
 }

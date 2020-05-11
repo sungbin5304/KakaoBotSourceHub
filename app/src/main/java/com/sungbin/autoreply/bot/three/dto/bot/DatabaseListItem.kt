@@ -9,5 +9,4 @@ class DatabaseListItem  {
         this.name = name
         this.size = size
     }
-
 }

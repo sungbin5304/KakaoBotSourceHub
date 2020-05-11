@@ -8,12 +8,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never"
-        tools:ignore="Autofill,TextFields,RtlSymmetry" >
+        tools:ignore="ContentDescription,MissingConstraints,Autofill,TextFields,RtlSymmetry" >
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#fff">
+            android:background="@color/colorWhite">
 
         <TextView
                 android:id="@+id/tv_scripts"
@@ -65,20 +65,45 @@
 
         </FrameLayout>
 
-        <TextView
-                android:visibility="visible"
-                android:fontFamily="@font/nanumgothic"
-                android:id="@+id/tv_script_none"
-                android:text="@string/add_script_none"
+        <androidx.constraintlayout.widget.ConstraintLayout
+                tools:visibility="visible"
+                android:visibility="invisible"
+                android:id="@+id/cl_bot_empty"
                 android:layout_width="match_parent"
-                android:gravity="center"
-                android:textSize="15sp"
-                android:textStyle="bold"
                 android:layout_height="125dp"
                 android:layout_marginStart="@dimen/margin_default"
                 android:layout_marginTop="@dimen/margin_half"
                 android:layout_marginEnd="@dimen/margin_default"
-                app:layout_constraintTop_toBottomOf="@+id/tv_scripts" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_scripts">
+
+            <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/lav_bot_empty"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginStart="@dimen/margin_default"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:lottie_rawRes="@raw/empty_bot" />
+
+            <TextView
+                    android:gravity="center"
+                    android:id="@+id/tv_bot_none"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_twice"
+                    android:layout_marginEnd="@dimen/margin_triple_and_half"
+                    android:fontFamily="@font/nanumgothic"
+                    android:text="@string/add_bot_none"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/lav_bot_empty"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
                 android:visibility="invisible"
@@ -118,22 +143,45 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rc_script"  />
 
-        <TextView
-                android:visibility="visible"
-                android:fontFamily="@font/nanumgothic"
-                android:id="@+id/tv_log_none"
-                android:text="@string/add_log_none"
+        <androidx.constraintlayout.widget.ConstraintLayout
+                tools:visibility="visible"
+                android:visibility="invisible"
+                android:id="@+id/cl_logs_empty"
                 android:layout_width="match_parent"
-                android:gravity="center"
-                android:textSize="15sp"
-                android:textStyle="bold"
                 android:layout_height="125dp"
                 android:layout_marginStart="@dimen/margin_default"
                 android:layout_marginTop="@dimen/margin_half"
                 android:layout_marginEnd="@dimen/margin_default"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_logs" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_logs">
+
+            <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/lav_logs_empty"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginStart="@dimen/margin_default"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:lottie_rawRes="@raw/empty_logs" />
+
+            <TextView
+                    android:gravity="center"
+                    android:id="@+id/tv_logs_none"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_twice"
+                    android:layout_marginEnd="@dimen/margin_triple_and_half"
+                    android:fontFamily="@font/nanumgothic"
+                    android:text="@string/add_log_none"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/lav_logs_empty"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
                 android:visibility="invisible"
@@ -176,27 +224,45 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rc_logs"  />
 
-        <TextView
-                android:visibility="visible"
-                android:fontFamily="@font/nanumgothic"
-                android:id="@+id/tv_database_none"
-                android:text="@string/add_database_none"
+        <androidx.constraintlayout.widget.ConstraintLayout
+                tools:visibility="visible"
+                android:visibility="invisible"
+                android:id="@+id/cl_databases_empty"
                 android:layout_width="match_parent"
-                android:gravity="center"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:layout_height="145dp"
+                android:layout_height="125dp"
                 android:layout_marginStart="@dimen/margin_default"
                 android:layout_marginTop="@dimen/margin_half"
                 android:layout_marginEnd="@dimen/margin_default"
-                android:layout_marginBottom="@dimen/margin_half"
-                android:overScrollMode="never"
-                android:scrollbars="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_databases"  />
+                app:layout_constraintTop_toBottomOf="@+id/tv_databases">
+
+            <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/lav_databases_empty"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginStart="@dimen/margin_default"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:lottie_rawRes="@raw/empty_databases" />
+
+            <TextView
+                    android:gravity="center"
+                    android:id="@+id/tv_databases_none"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_twice"
+                    android:layout_marginEnd="@dimen/margin_triple_and_half"
+                    android:fontFamily="@font/nanumgothic"
+                    android:text="@string/add_database_none"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/lav_databases_empty"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
                 android:visibility="invisible"

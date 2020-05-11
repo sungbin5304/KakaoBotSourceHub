@@ -16,7 +16,7 @@ import com.stfalcon.chatkit.dialogs.DialogsListAdapter
 import com.sungbin.autoreply.bot.three.R
 import com.sungbin.autoreply.bot.three.dto.chat.model.Dialog
 import com.sungbin.autoreply.bot.three.utils.ui.Glide
-import com.sungbin.autoreply.bot.three.view.chat.MessagesActivity
+import com.sungbin.autoreply.bot.three.view.chat.activity.MessagesActivity
 import com.sungbin.autoreply.bot.three.view.chat.viewholder.dialog.DialogViewHolder
 import com.sungbin.sungbintool.ToastUtils
 

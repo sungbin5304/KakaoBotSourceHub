@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
         android:background="@color/colorWhite"
         tools:ignore="ContentDescription"
-        tools:context=".view.hub.PostViewActivity">
+        tools:context=".view.hub.activity.PostViewActivity">
 
     <ImageView
             android:layout_width="150dp"

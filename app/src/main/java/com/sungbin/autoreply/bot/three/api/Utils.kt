@@ -19,7 +19,7 @@ object Utils {
             context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
     }
 
-    fun makeToast(content: String?) {
+    fun makeToast(content: String) {
         Toast.makeText(
             ctx,
             content,
@@ -39,12 +39,12 @@ object Utils {
         vibrator!!.vibrate(time * 1000.toLong())
     }
 
-    fun copy(content: String?) {
+    fun copy(content: String) {
         val clipboardManager =
             ctx!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clipData = ClipData.newPlainText("label", content)
         clipboardManager.setPrimaryClip(clipData)
-        ToastUtils.show(ctx!!, "클립보드에 복사되었습니다.",
+        ToastUtils.show(ctx!!, ctx!!.getString(R.string.copied_clipboard),
             ToastUtils.SHORT, ToastUtils.SUCCESS)
     }
 }

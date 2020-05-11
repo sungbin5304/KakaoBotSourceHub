@@ -8,10 +8,9 @@
         tools:ignore="HardcodedText,SmallSp"
         tools:showIn="@layout/activity_script_edit">
 
-    <me.testica.codeeditor.Editor
+    <com.sungbin.autoreply.bot.three.view.ui.edittext.CodeEditor
             android:layout_marginTop="@dimen/margin_half"
-            android:id="@+id/editor"
-            app:textSize="16sp"
+            android:id="@+id/sv_editor"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@+id/toolkey"/>

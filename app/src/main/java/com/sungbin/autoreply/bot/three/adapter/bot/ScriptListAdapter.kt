@@ -14,21 +14,28 @@ import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.github.zawadz88.materialpopupmenu.popupMenu
 import com.google.android.material.snackbar.Snackbar
 import com.sungbin.autoreply.bot.three.R
 import com.sungbin.autoreply.bot.three.dto.bot.ScriptListItem
 import com.sungbin.autoreply.bot.three.listener.KakaoTalkListener
+import com.sungbin.autoreply.bot.three.utils.bot.BotPathManager
 import com.sungbin.autoreply.bot.three.utils.bot.BotPowerUtils
 import com.sungbin.autoreply.bot.three.utils.bot.SimpleBotUtils
-import com.sungbin.autoreply.bot.three.view.activity.ScriptEditActivity
-import com.sungbin.autoreply.bot.three.view.activity.SimpleEditActivity
+import com.sungbin.autoreply.bot.three.utils.bot.StackUtils
+import com.sungbin.autoreply.bot.three.view.bot.activity.DashboardActivity
+import com.sungbin.autoreply.bot.three.view.bot.activity.ScriptEditActivity
+import com.sungbin.autoreply.bot.three.view.bot.activity.SimpleEditActivity
+import com.sungbin.autoreply.bot.three.view.bot.fragment.DashboardFragment
+import com.sungbin.sungbintool.DataUtils
 import com.sungbin.sungbintool.StorageUtils
 import com.sungbin.sungbintool.ToastUtils
 
 
 @Suppress("DEPRECATION")
-class ScriptListAdapter(private val list: ArrayList<ScriptListItem>?, private val act: Activity) :
+class ScriptListAdapter(private val list: ArrayList<ScriptListItem>?,
+                        private val act: Activity) :
     RecyclerView.Adapter<ScriptListAdapter.ScriptListViewHolder>() {
 
     private var ctx: Context? = null
@@ -76,6 +83,20 @@ class ScriptListAdapter(private val list: ArrayList<ScriptListItem>?, private va
         viewholder.lastTime.text = lastTime
         viewholder.title.text = name
         viewholder.onoff.isChecked = onoff
+
+        if (type == 1) {
+            viewholder.onoff.setOnCheckedChangeListener { _, boolean ->
+                if(boolean){
+                    viewholder.state.background = ContextCompat.getDrawable(ctx!!,
+                        R.drawable.reload_done_view)
+                }
+                else {
+                    viewholder.state.background = ContextCompat.getDrawable(ctx!!,
+                        R.drawable.reload_none_view)
+                }
+            }
+        }
+
         viewholder.menu.setOnClickListener { view ->
             val popupMenu = popupMenu {
                 section {
@@ -105,14 +126,15 @@ class ScriptListAdapter(private val list: ArrayList<ScriptListItem>?, private va
                                     Intent(act, SimpleEditActivity::class.java)
                                         .putExtra("name", name)
                                 )
-                            } else {
+                            }
+                            else {
                                 act.startActivity(
                                     Intent(act, ScriptEditActivity::class.java)
                                         .putExtra("name", name)
                                         .putExtra(
                                             "script",
                                             StorageUtils.read(
-                                                "KakaoTalkBotHub/Bots/JavaScript/$name.js",
+                                                "${BotPathManager.JS}/$name.js",
                                                 """
                             function response(room, msg, sender, isGroupChat, replier, ImageDB, package) {
                                 /*
@@ -139,34 +161,55 @@ class ScriptListAdapter(private val list: ArrayList<ScriptListItem>?, private va
                             labelRes = R.string.string_reload
                             icon = R.drawable.ic_autorenew_white_24dp
                             callback = {
-                                if (type == 1) {
-                                    act.startActivity(
-                                        Intent(act, SimpleEditActivity::class.java)
-                                            .putExtra("name", name)
-                                    )
-                                } else {
-                                    val state =
-                                        KakaoTalkListener.initializeJavaScript(name).toString()
-                                    if (state != "true") {
-                                        ToastUtils.show(
-                                            ctx!!,
-                                            state, ToastUtils.LONG, ToastUtils.ERROR
-                                        )
-                                        viewholder.state.background = ContextCompat.getDrawable(
-                                            ctx!!,
-                                            R.drawable.reload_error_view
-                                        )
-                                    } else {
-                                        ToastUtils.show(
-                                            ctx!!,
-                                            ctx!!.getString(R.string.reload_success),
-                                            ToastUtils.LONG, ToastUtils.SUCCESS
-                                        )
-                                        viewholder.state.background = ContextCompat.getDrawable(
-                                            ctx!!,
-                                            R.drawable.reload_done_view
-                                        )
+                                lateinit var statue: String
+                                val ms1 = System.currentTimeMillis()
+                                val pDialog = SweetAlertDialog(
+                                    act,
+                                    SweetAlertDialog.PROGRESS_TYPE
+                                )
+                                pDialog.progressHelper.barColor = ContextCompat.getColor(
+                                    act,
+                                    R.color.colorPrimary
+                                )
+                                pDialog.titleText = act.getString(R.string.string_reloading)
+                                pDialog.setCancelable(false)
+                                val thread = Thread {
+                                    statue = KakaoTalkListener.initializeJavaScript(name)
+                                    act.runOnUiThread {
+                                        pDialog.show()
                                     }
+                                }
+                                thread.start()
+                                thread.join()
+                                val ms2 = System.currentTimeMillis()
+                                val reloadTime = (ms2 - ms1).toString()
+                                pDialog.confirmText = "닫기"
+                                pDialog.confirmButtonBackgroundColor =
+                                    ContextCompat.getColor(act, R.color.colorPrimary)
+                                if (statue != "true") {
+                                    pDialog.changeAlertType(SweetAlertDialog.ERROR_TYPE)
+                                    pDialog.titleText = "리로드 실패"
+                                    pDialog.contentText = "리로드중 오류가 발생했습니다.<br>" +
+                                            "<font color=#EF5350>$statue</font>"
+                                    viewholder.state.background = ContextCompat.getDrawable(
+                                        ctx!!,
+                                        R.drawable.reload_error_view
+                                    )
+
+                                    if(!DataUtils.readData(ctx!!, "KeepScope", "false").toBoolean()){
+                                        viewholder.onoff.isChecked = false
+                                        BotPowerUtils.setOnOff(ctx!!, name, false)
+                                    }
+                                }
+                                else {
+                                    pDialog.changeAlertType(SweetAlertDialog.SUCCESS_TYPE)
+                                    pDialog.titleText = "리로드 성공"
+                                    pDialog.contentText = "리로드가 완료되었습니다.<br>" +
+                                            "<font color=#4CAF50>리로드 시간 : $reloadTime ms</font>"
+                                    viewholder.state.background = ContextCompat.getDrawable(
+                                        ctx!!,
+                                        R.drawable.reload_done_view
+                                    )
                                 }
                             }
                         }
@@ -187,7 +230,7 @@ class ScriptListAdapter(private val list: ArrayList<ScriptListItem>?, private va
                             val beforeDeleteIndex = list.indexOf(beforeDeleteItem)
 
                             if (type == 1) {
-                                val path = "Android/data/com.sungbin.autoreply.bot.three/KakaoTalkBotHub/Bots/simple/$name"
+                                val path = "${BotPathManager.SIMPLE}/$name"
 
                                 val simpleItemLabel = arrayOf("type", "room", "reply", "sender", "message")
                                 val beforeDeleteValues = HashMap<String, String>()
@@ -233,7 +276,7 @@ class ScriptListAdapter(private val list: ArrayList<ScriptListItem>?, private va
                             }
                             else {
                                 val beforeDeleteSource = StorageUtils.read(
-                                    "KakaoTalkBotHub/Bots/JavaScript/$name.js",
+                                    "${BotPathManager.JS}/$name.js",
                                     """
                             function response(room, msg, sender, isGroupChat, replier, ImageDB, package) {
                                 /*
@@ -248,7 +291,7 @@ class ScriptListAdapter(private val list: ArrayList<ScriptListItem>?, private va
                             """.trimIndent()
                                 )
 
-                                StorageUtils.delete("KakaoTalkBotHub/Bots/JavaScript/$name.js")
+                                StorageUtils.delete("${BotPathManager.JS}/$name.js")
                                 list.remove(list[position])
                                 notifyDataSetChanged()
                                 val bar = Snackbar.make(view, "$name 스크립트가 삭제되었습니다.", 3000)
@@ -261,7 +304,7 @@ class ScriptListAdapter(private val list: ArrayList<ScriptListItem>?, private va
                                     .setAction("되돌리기") {
                                         StorageUtils.save(
                                             "KakaoTalkBotHub/Bots/JavaScript/$name.js",
-                                            beforeDeleteSource
+                                            beforeDeleteSource!!
                                         )
                                         list.add(beforeDeleteIndex, beforeDeleteItem)
                                         notifyDataSetChanged()

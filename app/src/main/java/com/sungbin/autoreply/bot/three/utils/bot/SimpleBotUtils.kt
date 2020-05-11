@@ -6,7 +6,7 @@ import java.io.File
 object SimpleBotUtils {
 
     private fun getPath(name: String, type: String): String{
-        return "Android/data/com.sungbin.autoreply.bot.three/KakaoTalkBotHub/Bots/simple/$name/$type.data"
+        return "${BotPathManager.SIMPLE}/$name/$type.data"
     }
 
     fun save(name: String, sender: String, room: String, type: String, message: String, reply: String){
@@ -29,7 +29,7 @@ object SimpleBotUtils {
     fun get(name: String, type: String): String{
         return StorageUtils.read(
             getPath(name, type), ""
-        )
+        ).toString()
     }
 
     fun remove(name: String, type: String){

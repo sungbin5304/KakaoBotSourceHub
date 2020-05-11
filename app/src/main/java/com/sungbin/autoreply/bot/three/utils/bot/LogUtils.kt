@@ -12,8 +12,8 @@ object LogUtils {
     }
 
     private fun getPath(name: String, type: String): String{
-        StorageUtils.createFolder("Android/data/com.sungbin.autoreply.bot.three/KakaoTalkBotHub/Log/$name")
-        return "Android/data/com.sungbin.autoreply.bot.three/KakaoTalkBotHub/Log/$name/$type.log"
+        StorageUtils.createFolder("${BotPathManager.LOG}/$name")
+        return "${BotPathManager.LOG}/$name/$type.log"
     }
 
     fun save(name: String, content: String, time: String, type: Int){
@@ -30,7 +30,7 @@ object LogUtils {
     fun get(name: String, type: String): String{
         return StorageUtils.read(
             getPath(name, type), ""
-        )
+        ).toString()
     }
 
     fun remove(name: String, type: String){

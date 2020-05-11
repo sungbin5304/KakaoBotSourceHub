@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical"
+        android:padding="@dimen/margin_default"
+        tools:ignore="MissingConstraints,ContentDescription,Useless,ButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <EditText
+            android:fontFamily="@font/nanumgothic"
+            android:id="@+id/et_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/input_app_name"
+            android:inputType="text"
+            android:importantForAutofill="no" />
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginTop="@dimen/margin_half"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/rv_apps"
+            android:scrollbars="none"
+            android:overScrollMode="never"/>
+
+</LinearLayout>

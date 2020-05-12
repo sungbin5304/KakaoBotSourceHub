@@ -33,6 +33,7 @@ import com.sungbin.autoreply.bot.three.utils.RhinoUtils
 import com.sungbin.autoreply.bot.three.utils.bot.DebugUtils
 import com.sungbin.autoreply.bot.three.view.ui.drawerlayout.DrawerLayout
 import com.sungbin.sungbintool.DataUtils
+import com.sungbin.sungbintool.DialogUtils
 import com.sungbin.sungbintool.StringUtils
 import com.sungbin.sungbintool.ToastUtils
 import com.sungbin.sungbintool.ui.TagableRoundImageView
@@ -61,7 +62,11 @@ class SandboxFragment : Fragment() {
     private lateinit var trivProfile: TagableRoundImageView
 
     @SuppressLint("InflateParams")
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         val view = inflater.inflate(R.layout.fragment_sandbox, container, false)
         activity!!.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
@@ -102,12 +107,19 @@ class SandboxFragment : Fragment() {
                     lavSwipe.cancelAnimation()
                     lavSwipe.setAnimation(R.raw.congratulations)
                     lavSwipe.playAnimation()
-                    lavSwipe.repeatCount = 0
+                    lavSwipe.repeatCount = 1
                     Handler().postDelayed({
                         tvGuide.visibility = View.GONE
                         lavSwipe.visibility = View.GONE
                         rlLayout.visibility = View.VISIBLE
                         dlLayout.openDrawer(GravityCompat.START)
+                        DialogUtils.showOnce(
+                            context!!,
+                            getString(R.string.experimental_function),
+                            getString(R.string.sandbox_experimental_function_description),
+                            "experimental_sandbox",
+                            null, false
+                        )
                     }, 1000)
 
                 }
@@ -170,6 +182,7 @@ class SandboxFragment : Fragment() {
                 .into(trivProfile)
         }
 
+        senders.add(getString(R.string.default_user))
         senders.add(getString(R.string.icon_add_sender))
         msSender.setItems(senders.toList())
         msSender.selectedIndex = DataUtils.readData(context!!, "SenderPosition", "0").toInt()
@@ -178,11 +191,27 @@ class SandboxFragment : Fragment() {
             when (item) {
                 getString(R.string.icon_add_sender) -> {
                     msSender.selectedIndex = 0
+                    adapter = DebugListAdapter(
+                        DebugUtils.getMessges(rooms[msRoom.selectedIndex]),
+                        senders[0],
+                        activity!!
+                    )
+                    rvList.adapter = adapter
+                    adapter.notifyDataSetChanged()
+                    DataUtils.saveData(context!!, "SenderPosition", "0")
+                    Glide
+                        .with(context!!)
+                        .load(
+                            DebugUtils.getProfileImagePath(
+                                senders[0]
+                            )
+                        )
+                        .into(trivProfile)
                     showSenderAddDialog()
                 }
                 else -> {
                     adapter = DebugListAdapter(
-                        DebugUtils.getMessges(item.toString()),
+                        DebugUtils.getMessges(rooms[msRoom.selectedIndex]),
                         senders[position],
                         activity!!
                     )
@@ -218,7 +247,16 @@ class SandboxFragment : Fragment() {
             val position = rooms.indexOf(item.toString())
             when (item) {
                 getString(R.string.icon_room_sender) -> {
+                    etRoom.text = StringUtils.toEditable(rooms[0])
                     msRoom.selectedIndex = 0
+                    adapter = DebugListAdapter(
+                        DebugUtils.getMessges(rooms[0]),
+                        senders[msSender.selectedIndex],
+                        activity!!
+                    )
+                    rvList.adapter = adapter
+                    adapter.notifyDataSetChanged()
+                    DataUtils.saveData(context!!, "RoomPosition", "0")
                     showRoomAddDialog()
                 }
                 else -> {
@@ -235,6 +273,14 @@ class SandboxFragment : Fragment() {
                 }
             }
         }
+
+        adapter = DebugListAdapter(
+            DebugUtils.getMessges(rooms[msRoom.selectedIndex]),
+            senders[msSender.selectedIndex],
+            activity!!
+        )
+        rvList.adapter = adapter
+        adapter.notifyDataSetChanged()
 
         rvList.setOnTouchListener(object : OnSwipeListener(context!!) {
             override fun onSwipeLeftToRight() {
@@ -301,7 +347,7 @@ class SandboxFragment : Fragment() {
     private fun showRoomAddDialog(){
         lateinit var alert: AlertDialog
         val dialog = AlertDialog.Builder(context)
-        dialog.setTitle("방 추가")
+        dialog.setTitle(getString(R.string.add_debug_room))
 
         val edittext = EditText(context)
         dialog.setView(edittext)
@@ -332,6 +378,7 @@ class SandboxFragment : Fragment() {
         alert.show()
     }
 
+    @SuppressLint("InflateParams")
     private fun showSenderAddDialog(){
         var base64: String? = null
         val dialog = AlertDialog.Builder(context)
@@ -344,9 +391,9 @@ class SandboxFragment : Fragment() {
         val input = layout.findViewById<EditText>(R.id.et_sender)
         icon.setOnClickListener {
             lateinit var iconAlert: AlertDialog
-            val items = arrayOf("이미지 선택", "Base64 입력")
+            val items = arrayOf(getString(R.string.select_image), getString(R.string.input_base64))
             val iconDialog = AlertDialog.Builder(context)
-            iconDialog.setTitle("사용자 프로필사진 선택")
+            iconDialog.setTitle(getString(R.string.select_sender_profile))
             iconDialog.setSingleChoiceItems(items, -1) { _, id ->
                 if(id == 0){
                     TedImagePicker
@@ -364,7 +411,7 @@ class SandboxFragment : Fragment() {
                     iconAlert.cancel()
                     lateinit var inputAlert: AlertDialog
                     val inputDialog = AlertDialog.Builder(context)
-                    inputDialog.setTitle("Base64 입력")
+                    inputDialog.setTitle(getString(R.string.input_base64))
 
                     val edittext = EditText(context)
                     val clipboard = context!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -372,7 +419,6 @@ class SandboxFragment : Fragment() {
                         edittext.text =
                             StringUtils.toEditable(clipboard.primaryClip!!.getItemAt(0).text.toString())
                     } catch (ignored: Exception) {}
-
                     inputDialog.setPositiveButton(getString(R.string.input_done)){ _, _ ->
                         try{
                             base64 = edittext.text.toString()
@@ -424,9 +470,10 @@ class SandboxFragment : Fragment() {
                     )
                 }
                 senders = DebugUtils.getSenderList()
+                senders.add(getString(R.string.default_user))
                 senders.add(getString(R.string.icon_add_sender))
                 msSender.setItems(senders.toList())
-                val position = senders.size - 2
+                val position = senders.size - 3
                 msSender.selectedIndex = position
                 DataUtils.saveData(context!!, "SenderPosition", position.toString())
                 Glide

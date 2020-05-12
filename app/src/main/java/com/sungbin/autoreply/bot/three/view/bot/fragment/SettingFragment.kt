@@ -7,7 +7,6 @@ import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,7 +25,6 @@ import com.sungbin.autoreply.bot.three.R
 import com.sungbin.autoreply.bot.three.adapter.apps.AppListAdapter
 import com.sungbin.autoreply.bot.three.api.Black
 import com.sungbin.autoreply.bot.three.dto.apps.AppInfo
-import com.sungbin.autoreply.bot.three.listener.KakaoTalkListener
 import com.sungbin.autoreply.bot.three.utils.bot.BotNotificationManager
 import com.sungbin.sungbintool.DataUtils
 import com.sungbin.sungbintool.StringUtils
@@ -152,8 +150,9 @@ class SettingFragment : Fragment(), CaulyAdViewListener, CaulyInterstitialAdList
             }
         }
 
-        swBotOnoff!!.isChecked = DataUtils.readData(context!!, "BotOn", "true").toBoolean()
+        swBotOnoff!!.isChecked = DataUtils.readData(context!!, "BotOn", "false").toBoolean()
         swBotOnoff!!.setOnCheckedChangeListener { _, boolean ->
+            DataUtils.saveData(context!!, "BotOn", boolean.toString())
             if(boolean){
                 BotNotificationManager.create(context!!)
             }
@@ -318,6 +317,16 @@ class SettingFragment : Fragment(), CaulyAdViewListener, CaulyInterstitialAdList
             showAppSelectDialog()
         }
 
+        tblFavorateLanguage!!.onToggledListener = { _, toggle, select ->
+            if(select) {
+                DataUtils.saveData(
+                    context!!,
+                    "FavoriteLanguage",
+                    toggle.title.toString()
+                )
+            }
+        }
+
         fabSave!!.setOnClickListener {
             @Suppress("NAME_SHADOWING")
             val packages = etPackages!!.text.toString()
@@ -327,14 +336,6 @@ class SettingFragment : Fragment(), CaulyAdViewListener, CaulyInterstitialAdList
             DataUtils.saveData(context!!, "packages", packages)
             DataUtils.saveData(context!!, "RoomBlackList", blackRoom)
             DataUtils.saveData(context!!, "SenderBlackList", blackSender)
-
-            if(tblFavorateLanguage!!.selectedToggles().isNotEmpty()) {
-                DataUtils.saveData(
-                    context!!,
-                    "FavoriteLanguage",
-                    tblFavorateLanguage!!.selectedToggles()[0].title.toString()
-                )
-            }
 
             ToastUtils.show(
                 context!!,
@@ -694,9 +695,30 @@ class SettingFragment : Fragment(), CaulyAdViewListener, CaulyInterstitialAdList
             )
             .setLibrary(
                 Library(
+                    "SimpleCodeEditor",
+                    "https://github.com/sungbin5304/SimpleCodeEditor/blob/master/README.md",
+                    License.APACHE2
+                )
+            )
+            .setLibrary(
+                Library(
                     "Cauly SDK",
                     "https://github.com/cauly/Android-SDK",
                     License.MIT
+                )
+            )
+            .setLibrary(
+                Library(
+                    "Logger",
+                    "https://github.com/orhanobut/logger",
+                    License.APACHE2
+                )
+            )
+            .setLibrary(
+                Library(
+                    "android json view",
+                    "https://github.com/pvarry/android-json-viewer",
+                    License.APACHE2
                 )
             )
             .show()

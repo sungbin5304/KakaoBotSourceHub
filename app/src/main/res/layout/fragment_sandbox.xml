@@ -10,8 +10,7 @@
         android:layout_marginTop="@dimen/margin_half"
         android:layout_marginBottom="@dimen/margin_half"
         android:overScrollMode="never"
-        android:scrollbars="none"
-        tools:openDrawer="start">
+        android:scrollbars="none">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
@@ -30,12 +29,13 @@
                     app:lottie_rawRes="@raw/swipe_left_right" />
 
             <TextView
+                    android:fontFamily="@font/nanumgothic"
                     android:id="@+id/tv_guide"
                     android:layout_marginBottom="100dp"
                     android:layout_gravity="bottom"
                     android:gravity="center"
                     android:textColor="@color/colorPrimary"
-                    android:text="@string/swipe_screen_right_to_left"
+                    android:text="@string/swipe_screen_left_to_right"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
@@ -57,6 +57,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layoutAnimation="@anim/layout_animation"
+                        android:scrollbars="vertical"
+                        android:nestedScrollingEnabled="true"
                         android:overScrollMode="never" />
 
                 <LinearLayout

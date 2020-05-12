@@ -1,11 +1,11 @@
-@file:Suppress("DEPRECATION")
+@file:Suppress("DEPRECATION", "NAME_SHADOWING")
 
 package com.sungbin.autoreply.bot.three.view.bot.fragment
 
 import android.animation.Animator
+import android.content.Intent
 import android.graphics.Rect
 import android.os.Bundle
-import android.os.Environment
 import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +13,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -22,6 +21,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.daimajia.androidanimations.library.Techniques
 import com.daimajia.androidanimations.library.YoYo
+import com.orhanobut.logger.AndroidLogAdapter
+import com.orhanobut.logger.Logger
 import com.sungbin.autoreply.bot.three.R
 import com.sungbin.autoreply.bot.three.adapter.bot.DatabaseListAdapter
 import com.sungbin.autoreply.bot.three.adapter.bot.LogListAdapter
@@ -33,13 +34,18 @@ import com.sungbin.autoreply.bot.three.utils.bot.BotPathManager
 import com.sungbin.autoreply.bot.three.utils.bot.BotPowerUtils
 import com.sungbin.autoreply.bot.three.utils.bot.LogUtils
 import com.sungbin.autoreply.bot.three.utils.bot.RunTimeUtils
+import com.sungbin.autoreply.bot.three.view.bot.activity.DashboardContentShowAllActivity
+import com.sungbin.sungbintool.StorageUtils
+import com.sungbin.sungbintool.StorageUtils.sdcard
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-@Suppress("DEPRECATED_IDENTITY_EQUALS")
+@Suppress("DEPRECATED_IDENTITY_EQUALS", "UNUSED_VARIABLE",
+    "RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS"
+)
 class DashboardFragment : Fragment() {
 
     var searchEt: EditText? = null
@@ -76,6 +82,8 @@ class DashboardFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        Logger.addLogAdapter(AndroidLogAdapter())
 
         btn_script_search.setOnClickListener {
             YoYo.with(Techniques.FadeOut)
@@ -119,7 +127,20 @@ class DashboardFragment : Fragment() {
                 .playOn(btn_script_search)
         }
 
-        val sdcard = Environment.getExternalStorageDirectory().absolutePath
+        logViewAllBtn!!.setOnClickListener {
+            startActivity(
+                Intent(context, DashboardContentShowAllActivity::class.java)
+                    .putExtra("type", "전체 로그")
+            )
+        }
+
+        databasesViewAllBtn!!.setOnClickListener {
+            startActivity(
+                Intent(context, DashboardContentShowAllActivity::class.java)
+                    .putExtra("type", "전체 데이터베이스")
+            )
+        }
+
         val layoutManagerHorizontal =
             LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         val layoutManagerVertical =
@@ -127,17 +148,19 @@ class DashboardFragment : Fragment() {
         val layoutManagerVertical2 =
             LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
 
+        val jsPath = "$sdcard/${BotPathManager.JS}/"
+        val simplePath = "$sdcard/${BotPathManager.SIMPLE}/"
+        val logPath = "$sdcard/${BotPathManager.LOG}/"
+        val databasePath = "$sdcard/${BotPathManager.DATABASE}/"
+
         val scriptItem = ArrayList<ScriptListItem>()
         val logItem = ArrayList<LogListItem>()
         val databaseItem = ArrayList<DatabaseListItem>()
 
-        val jsPath = "$sdcard/${BotPathManager.JS}/"
-        val simplePath = "$sdcard/${BotPathManager.SIMPLE}/"
-        val logPath = "$sdcard/${BotPathManager.LOG}/"
-
-        val jsList = File(jsPath).listFiles()
-        val simpleList = File(simplePath).listFiles()
-        val logList = File(logPath).listFiles()
+        var jsList = File(jsPath).listFiles()
+        var simpleList = File(simplePath).listFiles()
+        var logList = File(logPath).listFiles()
+        var databaseList = File(databasePath).listFiles()
 
         if (simpleList != null) {
             for (element in simpleList) {
@@ -189,6 +212,20 @@ class DashboardFragment : Fragment() {
                 logItem.add(item)
             }
         }
+        if (databaseList != null) {
+            Collections.sort(databaseList.asList(), kotlin.Comparator { t, t2 ->
+                return@Comparator t.lastModified().compareTo(t2.lastModified())
+            })
+
+            for (i in databaseList.indices) {
+                if(i >= 2) break
+                val name = databaseList[i].name
+                val item = DatabaseListItem(
+                    name, StorageUtils.getFileSize(databaseList[i])
+                )
+                databaseItem.add(item)
+            }
+        }
 
         if (scriptItem.isEmpty()) {
             botsNoneCl!!.visibility = View.VISIBLE
@@ -236,8 +273,88 @@ class DashboardFragment : Fragment() {
         }
 
         val scriptListAdapter = ScriptListAdapter(scriptItem, activity!!)
-        val logListAdapter = LogListAdapter(logItem, activity!!)
+        scriptListAdapter.setOnScriptRemovedListener {
+            scriptItem.clear()
+            jsList = File(jsPath).listFiles()
+            simpleList = File(simplePath).listFiles()
+            if (simpleList != null) {
+                for (element in simpleList) {
+                    val name = element.name
+                    val onOff = BotPowerUtils.getIsOn(context!!, name)
+                    scriptItem.add(
+                        ScriptListItem(
+                            name,
+                            onOff,
+                            1,
+                            RunTimeUtils.get(context!!, name),
+                            R.drawable.ic_textsms_blue_24dp
+                        )
+                    )
+                }
+            }
+            if (jsList != null) {
+                for (element in jsList) {
+                    val name = element.name
+                    val onOff = BotPowerUtils.getIsOn(context!!, name)
+                    scriptItem.add(
+                        ScriptListItem(
+                            name,
+                            onOff,
+                            0,
+                            RunTimeUtils.get(context!!, name),
+                            R.drawable.ic_javascript
+                        )
+                    )
+                }
+            }
+
+            scriptListAdapter.notifyDataSetChanged()
+
+            if (scriptItem.isEmpty()) {
+                botsNoneCl!!.visibility = View.VISIBLE
+                scriptsRc!!.visibility = View.INVISIBLE
+                botsNoneLav!!.playAnimation()
+            }
+            else {
+                botsNoneCl!!.visibility = View.INVISIBLE
+                scriptsRc!!.visibility = View.VISIBLE
+            }
+        }
+
         val databaseListAdapter = DatabaseListAdapter(databaseItem, activity!!)
+        databaseListAdapter.setOnDatabaseRemovedListener {
+            databaseItem.clear()
+            databaseList = File(databasePath).listFiles()
+            if (databaseList != null) {
+                Collections.sort(databaseList.asList(), kotlin.Comparator { t, t2 ->
+                    return@Comparator t.lastModified().compareTo(t2.lastModified())
+                })
+
+                for (i in databaseList.indices) {
+                    if(i >= 2) break
+                    val name = databaseList[i].name
+                    val item = DatabaseListItem(
+                        name, StorageUtils.getFileSize(databaseList[i])
+                    )
+                    databaseItem.add(item)
+                }
+            }
+
+            databaseListAdapter.notifyDataSetChanged()
+
+            if (databaseItem.isEmpty()){
+                databasesNoneCl!!.visibility = View.VISIBLE
+                databasesRc!!.visibility = View.INVISIBLE
+                databasesNoneLav!!.playAnimation()
+            }
+            else {
+                databasesNoneCl!!.visibility = View.INVISIBLE
+                databasesRc!!.visibility = View.VISIBLE
+            }
+        }
+
+        val logListAdapter = LogListAdapter(logItem, activity!!)
+        //TODO: 로그 아이템 삭제 이벤트
 
         scriptsRc!!.layoutManager = layoutManagerHorizontal
         scriptsRc!!.adapter = scriptListAdapter

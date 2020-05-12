@@ -1,6 +1,7 @@
 package com.sungbin.autoreply.bot.three.api
 
 import android.content.Context
+import com.sungbin.autoreply.bot.three.utils.bot.BotPathManager
 import com.sungbin.autoreply.bot.three.utils.bot.LogUtils
 import com.sungbin.autoreply.bot.three.utils.bot.StackUtils
 import com.sungbin.sungbintool.StorageUtils
@@ -9,7 +10,6 @@ import org.mozilla.javascript.ScriptableObject
 import org.mozilla.javascript.annotations.JSStaticFunction
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 object ApiClass{
 
@@ -128,7 +128,6 @@ object ApiClass{
     }
 
     class Api : ScriptableObject(){
-
         override fun getClassName(): String {
             return "Api"
         }
@@ -202,6 +201,32 @@ object ApiClass{
             @JSStaticFunction
             fun get(name: String): ScriptableObject? {
                 return StackUtils.jsScope[name]
+            }
+        }
+    }
+
+    class DataBase : ScriptableObject() {
+        override fun getClassName(): String {
+            return "DataBase"
+        }
+
+        companion object {
+            @JvmStatic
+            @JSStaticFunction
+            fun read(name: String): String? {
+                return StorageUtils.read("${BotPathManager.DATABASE}/$name", null)
+            }
+
+            @JvmStatic
+            @JSStaticFunction
+            fun save(name: String, content: String) {
+                StorageUtils.save("${BotPathManager.DATABASE}/$name", content)
+            }
+
+            @JvmStatic
+            @JSStaticFunction
+            fun remove(name: String) {
+                StorageUtils.delete("${BotPathManager.DATABASE}/$name")
             }
         }
     }
@@ -320,6 +345,12 @@ object ApiClass{
             @JSStaticFunction
             fun post(address: String, postName: NativeArray, postData: NativeArray): String{
                 return com.sungbin.autoreply.bot.three.api.Api.post(address, postName, postData)
+            }
+
+            @JvmStatic
+            @JSStaticFunction
+            fun showAll(): String{
+                return "\u200b".repeat(500)
             }
 
             @JvmStatic

@@ -19,6 +19,22 @@ class LogListAdapter (private val list: ArrayList<LogListItem>?, private val act
     RecyclerView.Adapter<LogListAdapter.LogListViewHolder>() {
 
     private var ctx: Context? = null
+    interface OnLogRemovedListener {
+        fun onRemoved()
+    }
+
+    private var listener: OnLogRemovedListener? = null
+    fun setOnLogRemovedListener(listener: OnLogRemovedListener?) {
+        this.listener = listener
+    }
+
+    fun setOnDatabaseRemovedListener(listener: () -> Unit) {
+        this.listener = object : OnLogRemovedListener {
+            override fun onRemoved() {
+                listener()
+            }
+        }
+    }
 
     inner class LogListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var name: TextView = view.findViewById(R.id.tv_name)

@@ -19,6 +19,7 @@ object DebugUtils {
     }
 
     fun addMessage(room: String, message: DebugMessageItem){
+        if(!messages.containsKey(room)) saveRoom(room)
         val messages = getMessges(room)
         if(messages == null) {
             val array = ArrayList<DebugMessageItem>()

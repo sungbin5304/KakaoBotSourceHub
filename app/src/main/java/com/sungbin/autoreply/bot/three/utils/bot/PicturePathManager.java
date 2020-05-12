@@ -12,7 +12,7 @@ import java.util.Comparator;
 
 public class PicturePathManager{
     private static String sdcard = Environment.getExternalStorageDirectory().getAbsolutePath();
-    private static String PICTURE_PATH = sdcard+"/Android/data/com.kakao.talk/contents/Mg==";
+    private static String PICTURE_PATH = sdcard + "/Android/data/com.kakao.talk/contents/Mg==";
 
     private static class ModifiedDate implements Comparator<File> {
         public int compare(File f1, File f2) {

@@ -29,7 +29,6 @@ import com.sungbin.autoreply.bot.three.R
 import com.sungbin.autoreply.bot.three.dto.chat.item.UserItem
 import com.sungbin.autoreply.bot.three.dto.chat.model.User
 import com.sungbin.autoreply.bot.three.utils.chat.ChatModuleUtils
-import com.sungbin.autoreply.bot.three.view.chat.activity.DialogsActivity
 import com.sungbin.sungbintool.ToastUtils
 import com.sungbin.sungbintool.Utils
 import kotlinx.android.synthetic.main.content_login.*
@@ -94,8 +93,8 @@ class LoginActivity : AppCompatActivity() {
                         reference.child(deviceId).setValue(user)
 
                         finish()
-                        //startActivity(Intent(applicationContext, PermissionActivity::class.java))
-                        startActivity(Intent(applicationContext, DialogsActivity::class.java))
+                        startActivity(Intent(applicationContext, PermissionActivity::class.java))
+                        //startActivity(Intent(applicationContext, DialogsActivity::class.java))
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                     }
 

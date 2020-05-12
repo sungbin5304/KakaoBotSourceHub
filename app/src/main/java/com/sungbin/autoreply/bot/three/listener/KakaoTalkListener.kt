@@ -70,7 +70,7 @@ class KakaoTalkListener : NotificationListenerService() {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         super.onNotificationPosted(sbn)
-        if(!DataUtils.readData(applicationContext, "BotOn", "true").toBoolean()) return
+        if(!DataUtils.readData(applicationContext, "BotOn", "false").toBoolean()) return
         var packages = DataUtils.readData(ctx!!, "packages", "com.kakao.talk").trim()
         if(packages.isBlank()) packages = "com.kakao.talk"
         if (packages.split("\n").contains(sbn.packageName)) {
@@ -285,7 +285,6 @@ class KakaoTalkListener : NotificationListenerService() {
                 )
             }
         }
-
     }
 
     class DebugReplier(private val room: String,
@@ -404,6 +403,7 @@ class KakaoTalkListener : NotificationListenerService() {
                 ScriptableObject.defineClass(scope, ApiClass.Device::class.java, false, true)
                 ScriptableObject.defineClass(scope, ApiClass.Scope::class.java, false, true)
                 ScriptableObject.defineClass(scope, ApiClass.File::class.java, false, true)
+                ScriptableObject.defineClass(scope, ApiClass.DataBase::class.java, false, true)
                 ScriptableObject.defineClass(scope, ApiClass.Black::class.java, false, true)
                 ScriptableObject.defineClass(scope, ApiClass.Utils::class.java, false, true)
 
@@ -545,6 +545,7 @@ class KakaoTalkListener : NotificationListenerService() {
                 }
             }
             catch (e: Exception) {
+                CrashReporter.logException(e)
                 ToastUtils.show(ctx!!,
                     "$name 작동에 오류가 발생했습니다.\n\n오류 내용 : $e",
                     ToastUtils.LONG,

@@ -6,7 +6,7 @@
         android:focusableInTouchMode="true"
         tools:ignore="MissingConstraints,ContentDescription,Useless,ButtonStyle"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="80dp"
         android:layout_marginTop="5dp"
         android:layout_marginStart="1dp"
         android:layout_marginBottom="@dimen/margin_twice_half"
@@ -51,7 +51,7 @@
                     android:fontFamily="@font/nanumgothic"
                     android:maxLength="12"
                     android:text="@string/string_databases"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
             <TextView
@@ -80,7 +80,7 @@
             <Button
                     android:id="@+id/btn_view"
                     android:layout_width="wrap_content"
-                    android:layout_height="35dp"
+                    android:layout_height="40dp"
                     android:background="@drawable/round_button_primary"
                     android:elevation="8dp"
                     android:fontFamily="@font/poppins"
@@ -92,7 +92,7 @@
             <Button
                     android:id="@+id/btn_remove"
                     android:layout_width="wrap_content"
-                    android:layout_height="35dp"
+                    android:layout_height="40dp"
                     android:layout_marginStart="@dimen/margin_half"
                     android:background="@drawable/round_button_pink"
                     android:elevation="8dp"

@@ -8,12 +8,15 @@
         tools:ignore="HardcodedText,SmallSp"
         tools:showIn="@layout/activity_script_edit">
 
-    <com.sungbin.autoreply.bot.three.view.ui.edittext.CodeEditor
+    <com.sungbin.texteditor.library.ui.SimpleCodeEditor
             android:layout_marginTop="@dimen/margin_half"
-            android:id="@+id/sv_editor"
+            android:id="@+id/sce_editor"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/toolkey"/>
+            android:layout_above="@+id/toolkey"
+            app:sce_selectLineColor="@color/colorPrimary"
+            app:sce_lineNumberColor="@color/colorGray"
+            app:sce_lineColor="@color/colorGray"/>
 
     <TextView
             tools:visibility="visible"

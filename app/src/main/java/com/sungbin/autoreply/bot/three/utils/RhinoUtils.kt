@@ -3,10 +3,9 @@ package com.sungbin.autoreply.bot.three.utils
 import com.balsikandar.crashreporter.CrashReporter
 import com.faendir.rhino_android.RhinoAndroidHelper
 import com.sungbin.autoreply.bot.three.api.*
-import com.sungbin.autoreply.bot.three.api.Utils
 import org.mozilla.javascript.Context
-import org.mozilla.javascript.Scriptable
 import org.mozilla.javascript.ScriptableObject
+
 
 class RhinoUtils constructor(ctx: android.content.Context) {
 
@@ -22,7 +21,7 @@ class RhinoUtils constructor(ctx: android.content.Context) {
 
     fun runJs(source: String): String{
         return try {
-            val rhino: Context = RhinoAndroidHelper().enterContext()
+            val rhino = RhinoAndroidHelper().enterContext()
             rhino.languageVersion =  Context.VERSION_ES6
             rhino.optimizationLevel = -1
 
@@ -34,6 +33,7 @@ class RhinoUtils constructor(ctx: android.content.Context) {
             ScriptableObject.defineClass(scope, ApiClass.Scope::class.java, false, true)
             ScriptableObject.defineClass(scope, ApiClass.File::class.java, false, true)
             ScriptableObject.defineClass(scope, ApiClass.Black::class.java, false, true)
+            ScriptableObject.defineClass(scope, ApiClass.DataBase::class.java, false, true)
             ScriptableObject.defineClass(scope, ApiClass.Utils::class.java, false, true)
 
             val result: Any = rhino.evaluateString(scope, source, "sandbox", 1, null)

@@ -50,6 +50,7 @@ class AddFragment
             }
             else {
                 botTypeTs!!.setToggled(R.id.simple, true)
+                isJsBot = false
             }
         }
 

@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.remoteconfig.BuildConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -68,6 +67,7 @@ class DashboardActivity  : AppCompatActivity() {
             StorageUtils.createFolder(BotPathManager.ROOM)
             StorageUtils.createFolder(BotPathManager.SENDER)
             StorageUtils.createFolder(BotPathManager.SIMPLE)
+            StorageUtils.createFolder(BotPathManager.DATABASE)
             BotNotificationManager.createChannel(applicationContext)
 
             if (DataUtils.readData(applicationContext, "BotOn", "true").toBoolean()) {

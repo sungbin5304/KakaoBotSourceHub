@@ -30,14 +30,14 @@
             </intent-filter>
         </activity>
         <activity
-                android:name="com.sungbin.autoreply.bot.three.view.bot.activity.SplashActivity"
+                android:name=".view.bot.activity.SplashActivity"
                 android:theme="@style/FullScreen"/>
         <activity
-                android:name="com.sungbin.autoreply.bot.three.view.ui.imageview.activity.DetailImageActivity"
+                android:name=".view.ui.imageview.activity.DetailImageActivity"
                 android:configChanges="orientation|keyboardHidden|screenSize"
                 android:theme="@style/ImageViewDetailActivity" />
         <activity
-                android:name="com.sungbin.autoreply.bot.three.view.bot.activity.SimpleEditActivity"
+                android:name=".view.bot.activity.SimpleEditActivity"
                 android:theme="@style/AppThemeMaterial" />
         <activity
                 android:name=".view.chat.activity.DialogsActivity"
@@ -49,17 +49,23 @@
                 android:name=".view.hub.activity.PostViewActivity"
                 android:theme="@style/AppTheme.NoActionBar" />
         <activity
-                android:name="com.sungbin.autoreply.bot.three.view.bot.activity.ScriptEditActivity"
+                android:name=".view.bot.activity.ScriptEditActivity"
                 android:theme="@style/AppTheme.NoActionBar" />
         <activity
-                android:name="com.sungbin.autoreply.bot.three.view.bot.activity.DashboardActivity"
+                android:name=".view.bot.activity.DatabaseViewActivity"
+                android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+                android:name=".view.bot.activity.DashboardContentShowAllActivity"
+                android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+                android:name=".view.bot.activity.DashboardActivity"
                 android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
                 android:theme="@style/AppThemeWhiteStatusBar.NoActionBar" />
         <activity
-                android:name="com.sungbin.autoreply.bot.three.view.bot.activity.PermissionActivity"
+                android:name=".view.bot.activity.PermissionActivity"
                 android:theme="@style/AppThemeWhiteStatusBar.NoActionBar" />
         <activity
-                android:name="com.sungbin.autoreply.bot.three.view.bot.activity.LoginActivity"
+                android:name=".view.bot.activity.LoginActivity"
                 android:theme="@style/AppThemeWhiteStatusBar.NoActionBar" />
         <activity
                 android:name=".view.hub.activity.PostActivity"

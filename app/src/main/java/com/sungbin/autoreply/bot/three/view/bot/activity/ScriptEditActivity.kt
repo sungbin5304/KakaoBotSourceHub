@@ -1,5 +1,6 @@
 package com.sungbin.autoreply.bot.three.view.bot.activity
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Build
 import android.os.Bundle
@@ -8,21 +9,34 @@ import android.text.Layout
 import android.text.Selection
 import android.text.TextWatcher
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.PopupMenu
+import android.widget.Switch
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.GravityCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.balsikandar.crashreporter.CrashReporter
 import com.github.zawadz88.materialpopupmenu.popupMenu
+import com.google.android.material.textfield.TextInputEditText
 import com.sungbin.autoreply.bot.three.R
+import com.sungbin.autoreply.bot.three.adapter.bot.EditorFindAdapter
+import com.sungbin.autoreply.bot.three.dto.bot.EditorFindItem
 import com.sungbin.autoreply.bot.three.utils.bot.BotPathManager
-import com.sungbin.autoreply.bot.three.utils.ui.EdittextHistoryManager
 import com.sungbin.sungbintool.DataUtils
+import com.sungbin.sungbintool.DialogUtils
 import com.sungbin.sungbintool.StorageUtils
 import com.sungbin.sungbintool.ToastUtils
 import kotlinx.android.synthetic.main.activity_script_edit.*
+import kotlinx.android.synthetic.main.activity_script_edit.nv_navigation
 import kotlinx.android.synthetic.main.content_script_edit.*
+import kotlinx.android.synthetic.main.fragment_sandbox.*
 import org.mozilla.javascript.CompilerEnvirons
 import org.mozilla.javascript.Context
 import org.mozilla.javascript.Parser
@@ -36,19 +50,90 @@ class ScriptEditActivity : AppCompatActivity() {
     private val classNameList = ArrayList<String>()
     private val timer = Timer()
 
+    @SuppressLint("InflateParams")
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_script_edit)
-
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
-        val editText = sv_editor.editor
+        DialogUtils.showOnce(
+            this,
+            getString(R.string.experimental_function),
+            getString(R.string.editor_experimental_function_description),
+            "experimental_editor",
+            null, false
+        )
+
+        val editText = sce_editor.editor
         val scriptName = intent.getStringExtra("name")!!
         val textSize = DataUtils.readData(applicationContext, "TextSize", "17").toInt()
         val autoSave = DataUtils.readData(applicationContext, "AutoSave", "true").toBoolean()
         val notHighting = DataUtils.readData(applicationContext, "NotHighting", "false").toBoolean()
         val notErrorHighting = DataUtils.readData(applicationContext, "NotErrorHighting", "false").toBoolean()
+
+        val headerView = LayoutInflater
+            .from(applicationContext)
+            .inflate(R.layout.header_layout_editor_find, null, false)
+        val etFind = headerView.findViewById<TextInputEditText>(R.id.et_find)
+        val swIgnoreUpper = headerView.findViewById<Switch>(R.id.sw_ignore)
+        val rvList = headerView.findViewById<RecyclerView>(R.id.rv_list)
+
+        rvList.layoutManager = LinearLayoutManager(
+            applicationContext,
+            LinearLayoutManager.VERTICAL,
+            false
+        )
+
+        etFind.imeOptions = EditorInfo.IME_ACTION_SEARCH
+        etFind.setOnEditorActionListener { _, id, _ ->
+            if(id == EditorInfo.IME_ACTION_SEARCH){
+                val items = ArrayList<EditorFindItem>()
+                val result = sce_editor.findText(
+                    etFind.text.toString(),
+                    swIgnoreUpper.isChecked
+                )
+                if(result.isNotEmpty()){
+                    for(i in result.indices){
+                        val array = result[i]
+                        val item = EditorFindItem(
+                            editText.text.split("\n")[array[0]],
+                            etFind.text.toString(),
+                            array[0],
+                            array[1]
+                        )
+                        items.add(item)
+                    }
+                }
+                else {
+                    items.add(
+                        EditorFindItem(
+                            getString(R.string.find_none),
+                            "null",
+                            -1,
+                            -1
+                        )
+                    )
+                }
+                val adapter = EditorFindAdapter(items)
+                adapter.setOnItemClickListener { findText, _, line, index ->
+                    if(index > 0) {
+                        val i = getStartIndex(editText, line, index)
+                        editText.setSelection(i, i + findText.length)
+                    }
+                    dl_layout.closeDrawer(GravityCompat.START)
+                }
+                rvList.adapter = adapter
+                adapter.notifyDataSetChanged()
+            }
+            else return@setOnEditorActionListener false
+            return@setOnEditorActionListener true
+        }
+
+        nv_navigation.addHeaderView(headerView)
+
+        val typeface = ResourcesCompat.getFont(applicationContext, R.font.d2coding)
+        editText.typeface = typeface
 
         editText.textSize = textSize.toFloat()
         if(autoSave){
@@ -64,12 +149,10 @@ class ScriptEditActivity : AppCompatActivity() {
         }
 
         toolbar_title.text = scriptName
+        if(notHighting) sce_editor.applyHighlight = false
 
         val suggestList: ArrayList<String> = ArrayList()
         val list = ArrayList<String>()
-        val edittextHistoryManager = EdittextHistoryManager(
-                editText
-            )
         val items = arrayOf(
             "String",
             "File",
@@ -118,6 +201,19 @@ class ScriptEditActivity : AppCompatActivity() {
 
         action_left_slash.text = "\\"
 
+
+        ib_save.setOnClickListener {
+            StorageUtils.save(
+                "${BotPathManager.JS}/$scriptName.js",
+                editText.text.toString()
+            )
+            ToastUtils.show(
+                applicationContext,
+                getString(R.string.save_success),
+                ToastUtils.SHORT,
+                ToastUtils.SUCCESS
+            )
+        }
         ib_menu.setOnClickListener {
             val popupMenu = popupMenu {
                 section {
@@ -126,21 +222,21 @@ class ScriptEditActivity : AppCompatActivity() {
                         labelRes = R.string.string_undo
                         icon = R.drawable.ic_undo_white_24dp
                         callback = {
-                            edittextHistoryManager.undo()
+                            sce_editor.undo()
                         }
                     }
                     item {
                         labelRes = R.string.string_redo
                         icon = R.drawable.ic_redo_white_24dp
                         callback = {
-                            edittextHistoryManager.redo()
+                            sce_editor.redo()
                         }
                     }
                     item {
                         labelRes = R.string.string_search_kr
                         icon = R.drawable.ic_search_white_24dp
                         callback = {
-                            //검색
+                            dl_drawer.openDrawer(GravityCompat.START)
                         }
                     }
                     item {
@@ -193,8 +289,8 @@ class ScriptEditActivity : AppCompatActivity() {
         }
 
         action_indent.setOnClickListener { editText.insert("\t\t\t\t") }
-        action_undo.setOnClickListener { edittextHistoryManager.undo() }
-        action_redo.setOnClickListener { edittextHistoryManager.redo() }
+        action_undo.setOnClickListener { sce_editor.undo() }
+        action_redo.setOnClickListener { sce_editor.redo() }
         action_right_big.setOnClickListener { editText.insert("{") }
         action_left_big.setOnClickListener { editText.insert("}") }
         action_right_small.setOnClickListener { editText.insert("(") }
@@ -300,15 +396,22 @@ class ScriptEditActivity : AppCompatActivity() {
                         }
                     }
                 } catch (e: Exception) {
-                    Log.d("EEE", e.toString())
+                    CrashReporter.logException(e)
                 }
             }
         })
     }
 
+    private fun getStartIndex(editText: EditText, line: Int, index: Int): Int {
+        var i = 0
+        val texts = editText.text.split("\n")
+        for (n in 0..line) i += texts[n].length
+        return i + index
+    }
+
     override fun onBackPressed() {
-        timer.cancel()
         super.onBackPressed()
+        timer.cancel()
     }
 
     private fun loadClassName(source: String) {

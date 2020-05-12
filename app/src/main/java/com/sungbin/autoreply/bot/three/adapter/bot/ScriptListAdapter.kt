@@ -3,7 +3,6 @@ package com.sungbin.autoreply.bot.three.adapter.bot
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,22 +11,16 @@ import android.widget.Switch
 import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import cn.pedant.SweetAlert.SweetAlertDialog
 import com.github.zawadz88.materialpopupmenu.popupMenu
-import com.google.android.material.snackbar.Snackbar
 import com.sungbin.autoreply.bot.three.R
 import com.sungbin.autoreply.bot.three.dto.bot.ScriptListItem
 import com.sungbin.autoreply.bot.three.listener.KakaoTalkListener
 import com.sungbin.autoreply.bot.three.utils.bot.BotPathManager
 import com.sungbin.autoreply.bot.three.utils.bot.BotPowerUtils
-import com.sungbin.autoreply.bot.three.utils.bot.SimpleBotUtils
-import com.sungbin.autoreply.bot.three.utils.bot.StackUtils
-import com.sungbin.autoreply.bot.three.view.bot.activity.DashboardActivity
 import com.sungbin.autoreply.bot.three.view.bot.activity.ScriptEditActivity
 import com.sungbin.autoreply.bot.three.view.bot.activity.SimpleEditActivity
-import com.sungbin.autoreply.bot.three.view.bot.fragment.DashboardFragment
 import com.sungbin.sungbintool.DataUtils
 import com.sungbin.sungbintool.StorageUtils
 import com.sungbin.sungbintool.ToastUtils
@@ -39,6 +32,23 @@ class ScriptListAdapter(private val list: ArrayList<ScriptListItem>?,
     RecyclerView.Adapter<ScriptListAdapter.ScriptListViewHolder>() {
 
     private var ctx: Context? = null
+
+    interface OnScriptRemovedListener {
+        fun onRemoved()
+    }
+
+    private var listener: OnScriptRemovedListener? = null
+    fun setOnScriptRemovedListener(listener: OnScriptRemovedListener?) {
+        this.listener = listener
+    }
+
+    fun setOnScriptRemovedListener(listener: () -> Unit) {
+        this.listener = object : OnScriptRemovedListener {
+            override fun onRemoved() {
+                listener()
+            }
+        }
+    }
 
     inner class ScriptListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         var title: TextView = view.findViewById(R.id.tv_script_name)
@@ -222,105 +232,20 @@ class ScriptListAdapter(private val list: ArrayList<ScriptListItem>?,
                                 ToastUtils.SHORT, ToastUtils.INFO)
                         }
                     }
+                }
+                section {
+                    title = act.getString(R.string.string_danger)
                     item {
                         labelRes = R.string.string_delete
                         icon = R.drawable.ic_delete_white_24dp
                         callback = {
-                            val beforeDeleteItem = list[position]
-                            val beforeDeleteIndex = list.indexOf(beforeDeleteItem)
-
                             if (type == 1) {
-                                val path = "${BotPathManager.SIMPLE}/$name"
-
-                                val simpleItemLabel = arrayOf("type", "room", "reply", "sender", "message")
-                                val beforeDeleteValues = HashMap<String, String>()
-
-                                for(label in simpleItemLabel){
-                                    Log.d("AAA", label)
-                                    Log.d("BBB", SimpleBotUtils.get(name, label))
-                                    beforeDeleteValues[label] = SimpleBotUtils.get(name, label)
-                                }
-
-                                StorageUtils.deleteAll(path)
-
-                                list.remove(list[position])
-                                notifyDataSetChanged()
-                                val bar = Snackbar.make(view, "$name 자동응답이이 삭제되었습니다.", 3000)
-                                    .setActionTextColor(
-                                        ContextCompat.getColor(
-                                            ctx!!,
-                                            R.color.colorPrimaryDark
-                                        )
-                                    )
-                                    .setAction("되돌리기") {
-                                       StorageUtils.createFolder(path)
-                                       SimpleBotUtils.save(
-                                           name, beforeDeleteValues["sender"]!!,
-                                           beforeDeleteValues["room"]!!, beforeDeleteValues["type"]!!,
-                                           beforeDeleteValues["message"]!!, beforeDeleteValues["reply"]!!
-                                       )
-                                       list.add(beforeDeleteIndex, beforeDeleteItem)
-                                       notifyDataSetChanged()
-                                    }
-                                bar.view.setBackgroundColor(
-                                    ContextCompat.getColor(
-                                        ctx!!,
-                                        R.color.colorAccent
-                                    )
-                                )
-                                bar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
-                                    .typeface = ResourcesCompat.getFont(ctx!!, R.font.nanumgothic)
-                                bar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_action)
-                                    .typeface = ResourcesCompat.getFont(ctx!!, R.font.nanumgothic)
-                                bar.show()
+                                StorageUtils.deleteAll("${BotPathManager.SIMPLE}/$name")
                             }
                             else {
-                                val beforeDeleteSource = StorageUtils.read(
-                                    "${BotPathManager.JS}/$name.js",
-                                    """
-                            function response(room, msg, sender, isGroupChat, replier, ImageDB, package) {
-                                /*
-                                @String room : 메세지를 받은 방 이름 리턴
-                                @String sender : 메세지를 보낸 상대의 이름 리턴
-                                @Boolean isGroupChat : 메세지를 받은 방이 그룹채팅방(오픈채팅방은 그룹채팅방 취급) 인지 리턴
-                                @Object replier : 메세지를 받은 방의 Action를 담은 Object 리턴
-                                @Object ImageDB : 이미지 관련 데이터를 담은 Object 리턴
-                                @String package : 메세지를 받은 어플의 패키지명 리턴
-                                */
-                            }    
-                            """.trimIndent()
-                                )
-
                                 StorageUtils.delete("${BotPathManager.JS}/$name.js")
-                                list.remove(list[position])
-                                notifyDataSetChanged()
-                                val bar = Snackbar.make(view, "$name 스크립트가 삭제되었습니다.", 3000)
-                                    .setActionTextColor(
-                                        ContextCompat.getColor(
-                                            ctx!!,
-                                            R.color.colorPrimaryDark
-                                        )
-                                    )
-                                    .setAction("되돌리기") {
-                                        StorageUtils.save(
-                                            "KakaoTalkBotHub/Bots/JavaScript/$name.js",
-                                            beforeDeleteSource!!
-                                        )
-                                        list.add(beforeDeleteIndex, beforeDeleteItem)
-                                        notifyDataSetChanged()
-                                    }
-                                bar.view.setBackgroundColor(
-                                    ContextCompat.getColor(
-                                        ctx!!,
-                                        R.color.colorAccent
-                                    )
-                                )
-                                bar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
-                                    .typeface = ResourcesCompat.getFont(ctx!!, R.font.nanumgothic)
-                                bar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_action)
-                                    .typeface = ResourcesCompat.getFont(ctx!!, R.font.nanumgothic)
-                                bar.show()
                             }
+                            if(listener != null) listener!!.onRemoved()
                         }
                     }
                 }

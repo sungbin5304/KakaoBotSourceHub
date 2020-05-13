@@ -59,6 +59,7 @@ dependencies {
     implementation 'com.github.stfalcon:chatkit:0.3.3'
     implementation 'com.github.rustamg:file-dialogs:1.0'
     implementation 'com.github.marcoscgdev:Licenser:1.0.7'
+    implementation 'com.github.kimkevin:hangulparser:1.0.0'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     implementation 'com.github.f0ris.sweetalert:library:1.6.2'
     implementation 'com.github.sungbin5304:AndroidUtils:3.1.2'

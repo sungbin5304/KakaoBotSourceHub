@@ -1,6 +1,8 @@
 package com.sungbin.autoreply.bot.three.api
 
 import android.content.Context
+import com.github.kimkevin.hangulparser.HangulParser
+import com.sungbin.autoreply.bot.three.api.game.chosung.ChosungType
 import com.sungbin.autoreply.bot.three.utils.bot.BotPathManager
 import com.sungbin.autoreply.bot.three.utils.bot.LogUtils
 import com.sungbin.autoreply.bot.three.utils.bot.StackUtils
@@ -149,6 +151,40 @@ object ApiClass{
             @JSStaticFunction
             fun replyRoomShowAll(room: String, msg1: String, msg2: String): Boolean{
                 return com.sungbin.autoreply.bot.three.api.Api.replyRoomShowAll(room, msg1, msg2)
+            }
+        }
+    }
+
+    class Game : ScriptableObject(){
+        override fun getClassName(): String {
+            return "Game"
+        }
+
+        companion object {
+            @JvmStatic
+            @JSStaticFunction
+            fun getRandomChosungQuiz(): ArrayList<Any> {
+                return com.sungbin.autoreply.bot.three.api.Game.chosungQuiz(ChosungType.getRandom())
+            }
+
+            @JvmStatic
+            @JSStaticFunction
+            fun getChosungQuiz(type: Int): ArrayList<Any> {
+                return com.sungbin.autoreply.bot.three.api.Game.chosungQuiz(type)
+            }
+        }
+    }
+
+    class Korean : ScriptableObject(){
+        override fun getClassName(): String {
+            return "Korean"
+        }
+
+        companion object {
+            @JvmStatic
+            @JSStaticFunction
+            fun split(string: String): List<String> {
+                return HangulParser.disassemble(string)
             }
         }
     }

@@ -418,6 +418,8 @@ class KakaoTalkListener : NotificationListenerService() {
                 ScriptableObject.defineClass(scope, ApiClass.File::class.java, false, true)
                 ScriptableObject.defineClass(scope, ApiClass.DataBase::class.java, false, true)
                 ScriptableObject.defineClass(scope, ApiClass.Black::class.java, false, true)
+                ScriptableObject.defineClass(scope, ApiClass.Game::class.java, false, true)
+                ScriptableObject.defineClass(scope, ApiClass.Korean::class.java, false, true)
                 ScriptableObject.defineClass(scope, ApiClass.Utils::class.java, false, true)
 
                 val script = rhino.compileReader(FileReader(scriptFile), name, 0, null)

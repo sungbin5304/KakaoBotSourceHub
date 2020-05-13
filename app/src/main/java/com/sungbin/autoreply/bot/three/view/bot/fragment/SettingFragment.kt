@@ -13,8 +13,10 @@ import android.view.ViewGroup
 import android.widget.*
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieAnimationView
 import com.fsn.cauly.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.marcoscg.licenser.Library
@@ -26,16 +28,23 @@ import com.sungbin.autoreply.bot.three.adapter.apps.AppListAdapter
 import com.sungbin.autoreply.bot.three.api.Black
 import com.sungbin.autoreply.bot.three.dto.apps.AppInfo
 import com.sungbin.autoreply.bot.three.utils.bot.BotNotificationManager
+import com.sungbin.autoreply.bot.three.view.bot.activity.DashboardActivity
 import com.sungbin.sungbintool.DataUtils
 import com.sungbin.sungbintool.StringUtils
 import com.sungbin.sungbintool.ToastUtils
 import kotlinx.android.synthetic.main.fragment_setting.*
+import me.ibrahimsn.lib.SmoothBottomBar
 import java.text.Collator
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class SettingFragment : Fragment(), CaulyAdViewListener, CaulyInterstitialAdListener {
+class SettingFragment constructor(private val fragmentManage: FragmentManager,
+                                  private val view: Int,
+                                  private val bottombar: SmoothBottomBar,
+                                  private val textview: TextView,
+                                  private val isTutorial: Boolean
+) : Fragment(), CaulyAdViewListener, CaulyInterstitialAdListener {
 
     private var showInterstitial = false
 
@@ -65,6 +74,10 @@ class SettingFragment : Fragment(), CaulyAdViewListener, CaulyInterstitialAdList
     private var tvPreviewSize: TextView? = null
     private var fabSave: FloatingActionButton? = null
     private var tblFavorateLanguage: ToggleButtonLayout? = null
+
+    private lateinit var lavWelcome: LottieAnimationView
+    private lateinit var tvWelcome: TextView
+    private lateinit var btnDone: Button
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -97,6 +110,10 @@ class SettingFragment : Fragment(), CaulyAdViewListener, CaulyInterstitialAdList
         svLayout = view.findViewById(R.id.sv_layout)
         tblFavorateLanguage = view.findViewById(R.id.tbl_favorite_langauge)
 
+        lavWelcome = view.findViewById(R.id.lav_welcome)
+        btnDone = view.findViewById(R.id.btn_done)
+        tvWelcome = view.findViewById(R.id.tv_welcome)
+
         return view
     }
 
@@ -105,10 +122,9 @@ class SettingFragment : Fragment(), CaulyAdViewListener, CaulyInterstitialAdList
 
         Black.init(context!!)
 
-        val adInfo =
-            CaulyAdInfoBuilder(getString(R.string.cauly_ad_id))
-                .effect("TopSlide")
-                .bannerHeight("Fixed_50").build()
+        val adInfo = CaulyAdInfoBuilder(getString(R.string.cauly_ad_id))
+            .effect("TopSlide")
+            .bannerHeight("Fixed_50").build()
 
         val adView = CaulyAdView(context)
         adView.setAdInfo(adInfo)
@@ -117,6 +133,67 @@ class SettingFragment : Fragment(), CaulyAdViewListener, CaulyInterstitialAdList
 
         fabSave!!.hide()
 
+        if(isTutorial){
+            lavWelcome.visibility = View.VISIBLE
+            lavWelcome.playAnimation()
+            tvWelcome.visibility = View.VISIBLE
+            btnDone.visibility = View.VISIBLE
+            btnDone.setOnClickListener {
+                textview.text = getString(R.string.string_dashboard)
+                val fragmentTransaction = fragmentManage.beginTransaction()
+                fragmentTransaction.replace(view,
+                    DashboardFragment(fragmentManage, view, bottombar, textview, true)
+                ).commit()
+                bottombar.setActiveItem(0)
+                DashboardActivity.bottomBarIndex = 0
+            }
+
+            swBotOnoff!!.alpha = 0.1f
+            swAutoSave!!.alpha = 0.1f
+            swKeepScope!!.alpha = 0.1f
+            swNotHighting!!.alpha = 0.1f
+            swErrorBotOff!!.alpha = 0.1f
+            swNotErrorHighting!!.alpha = 0.1f
+            etTextSize!!.alpha = 0.1f
+            etPackages!!.alpha = 0.1f
+            etBlackRoom!!.alpha = 0.1f
+            etBlackSender!!.alpha = 0.1f
+            etHtmlLimitTime!!.alpha = 0.1f
+            sbTextSize!!.alpha = 0.1f
+            sbHtmlLimitTime!!.alpha = 0.1f
+            btnShowAd!!.alpha = 0.1f
+            btnRemoveAd!!.alpha = 0.1f
+            btnSelectApp!!.alpha = 0.1f
+            btnShowLicense!!.alpha = 0.1f
+            llAd!!.alpha = 0.1f
+            svLayout!!.alpha = 0.1f
+            tvPreviewSize!!.alpha = 0.1f
+            fabSave!!.alpha = 0.1f
+            tblFavorateLanguage!!.alpha = 0.1f
+
+            swBotOnoff!!.isEnabled = false
+            swAutoSave!!.isEnabled = false
+            swKeepScope!!.isEnabled = false
+            swNotHighting!!.isEnabled = false
+            swErrorBotOff!!.isEnabled = false
+            swNotErrorHighting!!.isEnabled = false
+            etTextSize!!.isEnabled = false
+            etPackages!!.isEnabled = false
+            etBlackRoom!!.isEnabled = false
+            etBlackSender!!.isEnabled = false
+            etHtmlLimitTime!!.isEnabled = false
+            sbTextSize!!.isEnabled = false
+            sbHtmlLimitTime!!.isEnabled = false
+            btnShowAd!!.isEnabled = false
+            btnRemoveAd!!.isEnabled = false
+            btnSelectApp!!.isEnabled = false
+            btnShowLicense!!.isEnabled = false
+            llAd!!.isEnabled = false
+            svLayout!!.isEnabled = false
+            tvPreviewSize!!.isEnabled = false
+            fabSave!!.isEnabled = false
+            tblFavorateLanguage!!.isEnabled = false
+        }
 
         val textSize = DataUtils.readData(context!!, "TextSize", "17")
         val htmlLimitTime = DataUtils.readData(context!!, "HtmlLimitTime", "5")
@@ -347,13 +424,15 @@ class SettingFragment : Fragment(), CaulyAdViewListener, CaulyInterstitialAdList
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             svLayout!!.setOnScrollChangeListener { _, _, y, _, oldY ->
-                 if (y > oldY) { //Down
-                     fabSave!!.show()
-                 }
-                 if (y < oldY) { //Up
-                     fabSave!!.hide()
-                 }
-             }
+                if (!isTutorial) {
+                    if (y > oldY) { //Down
+                        fabSave!!.show()
+                    }
+                    if (y < oldY) { //Up
+                        fabSave!!.hide()
+                    }
+                }
+            }
         }
 
     }
@@ -434,6 +513,7 @@ class SettingFragment : Fragment(), CaulyAdViewListener, CaulyInterstitialAdList
         return appInfoList
     }
 
+    @SuppressLint("InflateParams")
     private fun showAppSelectDialog(){
         ToastUtils.show(
             context!!,
@@ -718,6 +798,13 @@ class SettingFragment : Fragment(), CaulyAdViewListener, CaulyInterstitialAdList
                 Library(
                     "android json view",
                     "https://github.com/pvarry/android-json-viewer",
+                    License.APACHE2
+                )
+            )
+            .setLibrary(
+                Library(
+                    "Markdown",
+                    "https://github.com/tiagohm/MarkdownView",
                     License.APACHE2
                 )
             )

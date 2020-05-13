@@ -13,10 +13,12 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.remoteconfig.BuildConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
+import com.orhanobut.logger.AndroidLogAdapter
+import com.orhanobut.logger.Logger
 import com.sungbin.autoreply.bot.three.R
 import com.sungbin.autoreply.bot.three.utils.bot.BotNotificationManager
 import com.sungbin.autoreply.bot.three.utils.bot.BotPathManager
-import com.sungbin.autoreply.bot.three.view.bot.fragment.AddFragment
+import com.sungbin.autoreply.bot.three.view.bot.fragment.AddBotFragment
 import com.sungbin.autoreply.bot.three.view.bot.fragment.DashboardFragment
 import com.sungbin.autoreply.bot.three.view.bot.fragment.SandboxFragment
 import com.sungbin.autoreply.bot.three.view.bot.fragment.SettingFragment
@@ -28,12 +30,18 @@ import kotlinx.android.synthetic.main.content_dashboard.*
 @Suppress("DEPRECATION")
 class DashboardActivity  : AppCompatActivity() {
 
-    val fragmentManager: FragmentManager = this.supportFragmentManager
+    private val fragmentManager: FragmentManager = this.supportFragmentManager
+
+    companion object {
+        var bottomBarIndex = 0
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         try {
             super.onCreate(savedInstanceState)
             setContentView(R.layout.content_dashboard)
+
+            Logger.addLogAdapter(AndroidLogAdapter())
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 window.statusBarColor =
@@ -50,8 +58,7 @@ class DashboardActivity  : AppCompatActivity() {
                 .addOnCompleteListener { task: Task<Void?> ->
                     if (task.isSuccessful) {
                         remoteConfig.activateFetched()
-                    }
-                    else {
+                    } else {
                         ToastUtils.show(
                             this,
                             getString(R.string.error_get_data),
@@ -75,49 +82,89 @@ class DashboardActivity  : AppCompatActivity() {
             }
 
             val title = findViewById<TextView>(R.id.tv_dashboard)
-            fragmentManager.beginTransaction().add(R.id.framelayout, DashboardFragment()).commit()
+            fragmentManager.beginTransaction().add(
+                R.id.framelayout,
+                DashboardFragment(
+                    fragmentManager,
+                    R.id.framelayout,
+                    bottombar,
+                    title,
+                    false
+                )
+            ).commit()
             bottombar.onItemSelected = {
-                val fragmentTransaction = fragmentManager.beginTransaction()
-                when (it) {
-                    0 -> { //대쉬보드
-                        title.text = getString(R.string.string_dashboard)
-                        fragmentTransaction.replace(
-                            R.id.framelayout,
-                            DashboardFragment()
-                        ).commit()
-                    }
-                    1 -> { //센드박스
-                        title.text = getString(R.string.string_sandbox)
-                        fragmentTransaction.replace(
-                            R.id.framelayout,
-                            SandboxFragment()
-                        ).commit()
-                    }
-                    2 -> { //스크립트 추가
-                        title.text = getString(R.string.add_bot)
-                        fragmentTransaction.replace(
-                            R.id.framelayout,
-                            AddFragment(
-                                fragmentManager,
+                if (DataUtils.readData(applicationContext, "isTutorial", "true").toBoolean()) {
+                    bottombar.setActiveItem(bottomBarIndex)
+                }
+                else {
+                    val fragmentTransaction = fragmentManager.beginTransaction()
+                    when (it) {
+                        0 -> { //대쉬보드
+                            title.text = getString(R.string.string_dashboard)
+                            fragmentTransaction.replace(
                                 R.id.framelayout,
-                                bottombar
-                            )
-                        ).commit()
-                    }
-                    3 -> { //카톡봇 허브
-                        fragmentTransaction.replace(
-                            R.id.framelayout,
-                            DashboardFragment()
-                        ).commit()
-                        bottombar.setActiveItem(0)
-                        startActivity(Intent(this, MainActivity::class.java))
-                    }
-                    4 -> { //설정
-                        title.text = getString(R.string.string_setting)
-                        fragmentTransaction.replace(
-                            R.id.framelayout,
-                            SettingFragment()
-                        ).commit()
+                                DashboardFragment(
+                                    fragmentManager,
+                                    R.id.framelayout,
+                                    bottombar,
+                                    title,
+                                    false
+                                )
+                            ).commit()
+                        }
+                        1 -> { //센드박스
+                            title.text = getString(R.string.string_sandbox)
+                            fragmentTransaction.replace(
+                                R.id.framelayout,
+                                SandboxFragment(
+                                    fragmentManager,
+                                    R.id.framelayout,
+                                    bottombar,
+                                    title,
+                                    false
+                                )
+                            ).commit()
+                        }
+                        2 -> { //스크립트 추가
+                            title.text = getString(R.string.add_bot)
+                            fragmentTransaction.replace(
+                                R.id.framelayout,
+                                AddBotFragment(
+                                    fragmentManager,
+                                    R.id.framelayout,
+                                    bottombar,
+                                    title,
+                                    false
+                                )
+                            ).commit()
+                        }
+                        3 -> { //카톡봇 허브
+                            fragmentTransaction.replace(
+                                R.id.framelayout,
+                                DashboardFragment(
+                                    fragmentManager,
+                                    R.id.framelayout,
+                                    bottombar,
+                                    title,
+                                    false
+                                )
+                            ).commit()
+                            bottombar.setActiveItem(0)
+                            startActivity(Intent(this, MainActivity::class.java))
+                        }
+                        4 -> { //설정
+                            title.text = getString(R.string.string_setting)
+                            fragmentTransaction.replace(
+                                R.id.framelayout,
+                                SettingFragment(
+                                    fragmentManager,
+                                    R.id.framelayout,
+                                    bottombar,
+                                    title,
+                                    false
+                                )
+                            ).commit()
+                        }
                     }
                 }
             }

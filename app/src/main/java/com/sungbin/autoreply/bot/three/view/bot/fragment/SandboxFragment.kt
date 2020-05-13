@@ -14,9 +14,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
@@ -31,6 +33,7 @@ import com.sungbin.autoreply.bot.three.listener.OnSwipeListener
 import com.sungbin.autoreply.bot.three.utils.Base64Utils
 import com.sungbin.autoreply.bot.three.utils.RhinoUtils
 import com.sungbin.autoreply.bot.three.utils.bot.DebugUtils
+import com.sungbin.autoreply.bot.three.view.bot.activity.DashboardActivity
 import com.sungbin.autoreply.bot.three.view.ui.drawerlayout.DrawerLayout
 import com.sungbin.sungbintool.DataUtils
 import com.sungbin.sungbintool.DialogUtils
@@ -38,9 +41,16 @@ import com.sungbin.sungbintool.StringUtils
 import com.sungbin.sungbintool.ToastUtils
 import com.sungbin.sungbintool.ui.TagableRoundImageView
 import gun0912.tedimagepicker.builder.TedImagePicker
+import kotlinx.android.synthetic.main.fragment_sandbox.*
+import me.ibrahimsn.lib.SmoothBottomBar
 
 @Suppress("DEPRECATION", "NAME_SHADOWING", "SENSELESS_COMPARISON")
-class SandboxFragment : Fragment() {
+class SandboxFragment constructor(private val fragmentManage: FragmentManager,
+                                  private val view: Int,
+                                  private val bottombar: SmoothBottomBar,
+                                  private val textview: TextView,
+                                  private val isTutorial: Boolean
+) : Fragment() {
 
     private var rooms = ArrayList<String>()
     private var senders = ArrayList<String>()
@@ -60,6 +70,9 @@ class SandboxFragment : Fragment() {
     private lateinit var nvNavigation: NavigationView
     private lateinit var lavSwipe: LottieAnimationView
     private lateinit var trivProfile: TagableRoundImageView
+    private lateinit var clWelcome: ConstraintLayout
+    private lateinit var lavWelcome: LottieAnimationView
+    private lateinit var btnNext: Button
 
     @SuppressLint("InflateParams")
     override fun onCreateView(
@@ -78,6 +91,9 @@ class SandboxFragment : Fragment() {
         lavSwipe = view.findViewById(R.id.lav_swipe)
         dlLayout = view.findViewById(R.id.dl_layout)
         nvNavigation = view.findViewById(R.id.nv_navigation)
+        clWelcome = view.findViewById(R.id.cl_welcome)
+        lavWelcome = view.findViewById(R.id.lav_welcome)
+        btnNext = view.findViewById(R.id.btn_next)
 
         val headerView = LayoutInflater
             .from(context!!)
@@ -98,8 +114,18 @@ class SandboxFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        btn_next.setOnClickListener {
+            textview.text = getString(R.string.add_bot)
+            val fragmentTransaction = fragmentManage.beginTransaction()
+            fragmentTransaction.replace(view,
+                AddBotFragment(fragmentManage, view, bottombar, textview, isTutorial)
+            ).commit()
+            bottombar.setActiveItem(2)
+            DashboardActivity.bottomBarIndex = 2
+        }
+
         val isFirstOpen = DataUtils.readData(context!!, "FirstOpen", "true").toBoolean()
-        if(isFirstOpen){
+        if(isFirstOpen && !isTutorial){
             lavSwipe.playAnimation()
             lavSwipe.setOnTouchListener(object : OnSwipeListener(context!!) {
                 override fun onSwipeLeftToRight() {
@@ -132,9 +158,18 @@ class SandboxFragment : Fragment() {
             })
         }
         else {
-            tvGuide.visibility = View.GONE
-            lavSwipe.visibility = View.GONE
-            rlLayout.visibility = View.VISIBLE
+            if(isTutorial && isFirstOpen){
+                tvGuide.visibility = View.GONE
+                lavSwipe.visibility = View.GONE
+                clWelcome.visibility = View.VISIBLE
+                lavWelcome.playAnimation()
+                btnNext.visibility = View.VISIBLE
+            }
+            else {
+                tvGuide.visibility = View.GONE
+                lavSwipe.visibility = View.GONE
+                rlLayout.visibility = View.VISIBLE
+            }
         }
 
         swEvalMode.isChecked = DataUtils.readData(context!!, "EvalMode", "false").toBoolean()
@@ -236,11 +271,6 @@ class SandboxFragment : Fragment() {
         rooms.add(getString(R.string.icon_room_sender))
         msRoom.setItems(rooms.toList())
         val position = DataUtils.readData(context!!, "RoomPosition", "0").toInt()
-        adapter = DebugListAdapter(
-            DebugUtils.getMessges(rooms[position]),
-            senders[msSender.selectedIndex],
-            activity!!
-        )
         etRoom.text = StringUtils.toEditable(rooms[position])
         msRoom.selectedIndex = position
         msRoom.setOnItemSelectedListener { _, _, _, item ->
@@ -274,6 +304,7 @@ class SandboxFragment : Fragment() {
             }
         }
 
+        rvList.layoutManager = LinearLayoutManager(context)
         adapter = DebugListAdapter(
             DebugUtils.getMessges(rooms[msRoom.selectedIndex]),
             senders[msSender.selectedIndex],
@@ -339,9 +370,6 @@ class SandboxFragment : Fragment() {
             else 0
             rvList.scrollToPosition(scrollPosition)
         }
-
-        rvList.layoutManager = LinearLayoutManager(context)
-        rvList.adapter = adapter
     }
 
     private fun showRoomAddDialog(){

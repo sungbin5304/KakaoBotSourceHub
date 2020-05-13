@@ -328,6 +328,12 @@ object ApiClass{
 
             @JvmStatic
             @JSStaticFunction
+            fun delay(time: Int) {
+                Thread.sleep((time * 1000).toLong())
+            }
+
+            @JvmStatic
+            @JSStaticFunction
             fun makeNoti(title: String, content: String) {
                 com.sungbin.autoreply.bot.three.api.Utils.makeNoti(title, content)
             }

@@ -3,7 +3,9 @@
 </p>
 
 # DEPRECATED
-> So many source code is fool...So I decided start a new project with MVVM pattern.
+> So many source code is a fool...So I decided to start a new project with an MVVM pattern.
+
+-----
 
 # Description
 KakaotalkBotHub is an application that supports KakaoTalk Bot and Hub(similar to a GitHub) for KakaoTalk Bot.<br>

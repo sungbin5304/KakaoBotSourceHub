@@ -34,6 +34,7 @@ import com.sungbin.autoreply.bot.three.utils.Base64Utils
 import com.sungbin.autoreply.bot.three.utils.RhinoUtils
 import com.sungbin.autoreply.bot.three.utils.bot.DebugUtils
 import com.sungbin.autoreply.bot.three.view.bot.activity.DashboardActivity
+import com.sungbin.autoreply.bot.three.view.ui.bottombar.SmoothBottomBar
 import com.sungbin.autoreply.bot.three.view.ui.drawerlayout.DrawerLayout
 import com.sungbin.sungbintool.DataUtils
 import com.sungbin.sungbintool.DialogUtils
@@ -42,7 +43,6 @@ import com.sungbin.sungbintool.ToastUtils
 import com.sungbin.sungbintool.ui.TagableRoundImageView
 import gun0912.tedimagepicker.builder.TedImagePicker
 import kotlinx.android.synthetic.main.fragment_sandbox.*
-import me.ibrahimsn.lib.SmoothBottomBar
 
 @Suppress("DEPRECATION", "NAME_SHADOWING", "SENSELESS_COMPARISON")
 class SandboxFragment constructor(private val fragmentManage: FragmentManager,

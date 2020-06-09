@@ -16,6 +16,8 @@
             android:id="@+id/inputTitleLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_half"
+            android:layout_marginEnd="@dimen/margin_half"
             app:counterEnabled="true"
             app:counterMaxLength="20">
 
@@ -32,6 +34,8 @@
 
     <com.google.android.material.textfield.TextInputLayout
             android:layout_marginTop="5dp"
+            android:layout_marginStart="@dimen/margin_half"
+            android:layout_marginEnd="@dimen/margin_half"
             android:id="@+id/inputDescLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

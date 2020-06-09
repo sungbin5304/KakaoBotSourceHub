@@ -3,14 +3,20 @@ package com.sungbin.autoreply.bot.three.view.hub.fragment
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.firebase.database.*
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
 import com.sungbin.autoreply.bot.three.R
 import com.sungbin.autoreply.bot.three.adapter.hub.BoardListAdapter
 import com.sungbin.autoreply.bot.three.dto.hub.BoardActionItem
@@ -20,8 +26,6 @@ import com.sungbin.autoreply.bot.three.utils.chat.ChatModuleUtils
 import com.sungbin.autoreply.bot.three.view.hub.activity.PostActivity
 import com.sungbin.sungbintool.ToastUtils
 import com.sungbin.sungbintool.Utils
-import java.lang.Exception
-import kotlin.collections.ArrayList
 
 
 @Suppress("UNUSED_ANONYMOUS_PARAMETER")
@@ -57,6 +61,7 @@ class BoardListFragment : Fragment() {
 
         boardListView = view.findViewById<RecyclerView>(R.id.list)
         boardListView!!.layoutManager = LinearLayoutManager(context)
+        boardListView!!.addItemDecoration(DividerItemDecoration(activity!!, 1)) //아이템 구분선
         boardListView!!.adapter = adapter
 
         val post_board = view.findViewById<FloatingActionButton>(R.id.post_board)
@@ -71,7 +76,6 @@ class BoardListFragment : Fragment() {
                 post_board.show()
             }
         })
-
 
         post_board.setOnClickListener {
             ToastUtils.show(context!!,

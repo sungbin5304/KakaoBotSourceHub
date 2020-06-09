@@ -7,9 +7,9 @@ import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.NonNull
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.sungbin.autoreply.bot.three.R
 import com.sungbin.autoreply.bot.three.dto.hub.BoardListItem
@@ -29,7 +29,7 @@ class BoardListAdapter(private val list: ArrayList<BoardListItem>?,
         var desc: TextView = view.findViewById(R.id.board_desc)
         var good_count: TextView = view.findViewById(R.id.board_good_count)
         var bad_count: TextView = view.findViewById(R.id.board_bad_count)
-        var view: CardView = view.findViewById(R.id.board_view)
+        var view: LinearLayout = view.findViewById(R.id.board_view)
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): BoardViewHolder {

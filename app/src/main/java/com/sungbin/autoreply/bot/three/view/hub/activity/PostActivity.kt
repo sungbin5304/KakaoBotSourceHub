@@ -10,30 +10,29 @@ import android.os.Build
 import android.os.Bundle
 import android.text.InputFilter
 import android.view.*
-import android.widget.*
-
+import android.widget.Button
+import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import cn.pedant.SweetAlert.SweetAlertDialog
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
-
 import com.rarepebble.colorpicker.ColorPickerView
 import com.rustamg.filedialogs.FileDialog
 import com.rustamg.filedialogs.OpenFileDialog
 import com.sungbin.autoreply.bot.three.R
 import com.sungbin.autoreply.bot.three.dto.hub.BoardDataItem
-
-import java.io.File
-
-import cn.pedant.SweetAlert.SweetAlertDialog
 import com.sungbin.autoreply.bot.three.utils.FirebaseUtils
 import com.sungbin.autoreply.bot.three.utils.chat.ChatModuleUtils
 import com.sungbin.sungbintool.LayoutUtils
 import com.sungbin.sungbintool.ToastUtils
 import com.sungbin.sungbintool.Utils
 import jp.wasabeef.richeditor.RichEditor
+import java.io.File
 
 @Suppress("DEPRECATION", "UNUSED_ANONYMOUS_PARAMETER")
 class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
@@ -81,6 +80,7 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_post)
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         toolbar.title = ""

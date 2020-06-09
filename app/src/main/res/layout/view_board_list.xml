@@ -1,124 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/board_view"
+        android:padding="@dimen/margin_half"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_half"
-        tools:ignore="NestedWeights,RtlSymmetry,ContentDescription"
-        app:contentPadding="@dimen/margin_half"
-        app:cardElevation="5dp"
-        app:cardCornerRadius="12dp">
+        android:layout_height="50dp"
+        android:orientation="vertical"
+        android:weightSum="2"
+        tools:ignore="NestedWeights,RtlSymmetry,ContentDescription">
 
     <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="vertical"
-            android:weightSum="2">
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:weightSum="5">
+
+        <TextView
+                android:id="@+id/board_title"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:gravity="center|start"
+                android:textColor="@android:color/black"
+                android:paddingEnd="5dp"
+                android:singleLine="true"
+                tools:text="게시글 제목 미리보기"/>
+
+        <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/darker_gray"/>
 
         <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:orientation="horizontal"
-                android:weightSum="5">
+                android:weightSum="2">
 
-            <TextView
-                    android:id="@+id/board_title"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="4"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:gravity="center|start"
-                    android:textColor="@android:color/black"
-                    android:paddingEnd="5dp"
-                    android:singleLine="true"
-                    tools:text="게시글 제목 미리보기"/>
-
-            <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/darker_gray"/>
-
-            <LinearLayout
+            <ImageView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="horizontal"
-                    android:weightSum="2">
-
-                <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:src="@drawable/ic_face_good_pink_24dp"/>
-
-                <TextView
-                        android:id="@+id/board_good_count"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:textColor="@color/colorPrimaryDark"
-                        tools:text="0"/>
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal"
-                android:weightSum="5">
+                    android:gravity="center"
+                    android:src="@drawable/ic_face_good_pink_24dp"/>
 
             <TextView
-                    android:id="@+id/board_desc"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="4"
-                    android:textSize="13sp"
-                    android:paddingEnd="5dp"
-                    android:gravity="center|start"
-                    tools:text="게시글 설명 미리보기"/>
-
-            <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:background="@android:color/darker_gray"/>
-
-            <LinearLayout
+                    android:id="@+id/board_good_count"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="horizontal"
-                    android:weightSum="2">
-
-                <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:src="@drawable/ic_face_bad_pink_24dp"/>
-
-                <TextView
-                        android:id="@+id/board_bad_count"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:textColor="@color/colorPrimaryDark"
-                        tools:text="0"/>
-
-            </LinearLayout>
+                    android:gravity="center"
+                    android:textColor="@color/colorPrimaryDark"
+                    tools:text="0"/>
 
         </LinearLayout>
 
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:weightSum="5">
+
+        <TextView
+                android:id="@+id/board_desc"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:textSize="13sp"
+                android:paddingEnd="5dp"
+                android:gravity="center|start"
+                tools:text="게시글 설명 미리보기"/>
+
+        <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="@android:color/darker_gray"/>
+
+        <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+            <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:src="@drawable/ic_face_bad_pink_24dp"/>
+
+            <TextView
+                    android:id="@+id/board_bad_count"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:textColor="@color/colorPrimaryDark"
+                    tools:text="0"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

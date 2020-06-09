@@ -40,10 +40,10 @@ import com.sungbin.autoreply.bot.three.utils.bot.LogUtils
 import com.sungbin.autoreply.bot.three.utils.bot.RunTimeUtils
 import com.sungbin.autoreply.bot.three.view.bot.activity.DashboardActivity
 import com.sungbin.autoreply.bot.three.view.bot.activity.DashboardContentShowAllActivity
+import com.sungbin.autoreply.bot.three.view.ui.bottombar.SmoothBottomBar
 import com.sungbin.sungbintool.DataUtils
 import com.sungbin.sungbintool.StorageUtils
 import com.sungbin.sungbintool.StorageUtils.sdcard
-import me.ibrahimsn.lib.SmoothBottomBar
 import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
@@ -637,7 +637,7 @@ class DashboardFragment constructor(private val fragmentManage: FragmentManager,
         }
     }
 
-    private class ListDecoration : RecyclerView.ItemDecoration() {
+    private class ListDecoration : RecyclerView.ItemDecoration() { //아이템 간격
         override fun getItemOffsets(
             outRect: Rect,
             view: View,

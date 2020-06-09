@@ -7,47 +7,40 @@
         android:layout_height="match_parent"
         tools:context=".view.hub.activity.PostViewActivity">
 
-    <FrameLayout
+    <com.google.android.material.appbar.AppBarLayout
+            android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:theme="@style/AppTheme.NoActionBar.AppBarOverlay">
 
-        <com.google.android.material.appbar.AppBarLayout
-                android:layout_height="wrap_content"
+        <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:theme="@style/AppTheme.NoActionBar.AppBarOverlay">
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay">
 
-            <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="?attr/colorPrimary"
-                    app:popupTheme="@style/AppTheme.PopupOverlay">
+            <TextView
+                    android:id="@+id/toolbar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/string_post"
+                    android:textColor="@android:color/white"
+                    style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+                    android:layout_gravity="center"/>
 
-                <TextView
-                        android:id="@+id/toolbar_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/string_post"
-                        android:textStyle="bold"
-                        android:textColor="@android:color/white"
-                        style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
-                        android:layout_gravity="center"/>
+        </androidx.appcompat.widget.Toolbar>
 
-            </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
 
-        </com.google.android.material.appbar.AppBarLayout>
+    <include
+            layout="@layout/content_board_view"/>
 
-        <include
-                layout="@layout/content_board_view"/>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/comment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end"
-                android:layout_margin="@dimen/margin_default"
-                app:srcCompat="@drawable/ic_comment_white_24dp"/>
-
-    </FrameLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/margin_default"
+            app:srcCompat="@drawable/ic_comment_white_24dp"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

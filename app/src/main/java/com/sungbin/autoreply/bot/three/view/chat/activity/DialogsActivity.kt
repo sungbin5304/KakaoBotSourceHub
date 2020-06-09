@@ -31,9 +31,9 @@ import com.sungbin.autoreply.bot.three.dto.chat.item.MessageItem
 import com.sungbin.autoreply.bot.three.dto.chat.model.Dialog
 import com.sungbin.autoreply.bot.three.dto.chat.model.Message
 import com.sungbin.autoreply.bot.three.dto.chat.model.User
-import com.sungbin.autoreply.bot.three.utils.ui.ImageUtils
 import com.sungbin.autoreply.bot.three.utils.chat.ChatModuleUtils
 import com.sungbin.autoreply.bot.three.utils.ui.Glide
+import com.sungbin.autoreply.bot.three.utils.ui.ImageUtils
 import com.sungbin.sungbintool.ToastUtils
 import com.sungbin.sungbintool.Utils
 import com.sungbin.sungbintool.ui.TagableRoundImageView
@@ -84,63 +84,6 @@ class DialogsActivity : AppCompatActivity() {
         val openItems = ArrayList<Dialog>()
         val act = this
 
-        openReference.addChildEventListener(object : ChildEventListener {
-            override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
-                try {
-                    val item = dataSnapshot.getValue(DialogItem::class.java)!!
-                    val dialogItem = item.lastMessage!!
-                    val dialogUser = dialogItem.user!!
-                    val dialogUserItem = User(dialogUser.id!!, dialogUser.name!!,
-                        dialogUser.avatar!!, dialogUser.isOnline!!,
-                        dialogUser.roomList, dialogUser.friendsList)
-                    val message = Message(dialogItem.id!!, dialogItem.dialogIdString!!,
-                        dialogUserItem, dialogItem.text!!, dialogItem.createdAt!!,
-                        dialogItem.messageStatue!!, dialogItem.messageContent)
-                    val userList = ArrayList<User>()
-                    for(element in item.users!!){
-                        userList.add(User(element.id!!, element.name!!,
-                            element.avatar!!, element.isOnline!!,
-                            element.roomList, element.friendsList))
-                    }
-                    val dialog = Dialog(item.id!!, item.owner!!, item.dialogName!!, item.dialogPhoto!!,
-                        userList, message, item.unreadCount!!, item.messageType!!)
-                    ChatModuleUtils.addDialog(dialog)
-
-                    if(!openItems.contains(dialog)) openItems.add(dialog)
-
-                    val viewPagerAdapter = DialogListAdapter(
-                            act,
-                            groupItems,
-                            openItems,
-                            fab
-                        )
-                    viewPagerAdapter.notifyDataSetChanged()
-                    viewPagerAdapter.refresh()
-                    view_pager.adapter = viewPagerAdapter
-                    tab.setViewPager(view_pager)
-                }
-                catch (e: Exception) {
-                    Utils.error(applicationContext, e, "init open dialogs")
-                }
-            }
-
-            override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {
-
-            }
-
-            override fun onChildRemoved(dataSnapshot: DataSnapshot) {
-
-            }
-
-            override fun onChildMoved(dataSnapshot: DataSnapshot, s: String?) {
-
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-
-            }
-        })
-
         groupReference.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
                 try {
@@ -178,6 +121,63 @@ class DialogsActivity : AppCompatActivity() {
                     tab.setViewPager(view_pager)
                 }
                 catch (e: Exception) {
+                }
+            }
+
+            override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {
+
+            }
+
+            override fun onChildRemoved(dataSnapshot: DataSnapshot) {
+
+            }
+
+            override fun onChildMoved(dataSnapshot: DataSnapshot, s: String?) {
+
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+
+            }
+        })
+
+        openReference.addChildEventListener(object : ChildEventListener {
+            override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
+                try {
+                    val item = dataSnapshot.getValue(DialogItem::class.java)!!
+                    val dialogItem = item.lastMessage!!
+                    val dialogUser = dialogItem.user!!
+                    val dialogUserItem = User(dialogUser.id!!, dialogUser.name!!,
+                        dialogUser.avatar!!, dialogUser.isOnline!!,
+                        dialogUser.roomList, dialogUser.friendsList)
+                    val message = Message(dialogItem.id!!, dialogItem.dialogIdString!!,
+                        dialogUserItem, dialogItem.text!!, dialogItem.createdAt!!,
+                        dialogItem.messageStatue!!, dialogItem.messageContent)
+                    val userList = ArrayList<User>()
+                    for(element in item.users!!){
+                        userList.add(User(element.id!!, element.name!!,
+                            element.avatar!!, element.isOnline!!,
+                            element.roomList, element.friendsList))
+                    }
+                    val dialog = Dialog(item.id!!, item.owner!!, item.dialogName!!, item.dialogPhoto!!,
+                        userList, message, item.unreadCount!!, item.messageType!!)
+                    ChatModuleUtils.addDialog(dialog)
+
+                    if(!openItems.contains(dialog)) openItems.add(dialog)
+
+                    val viewPagerAdapter = DialogListAdapter(
+                        act,
+                        groupItems,
+                        openItems,
+                        fab
+                    )
+                    viewPagerAdapter.notifyDataSetChanged()
+                    viewPagerAdapter.refresh()
+                    view_pager.adapter = viewPagerAdapter
+                    tab.setViewPager(view_pager)
+                }
+                catch (e: Exception) {
+                    Utils.error(applicationContext, e, "init open dialogs")
                 }
             }
 

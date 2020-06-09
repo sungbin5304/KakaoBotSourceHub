@@ -17,10 +17,10 @@ import com.savvyapps.togglebuttonlayout.ToggleButtonLayout
 import com.sungbin.autoreply.bot.three.R
 import com.sungbin.autoreply.bot.three.utils.bot.BotPathManager
 import com.sungbin.autoreply.bot.three.view.bot.activity.DashboardActivity
+import com.sungbin.autoreply.bot.three.view.ui.bottombar.SmoothBottomBar
 import com.sungbin.sungbintool.DataUtils
 import com.sungbin.sungbintool.StorageUtils
 import com.sungbin.sungbintool.ToastUtils
-import me.ibrahimsn.lib.SmoothBottomBar
 
 class AddBotFragment constructor(private val fragmentManage: FragmentManager,
                                  private val view: Int,

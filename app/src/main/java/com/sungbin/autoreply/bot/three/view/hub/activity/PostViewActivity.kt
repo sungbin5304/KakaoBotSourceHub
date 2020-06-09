@@ -5,33 +5,27 @@ import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.text.InputFilter
-import android.util.Log
+import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatActivity
-import com.sungbin.autoreply.bot.three.R
-import com.sungbin.autoreply.bot.three.dto.hub.BoardDataItem
-import kotlinx.android.synthetic.main.activity_board_view.*
-import kotlinx.android.synthetic.main.activity_board_view.toolbar
-import kotlinx.android.synthetic.main.content_board_view.*
-import android.view.Gravity
 import android.webkit.WebView
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.*
+import com.sungbin.autoreply.bot.three.R
 import com.sungbin.autoreply.bot.three.adapter.hub.CommentListAdapter
 import com.sungbin.autoreply.bot.three.dto.hub.BoardActionItem
+import com.sungbin.autoreply.bot.three.dto.hub.BoardDataItem
 import com.sungbin.autoreply.bot.three.dto.hub.CommentListItem
-import com.sungbin.autoreply.bot.three.utils.FirebaseUtils
 import com.sungbin.autoreply.bot.three.utils.chat.ChatModuleUtils
 import com.sungbin.sungbintool.LayoutUtils
 import com.sungbin.sungbintool.ToastUtils
 import com.sungbin.sungbintool.Utils
-import kotlinx.android.synthetic.main.content_comment_page.*
-import kotlin.collections.ArrayList
+import kotlinx.android.synthetic.main.activity_board_view.*
+import kotlinx.android.synthetic.main.content_board_view.*
 
 
 @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
@@ -51,8 +45,6 @@ class PostViewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_board_view)
-        toolbar.title = ""
-        setSupportActionBar(toolbar)
 
         viewer = findViewById(R.id.viewer)
 
@@ -257,7 +249,7 @@ class PostViewActivity : AppCompatActivity() {
             }
         }
 
-        comment.setOnClickListener {
+       /* comment.setOnClickListener {
             //slideUp!!.show()
             toolbar_title.text = boardDataItem!!.title + " - 댓글"
         }
@@ -291,22 +283,22 @@ class PostViewActivity : AppCompatActivity() {
             }
 
             override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {
-                /*val commentDataItem = dataSnapshot.getValue(CommentListItem::class.java)
-                Log.d("SSS", commentDataItem!!.comment)*/
-                /*Utils.toast(applicationContext, "댓글이 수정되었습니다.\n게시글을 다시 로드하시면 반영됩니다.",
-                    FancyToast.LENGTH_SHORT, FancyToast.SUCCESS)*/
+                *//*val commentDataItem = dataSnapshot.getValue(CommentListItem::class.java)
+                Log.d("SSS", commentDataItem!!.comment)*//*
+                *//*Utils.toast(applicationContext, "댓글이 수정되었습니다.\n게시글을 다시 로드하시면 반영됩니다.",
+                    FancyToast.LENGTH_SHORT, FancyToast.SUCCESS)*//*
             }
 
             override fun onChildRemoved(dataSnapshot: DataSnapshot) {
-                /*val commentDataItem = dataSnapshot.getValue(CommentListItem::class.java)
+                *//*val commentDataItem = dataSnapshot.getValue(CommentListItem::class.java)
                 Log.d("TTT", commentDataItem!!.comment)
                 //items!!.remove(commentDataItem)
                 //commentItemCash.remove(commentDataItem)
                 Log.d("SSS", items!!.contains(commentDataItem).toString())
                 //adapter!!.deleteItem(items!!.indexOf(commentDataItem))
-                adapter!!.notifyDataSetChanged()*/
-               /* Utils.toast(applicationContext, "댓글이 삭제되었습니다.\n게시글을 다시 로드하시면 반영됩니다.",
-                    FancyToast.LENGTH_SHORT, FancyToast.SUCCESS)*/
+                adapter!!.notifyDataSetChanged()*//*
+               *//* Utils.toast(applicationContext, "댓글이 삭제되었습니다.\n게시글을 다시 로드하시면 반영됩니다.",
+                    FancyToast.LENGTH_SHORT, FancyToast.SUCCESS)*//*
             }
 
             override fun onChildMoved(dataSnapshot: DataSnapshot, s: String?) {
@@ -370,7 +362,7 @@ class PostViewActivity : AppCompatActivity() {
                 }
             }
             dialog.show()
-        }
+        }*/
     }
 
     override fun onBackPressed() {

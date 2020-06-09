@@ -34,13 +34,13 @@
     <View
             android:id="@+id/view"
             android:layout_width="match_parent"
-            android:layout_height="00.5dp"
+            android:layout_height="0.5dp"
             android:layout_gravity="bottom"
             android:layout_alignParentBottom="true"
             android:background="#9e9e9e"
             app:layout_constraintBottom_toTopOf="@id/bottombar"/>
 
-    <me.ibrahimsn.lib.SmoothBottomBar
+    <com.sungbin.autoreply.bot.three.view.ui.bottombar.SmoothBottomBar
             android:id="@+id/bottombar"
             android:layout_width="match_parent"
             android:layout_height="70dp"
@@ -51,7 +51,6 @@
             app:indicatorColor="@color/colorLightAccent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:menu="@menu/dashboard_menu"
-            app:textColor="@color/colorPrimaryDark"
-            tools:layout_editor_absoluteX="82dp" />
+            app:textColor="@color/colorPrimaryDark" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

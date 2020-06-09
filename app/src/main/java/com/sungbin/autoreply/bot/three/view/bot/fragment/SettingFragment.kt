@@ -29,11 +29,11 @@ import com.sungbin.autoreply.bot.three.api.Black
 import com.sungbin.autoreply.bot.three.dto.apps.AppInfo
 import com.sungbin.autoreply.bot.three.utils.bot.BotNotificationManager
 import com.sungbin.autoreply.bot.three.view.bot.activity.DashboardActivity
+import com.sungbin.autoreply.bot.three.view.ui.bottombar.SmoothBottomBar
 import com.sungbin.sungbintool.DataUtils
 import com.sungbin.sungbintool.StringUtils
 import com.sungbin.sungbintool.ToastUtils
 import kotlinx.android.synthetic.main.fragment_setting.*
-import me.ibrahimsn.lib.SmoothBottomBar
 import java.text.Collator
 import java.util.*
 import kotlin.collections.ArrayList

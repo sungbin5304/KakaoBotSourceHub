@@ -15,6 +15,7 @@
             android:icon="@drawable/icon"
             android:label="@string/app_name"
             android:requestLegacyExternalStorage="true"
+            android:hardwareAccelerated="true"
             android:supportsRtl="true"
             android:theme="@style/AppTheme.NoActionBar"
             android:usesCleartextTraffic="true"
@@ -38,18 +39,20 @@
                 android:theme="@style/ImageViewDetailActivity" />
         <activity
                 android:name=".view.bot.activity.SimpleEditActivity"
+                android:windowSoftInputMode="stateHidden|adjustResize"
                 android:theme="@style/AppThemeMaterial" />
         <activity
                 android:name=".view.chat.activity.DialogsActivity"
                 android:theme="@style/AppThemeMaterial" />
         <activity
                 android:name=".view.chat.activity.MessagesActivity"
-                android:theme="@style/AppTheme.NoActionBar" />
+                android:theme="@style/AppTheme" />
         <activity
                 android:name=".view.hub.activity.PostViewActivity"
                 android:theme="@style/AppTheme.NoActionBar" />
         <activity
                 android:name=".view.bot.activity.ScriptEditActivity"
+                android:windowSoftInputMode="stateHidden|adjustResize"
                 android:theme="@style/AppTheme.NoActionBar" />
         <activity
                 android:name=".view.bot.activity.DatabaseViewActivity"
@@ -69,6 +72,7 @@
                 android:theme="@style/AppThemeWhiteStatusBar.NoActionBar" />
         <activity
                 android:name=".view.hub.activity.PostActivity"
+                android:windowSoftInputMode="stateHidden|adjustResize"
                 android:theme="@style/AppTheme.NoActionBar" />
         <activity
                 android:name=".view.hub.activity.MainActivity"

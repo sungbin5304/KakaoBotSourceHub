@@ -24,7 +24,8 @@ import com.sungbin.autoreply.bot.three.view.bot.fragment.SandboxFragment
 import com.sungbin.autoreply.bot.three.view.bot.fragment.SettingFragment
 import com.sungbin.autoreply.bot.three.view.hub.activity.MainActivity
 import com.sungbin.sungbintool.*
-import kotlinx.android.synthetic.main.content_dashboard.*
+import kotlinx.android.synthetic.main.content_dashboard.bottombar
+import kotlinx.android.synthetic.main.content_dashboard_new.*
 
 
 @Suppress("DEPRECATION")
@@ -39,13 +40,16 @@ class DashboardActivity  : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         try {
             super.onCreate(savedInstanceState)
-            setContentView(R.layout.content_dashboard)
-
+            setContentView(R.layout.content_dashboard_new)
             Logger.addLogAdapter(AndroidLogAdapter())
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 window.statusBarColor =
                     ContextCompat.getColor(applicationContext, R.color.colorWhite)
+            }
+
+            fab_add.setOnClickListener {
+
             }
 
             val remoteConfig = FirebaseRemoteConfig.getInstance()
@@ -92,6 +96,9 @@ class DashboardActivity  : AppCompatActivity() {
                     false
                 )
             ).commit()
+
+            bottombar.ignoredIndex = 2
+            bottombar.alwaysWhiteTintIndex = 2
             bottombar.onItemSelected = {
                 if (DataUtils.readData(applicationContext, "isTutorial", "true").toBoolean()) {
                     bottombar.setActiveItem(bottomBarIndex)

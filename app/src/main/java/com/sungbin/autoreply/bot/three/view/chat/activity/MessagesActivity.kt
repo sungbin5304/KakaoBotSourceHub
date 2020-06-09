@@ -131,6 +131,16 @@ class MessagesActivity : AppCompatActivity(),
         dialog = ChatModuleUtils.getDialog(intent.getStringExtra("dialogId")!!)
         imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
+        if(dialog == null){
+            ToastUtils.show(
+                applicationContext,
+                getString(R.string.cant_load_chat_module),
+                ToastUtils.SHORT,
+                ToastUtils.WARNING
+            )
+            return
+        }
+
         supportActionBar!!.title = dialog!!.dialogName
         reference = reference.child("Chat").child("Messages").child(dialog!!.id)
 

@@ -29,10 +29,7 @@ import com.sungbin.autoreply.bot.three.R
 import com.sungbin.autoreply.bot.three.adapter.bot.EditorFindAdapter
 import com.sungbin.autoreply.bot.three.dto.bot.EditorFindItem
 import com.sungbin.autoreply.bot.three.utils.bot.BotPathManager
-import com.sungbin.sungbintool.DataUtils
-import com.sungbin.sungbintool.DialogUtils
-import com.sungbin.sungbintool.StorageUtils
-import com.sungbin.sungbintool.ToastUtils
+import com.sungbin.sungbintool.*
 import kotlinx.android.synthetic.main.activity_script_edit.*
 import kotlinx.android.synthetic.main.activity_script_edit.nv_navigation
 import kotlinx.android.synthetic.main.content_script_edit.*
@@ -61,7 +58,7 @@ class ScriptEditActivity : AppCompatActivity() {
             this,
             getString(R.string.experimental_function),
             getString(R.string.editor_experimental_function_description),
-            "experimental_editor",
+            "experimental_editor2",
             null, false
         )
 
@@ -213,6 +210,7 @@ class ScriptEditActivity : AppCompatActivity() {
                 ToastUtils.SHORT,
                 ToastUtils.SUCCESS
             )
+            Utils.copy(applicationContext, editText.text.toString())
         }
         ib_menu.setOnClickListener {
             val popupMenu = popupMenu {
@@ -280,6 +278,7 @@ class ScriptEditActivity : AppCompatActivity() {
                                 ToastUtils.SHORT,
                                 ToastUtils.SUCCESS
                             )
+                            Utils.copy(applicationContext, editText.text.toString())
                         }
                     }
                 }
@@ -459,6 +458,7 @@ class ScriptEditActivity : AppCompatActivity() {
                     ToastUtils.SHORT,
                     ToastUtils.SUCCESS
                 )
+                Utils.copy(activity, editText.text.toString())
             }
         }
     }

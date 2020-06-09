@@ -49,7 +49,7 @@ class DashboardActivity  : AppCompatActivity() {
             }
 
             fab_add.setOnClickListener {
-
+                //TODO: 스크립트 추가 바텀다이얼로그
             }
 
             val remoteConfig = FirebaseRemoteConfig.getInstance()

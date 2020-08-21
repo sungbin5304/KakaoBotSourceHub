@@ -45,11 +45,12 @@ import gun0912.tedimagepicker.builder.TedImagePicker
 import kotlinx.android.synthetic.main.fragment_sandbox.*
 
 @Suppress("DEPRECATION", "NAME_SHADOWING", "SENSELESS_COMPARISON")
-class SandboxFragment constructor(private val fragmentManage: FragmentManager,
-                                  private val view: Int,
-                                  private val bottombar: SmoothBottomBar,
-                                  private val textview: TextView,
-                                  private val isTutorial: Boolean
+class SandboxFragment constructor(
+    private val fragmentManage: FragmentManager,
+    private val view: Int,
+    private val bottombar: SmoothBottomBar,
+    private val textview: TextView,
+    private val isTutorial: Boolean
 ) : Fragment() {
 
     private var rooms = ArrayList<String>()
@@ -117,7 +118,8 @@ class SandboxFragment constructor(private val fragmentManage: FragmentManager,
         btn_next.setOnClickListener {
             textview.text = getString(R.string.add_bot)
             val fragmentTransaction = fragmentManage.beginTransaction()
-            fragmentTransaction.replace(view,
+            fragmentTransaction.replace(
+                view,
                 AddBotFragment(fragmentManage, view, bottombar, textview, isTutorial)
             ).commit()
             bottombar.setActiveItem(2)
@@ -125,7 +127,7 @@ class SandboxFragment constructor(private val fragmentManage: FragmentManager,
         }
 
         val isFirstOpen = DataUtils.readData(context!!, "FirstOpen", "true").toBoolean()
-        if(isFirstOpen && !isTutorial){
+        if (isFirstOpen && !isTutorial) {
             lavSwipe.playAnimation()
             lavSwipe.setOnTouchListener(object : OnSwipeListener(context!!) {
                 override fun onSwipeLeftToRight() {
@@ -140,7 +142,7 @@ class SandboxFragment constructor(private val fragmentManage: FragmentManager,
                         rlLayout.visibility = View.VISIBLE
                         dlLayout.openDrawer(GravityCompat.START)
                         DialogUtils.showOnce(
-                            context!!,
+                            activity!!,
                             getString(R.string.experimental_function),
                             getString(R.string.sandbox_experimental_function_description),
                             "experimental_sandbox",
@@ -149,23 +151,24 @@ class SandboxFragment constructor(private val fragmentManage: FragmentManager,
                     }, 1000)
 
                 }
+
                 override fun onSwipeRightToLeft() {
                 }
+
                 override fun onSwipeBottomToTop() {
                 }
+
                 override fun onSwipeTopToBottom() {
                 }
             })
-        }
-        else {
-            if(isTutorial && isFirstOpen){
+        } else {
+            if (isTutorial && isFirstOpen) {
                 tvGuide.visibility = View.GONE
                 lavSwipe.visibility = View.GONE
                 clWelcome.visibility = View.VISIBLE
                 lavWelcome.playAnimation()
                 btnNext.visibility = View.VISIBLE
-            }
-            else {
+            } else {
                 tvGuide.visibility = View.GONE
                 lavSwipe.visibility = View.GONE
                 rlLayout.visibility = View.VISIBLE
@@ -185,7 +188,7 @@ class SandboxFragment constructor(private val fragmentManage: FragmentManager,
         etRoom.text = StringUtils.toEditable(
             DataUtils.readData(context!!, "DebugRoom", "Debug Room")
         )
-        etRoom.addTextChangedListener(object : TextWatcher{
+        etRoom.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(editable: Editable?) {
                 DataUtils.saveData(context!!, "DebugRoom", editable.toString())
             }
@@ -199,7 +202,7 @@ class SandboxFragment constructor(private val fragmentManage: FragmentManager,
         })
 
         senders = DebugUtils.getSenderList()
-        if(senders.isNotEmpty()){
+        if (senders.isNotEmpty()) {
             Glide
                 .with(context!!)
                 .load(
@@ -317,10 +320,13 @@ class SandboxFragment constructor(private val fragmentManage: FragmentManager,
             override fun onSwipeLeftToRight() {
                 dlLayout.openDrawer(GravityCompat.START)
             }
+
             override fun onSwipeRightToLeft() {
             }
+
             override fun onSwipeBottomToTop() {
             }
+
             override fun onSwipeTopToBottom() {
             }
         })
@@ -331,7 +337,7 @@ class SandboxFragment constructor(private val fragmentManage: FragmentManager,
             val sender = senders[msSender.selectedIndex]
             val isGroupChat = swGroupChat.isChecked
 
-            if(swEvalMode.isChecked) room = getString(R.string.eval_room)
+            if (swEvalMode.isChecked) room = getString(R.string.eval_room)
 
             val messageItem =
                 DebugMessageItem(
@@ -341,18 +347,17 @@ class SandboxFragment constructor(private val fragmentManage: FragmentManager,
 
             DebugUtils.addMessage(room, messageItem)
 
-            if(swEvalMode.isChecked) {
+            if (swEvalMode.isChecked) {
                 val result = RhinoUtils(context!!).runJs(msg)
 
                 val resultItem =
                     DebugMessageItem(
-                        getString(R.string.bot_name),
+                        getString(R.string.default_bot_name),
                         result
                     )
 
                 DebugUtils.addMessage(room, resultItem)
-            }
-            else {
+            } else {
                 KakaoTalkListener.chatHook(
                     sender, msg, room,
                     isGroupChat, null, null,
@@ -364,15 +369,14 @@ class SandboxFragment constructor(private val fragmentManage: FragmentManager,
             etInput.text = StringUtils.toEditable("")
             val messages = DebugUtils.getMessges(room)
             adapter.notifyDataSetChanged()
-            val scrollPosition = if(messages != null) {
+            val scrollPosition = if (messages != null) {
                 messages.size - 1
-            }
-            else 0
+            } else 0
             rvList.scrollToPosition(scrollPosition)
         }
     }
 
-    private fun showRoomAddDialog(){
+    private fun showRoomAddDialog() {
         lateinit var alert: AlertDialog
         val dialog = AlertDialog.Builder(context)
         dialog.setTitle(getString(R.string.add_debug_room))
@@ -381,15 +385,14 @@ class SandboxFragment constructor(private val fragmentManage: FragmentManager,
         dialog.setView(edittext)
         dialog.setPositiveButton(getString(R.string.add_done)) { _, _ ->
             val name = edittext.text.toString()
-            if(name.isBlank()){
+            if (name.isBlank()) {
                 ToastUtils.show(
                     context!!,
                     getString(R.string.input_room_name),
                     ToastUtils.SHORT,
                     ToastUtils.WARNING
                 )
-            }
-            else {
+            } else {
                 DebugUtils.saveRoom(name)
                 rooms = DebugUtils.getRoomList()
                 rooms.add(getString(R.string.eval_room))
@@ -407,7 +410,7 @@ class SandboxFragment constructor(private val fragmentManage: FragmentManager,
     }
 
     @SuppressLint("InflateParams")
-    private fun showSenderAddDialog(){
+    private fun showSenderAddDialog() {
         var base64: String? = null
         val dialog = AlertDialog.Builder(context)
         dialog.setTitle(getString(R.string.add_sender))
@@ -423,7 +426,7 @@ class SandboxFragment constructor(private val fragmentManage: FragmentManager,
             val iconDialog = AlertDialog.Builder(context)
             iconDialog.setTitle(getString(R.string.select_sender_profile))
             iconDialog.setSingleChoiceItems(items, -1) { _, id ->
-                if(id == 0){
+                if (id == 0) {
                     TedImagePicker
                         .with(context!!)
                         .start {
@@ -434,27 +437,27 @@ class SandboxFragment constructor(private val fragmentManage: FragmentManager,
                                 .into(icon)
                             iconAlert.cancel()
                         }
-                }
-                else {
+                } else {
                     iconAlert.cancel()
                     lateinit var inputAlert: AlertDialog
                     val inputDialog = AlertDialog.Builder(context)
                     inputDialog.setTitle(getString(R.string.input_base64))
 
                     val edittext = EditText(context)
-                    val clipboard = context!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                    val clipboard =
+                        context!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                     try {
                         edittext.text =
                             StringUtils.toEditable(clipboard.primaryClip!!.getItemAt(0).text.toString())
-                    } catch (ignored: Exception) {}
-                    inputDialog.setPositiveButton(getString(R.string.input_done)){ _, _ ->
-                        try{
+                    } catch (ignored: Exception) {
+                    }
+                    inputDialog.setPositiveButton(getString(R.string.input_done)) { _, _ ->
+                        try {
                             base64 = edittext.text.toString()
                             val bitmap = Base64Utils.base642bitmap(edittext.text.toString())
                             icon.setImageBitmap(bitmap)
                             inputAlert.dismiss()
-                        }
-                        catch (e: Exception){
+                        } catch (e: Exception) {
                             ToastUtils.show(
                                 context!!,
                                 getString(R.string.not_base64_image),
@@ -472,17 +475,16 @@ class SandboxFragment constructor(private val fragmentManage: FragmentManager,
             iconAlert = iconDialog.create()
             iconAlert.show()
         }
-        dialog.setPositiveButton(getString(R.string.add_done)){ _, _ ->
+        dialog.setPositiveButton(getString(R.string.add_done)) { _, _ ->
             val name = input.text.toString()
-            if(name.isBlank()){
+            if (name.isBlank()) {
                 ToastUtils.show(
                     context!!,
                     getString(R.string.input_sender_name),
                     ToastUtils.SHORT,
                     ToastUtils.WARNING
                 )
-            }
-            else {
+            } else {
                 if (base64 != null) {
                     DebugUtils.saveSender(
                         name,

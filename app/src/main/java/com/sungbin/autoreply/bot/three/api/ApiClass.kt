@@ -13,10 +13,10 @@ import org.mozilla.javascript.annotations.JSStaticFunction
 import java.text.SimpleDateFormat
 import java.util.*
 
-object ApiClass{
+object ApiClass {
 
     private var context: Context? = null
-    fun setContext(ctx: Context){
+    fun setContext(ctx: Context) {
         context = ctx
     }
 
@@ -71,7 +71,7 @@ object ApiClass{
             }
 
         }
-   }
+    }
 
     class AppData : ScriptableObject() {
         override fun getClassName(): String {
@@ -129,7 +129,7 @@ object ApiClass{
         }
     }
 
-    class Api : ScriptableObject(){
+    class Api : ScriptableObject() {
         override fun getClassName(): String {
             return "Api"
         }
@@ -137,7 +137,7 @@ object ApiClass{
         companion object {
             @JvmStatic
             @JSStaticFunction
-            fun getContext(): Context{
+            fun getContext(): Context {
                 return context!!
             }
 
@@ -149,13 +149,13 @@ object ApiClass{
 
             @JvmStatic
             @JSStaticFunction
-            fun replyRoomShowAll(room: String, msg1: String, msg2: String): Boolean{
+            fun replyRoomShowAll(room: String, msg1: String, msg2: String): Boolean {
                 return com.sungbin.autoreply.bot.three.api.Api.replyRoomShowAll(room, msg1, msg2)
             }
         }
     }
 
-    class Game : ScriptableObject(){
+    class Game : ScriptableObject() {
         override fun getClassName(): String {
             return "Game"
         }
@@ -175,7 +175,7 @@ object ApiClass{
         }
     }
 
-    class Korean : ScriptableObject(){
+    class Korean : ScriptableObject() {
         override fun getClassName(): String {
             return "Korean"
         }
@@ -294,13 +294,13 @@ object ApiClass{
 
             @JvmStatic
             @JSStaticFunction
-            fun delete(path: String): Boolean{
+            fun delete(path: String): Boolean {
                 return StorageUtils.delete(path)
             }
 
             @JvmStatic
             @JSStaticFunction
-            fun deleteAll(path: String): Boolean{
+            fun deleteAll(path: String): Boolean {
                 return StorageUtils.deleteAll(path)
             }
         }
@@ -377,21 +377,20 @@ object ApiClass{
             @JvmStatic
             @JSStaticFunction
             fun getHtml(link: String, fromJsoup: Boolean = true): String? {
-                return if(!fromJsoup){
+                return if (!fromJsoup) {
                     com.sungbin.autoreply.bot.three.api.Api.getHtmlFromJava(link)
-                }
-                else com.sungbin.autoreply.bot.three.api.Api.getHtmlFromJsoup(link)
+                } else com.sungbin.autoreply.bot.three.api.Api.getHtmlFromJsoup(link)
             }
 
             @JvmStatic
             @JSStaticFunction
-            fun post(address: String, postName: NativeArray, postData: NativeArray): String{
+            fun post(address: String, postName: NativeArray, postData: NativeArray): String {
                 return com.sungbin.autoreply.bot.three.api.Api.post(address, postName, postData)
             }
 
             @JvmStatic
             @JSStaticFunction
-            fun showAll(): String{
+            fun showAll(): String {
                 return "\u200b".repeat(500)
             }
 

@@ -15,10 +15,11 @@ import com.sungbin.autoreply.bot.three.R
 import com.sungbin.autoreply.bot.three.dto.bot.LogListItem
 import com.sungbin.autoreply.bot.three.utils.bot.LogUtils
 
-class LogListAdapter (private val list: ArrayList<LogListItem>?, private val act: Activity) :
+class LogListAdapter(private val list: ArrayList<LogListItem>?, private val act: Activity) :
     RecyclerView.Adapter<LogListAdapter.LogListViewHolder>() {
 
     private var ctx: Context? = null
+
     interface OnLogRemovedListener {
         fun onRemoved()
     }
@@ -54,7 +55,7 @@ class LogListAdapter (private val list: ArrayList<LogListItem>?, private val act
         val type = list[position].type!!.toInt()
         val content = list[position].content
         val time = list[position].time
-        val color = when(type){
+        val color = when (type) {
             LogUtils.Type.SUCCESS -> R.color.colorGreen
             LogUtils.Type.INFO -> R.color.colorPrimary
             LogUtils.Type.ERROR -> R.color.colorPink

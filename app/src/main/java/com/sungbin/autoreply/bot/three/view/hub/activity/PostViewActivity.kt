@@ -56,9 +56,9 @@ class PostViewActivity : AppCompatActivity() {
 
                 @Suppress("DEPRECATION")
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                    viewer!!.loadData(boardDataItem!!.content, "text/html", "UTF-8")
+                    viewer!!.loadData(boardDataItem!!.content!!, "text/html", "UTF-8")
                 } else {
-                    viewer!!.loadData(boardDataItem!!.content, "text/html;", "charset=UTF-8")
+                    viewer!!.loadData(boardDataItem!!.content!!, "text/html;", "charset=UTF-8")
                 }
 
                 toolbar_title.text = boardDataItem!!.title
@@ -67,8 +67,10 @@ class PostViewActivity : AppCompatActivity() {
                 board_good_count.text = boardDataItem!!.good_count.toString()
                 board_bad_count.text = boardDataItem!!.bad_count.toString()
             }
+
             override fun onCancelled(databaseError: DatabaseError) {
-                ToastUtils.show(applicationContext,
+                ToastUtils.show(
+                    applicationContext,
                     "Error at DatabaseError\n\n${databaseError.message}",
                     ToastUtils.SHORT, ToastUtils.ERROR
                 )
@@ -103,34 +105,35 @@ class PostViewActivity : AppCompatActivity() {
         reference.child("User Action")
             .child(uid).child("board_good")
             .addChildEventListener(object : ChildEventListener {
-            override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
-                try {
-                    val actionData = dataSnapshot.getValue(BoardActionItem::class.java)
-                    isGood = actionData!!.uuid == uuid
-                    if(isGood) {
-                        board_good_count.setTypeface(null, Typeface.BOLD)
-                        actionKey = actionData.key
+                override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
+                    try {
+                        val actionData = dataSnapshot.getValue(BoardActionItem::class.java)
+                        isGood = actionData!!.uuid == uuid
+                        if (isGood) {
+                            board_good_count.setTypeface(null, Typeface.BOLD)
+                            actionKey = actionData.key
+                        }
+                    } catch (e: Exception) {
+                        Utils.error(
+                            applicationContext,
+                            e, "Load board_good listener."
+                        )
                     }
-                }
-                catch (e: Exception) {
-                    Utils.error(applicationContext,
-                        e, "Load board_good listener.")
+
                 }
 
-            }
+                override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {
+                }
 
-            override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {
-            }
+                override fun onChildRemoved(dataSnapshot: DataSnapshot) {
+                }
 
-            override fun onChildRemoved(dataSnapshot: DataSnapshot) {
-            }
+                override fun onChildMoved(dataSnapshot: DataSnapshot, s: String?) {
+                }
 
-            override fun onChildMoved(dataSnapshot: DataSnapshot, s: String?) {
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-            }
-        })
+                override fun onCancelled(databaseError: DatabaseError) {
+                }
+            })
 
         reference.child("User Action").child(uid).child("board_bad")
             .addChildEventListener(object : ChildEventListener {
@@ -138,14 +141,15 @@ class PostViewActivity : AppCompatActivity() {
                     try {
                         val actionData = dataSnapshot.getValue(BoardActionItem::class.java)
                         isBad = actionData!!.uuid == uuid
-                        if(isBad) {
+                        if (isBad) {
                             board_bad_count.setTypeface(null, Typeface.BOLD)
                             actionKey = actionData.key
                         }
-                    }
-                    catch (e: Exception) {
-                        Utils.error(applicationContext,
-                            e, "Load board_bad listener.")
+                    } catch (e: Exception) {
+                        Utils.error(
+                            applicationContext,
+                            e, "Load board_bad listener."
+                        )
                     }
 
                 }
@@ -178,16 +182,16 @@ class PostViewActivity : AppCompatActivity() {
 //        }
 
         board_good.setOnClickListener {
-            if(isGood) {
-                ToastUtils.show(applicationContext,
+            if (isGood) {
+                ToastUtils.show(
+                    applicationContext,
                     getString(R.string.already_post_good),
                     ToastUtils.SHORT, ToastUtils.INFO
                 )
-            }
-            else {
+            } else {
                 val good_count = (boardDataItem!!.good_count)?.plus(1)
                 var bad_count = boardDataItem!!.bad_count
-                if(isBad){
+                if (isBad) {
                     reference.child("User Action").child(uid)
                         .child("board_bad").child(actionKey!!).removeValue()
                     bad_count = bad_count?.minus(1)
@@ -214,16 +218,16 @@ class PostViewActivity : AppCompatActivity() {
         }
 
         board_bad.setOnClickListener {
-            if(isBad) {
-                ToastUtils.show(applicationContext,
+            if (isBad) {
+                ToastUtils.show(
+                    applicationContext,
                     getString(R.string.already_post_bad),
                     ToastUtils.SHORT, ToastUtils.INFO
                 )
-            }
-            else {
+            } else {
                 val bad_count = (boardDataItem!!.bad_count)?.plus(1)
                 var good_count = boardDataItem!!.good_count
-                if(isGood){
+                if (isGood) {
                     reference.child("User Action").child(uid)
                         .child("board_good").child(actionKey!!).removeValue()
                     good_count = good_count?.minus(1)
@@ -249,41 +253,41 @@ class PostViewActivity : AppCompatActivity() {
             }
         }
 
-       /* comment.setOnClickListener {
-            //slideUp!!.show()
-            toolbar_title.text = boardDataItem!!.title + " - 댓글"
-        }
+        /* comment.setOnClickListener {
+             //slideUp!!.show()
+             toolbar_title.text = boardDataItem!!.title + " - 댓글"
+         }
 
-        items = ArrayList()
-        adapter = CommentListAdapter(
-            items,
-            this@PostViewActivity,
-            uuid
-        )
-        list.layoutManager = LinearLayoutManager(applicationContext)
-        list.adapter = adapter
+         items = ArrayList()
+         adapter = CommentListAdapter(
+             items,
+             this@PostViewActivity,
+             uuid
+         )
+         list.layoutManager = LinearLayoutManager(applicationContext)
+         list.adapter = adapter
 
-        val commentItemCash: ArrayList<CommentListItem> = ArrayList()
-        reference.child("Board Comment").child(uuid)
-            .addChildEventListener(object : ChildEventListener {
-            override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
-                try {
-                    val commentDataItem = dataSnapshot.getValue(CommentListItem::class.java)
-                    if(!commentItemCash.contains(commentDataItem)) {
-                        items!!.add(commentDataItem!!)
-                        Log.d("TTT", commentDataItem.comment)
-                        commentItemCash.add(commentDataItem)
-                        adapter!!.notifyDataSetChanged()
-                    }
-                }
-                catch (e: Exception) {
-                    Utils.error(applicationContext,
-                        e, "Load comment list listener.")
-                }
-            }
+         val commentItemCash: ArrayList<CommentListItem> = ArrayList()
+         reference.child("Board Comment").child(uuid)
+             .addChildEventListener(object : ChildEventListener {
+             override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
+                 try {
+                     val commentDataItem = dataSnapshot.getValue(CommentListItem::class.java)
+                     if(!commentItemCash.contains(commentDataItem)) {
+                         items!!.add(commentDataItem!!)
+                         Log.d("TTT", commentDataItem.comment)
+                         commentItemCash.add(commentDataItem)
+                         adapter!!.notifyDataSetChanged()
+                     }
+                 }
+                 catch (e: Exception) {
+                     Utils.error(applicationContext,
+                         e, "Load comment list listener.")
+                 }
+             }
 
-            override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {
-                *//*val commentDataItem = dataSnapshot.getValue(CommentListItem::class.java)
+             override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {
+                 *//*val commentDataItem = dataSnapshot.getValue(CommentListItem::class.java)
                 Log.d("SSS", commentDataItem!!.comment)*//*
                 *//*Utils.toast(applicationContext, "댓글이 수정되었습니다.\n게시글을 다시 로드하시면 반영됩니다.",
                     FancyToast.LENGTH_SHORT, FancyToast.SUCCESS)*//*
@@ -365,17 +369,9 @@ class PostViewActivity : AppCompatActivity() {
         }*/
     }
 
-    override fun onBackPressed() {
-        /*if(slideUp!!.isVisible) {
-            slideUp!!.hide()
-            toolbar_title.text = boardDataItem!!.title
-        }
-        else*/ super.onBackPressed()
-    }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        if(boardDataItem!!.source != "스크립트 업로드:V.000") {
-            menu.add(0, 1, 0, getString(R.string.string_version_list))
+        if (boardDataItem!!.source != "스크립트 업로드:V.000") {
+            menu.add(0, 1, 0, getString(R.string.version_list))
                 .setIcon(R.drawable.ic_history_white_24dp)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
             menu.add(0, 2, 0, getString(R.string.view_script))
@@ -388,11 +384,11 @@ class PostViewActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
 
-        if(id == 1){
+        if (id == 1) {
             val ctx = this@PostViewActivity
 
             val dialog = AlertDialog.Builder(ctx)
-            dialog.setTitle(getString(R.string.post_comment))
+            dialog.setTitle(getString(R.string.input_comment))
 
             val layout = LinearLayout(ctx)
             layout.orientation = LinearLayout.VERTICAL
@@ -403,60 +399,64 @@ class PostViewActivity : AppCompatActivity() {
             layout.addView(textview)
 
             val input = EditText(ctx)
-            input.hint = getString(R.string.string_comment)
+            input.hint = getString(R.string.comment)
             input.inputType = 0x00000002
             input.filters = arrayOf(InputFilter.LengthFilter(3))
             layout.addView(input)
 
             dialog.setView(
                 LayoutUtils.putMargin(
-                    ctx, layout
+                    layout
                 )
             )
-            dialog.setNegativeButton(getString(R.string.string_cancel), null)
-            dialog.setPositiveButton(getString(R.string.string_load)) { _, _ ->
+            dialog.setNegativeButton(getString(R.string.cancel), null)
+            dialog.setPositiveButton(getString(R.string.load)) { _, _ ->
                 val key = boardDataItem!!.source + ":V:" + input.text.toString()
-                reference.child("Board").child(key).addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange(dataSnapshot: DataSnapshot) {
-                        try {
-                            boardDataItem = dataSnapshot.getValue(BoardDataItem::class.java)
-                            @Suppress("DEPRECATION")
-                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                                viewer!!.loadData(boardDataItem!!.content, "text/html", "UTF-8")
-                            } else {
-                                viewer!!.loadData(boardDataItem!!.content, "text/html;", "charset=UTF-8")
+                reference.child("Board").child(key)
+                    .addValueEventListener(object : ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            try {
+                                boardDataItem = dataSnapshot.getValue(BoardDataItem::class.java)
+                                @Suppress("DEPRECATION")
+                                viewer!!.loadData(
+                                    boardDataItem!!.content!!,
+                                    "text/html;",
+                                    "charset=UTF-8"
+                                )
+
+                                toolbar_title.text = boardDataItem!!.title
+                                board_sender.text = boardDataItem!!.name
+                                board_desc.text = boardDataItem!!.desc
+                                board_good_count.text = boardDataItem!!.good_count.toString()
+                                board_bad_count.text = boardDataItem!!.bad_count.toString()
+
+                                ToastUtils.show(
+                                    applicationContext,
+                                    getString(R.string.load_version_success),
+                                    ToastUtils.SHORT, ToastUtils.SUCCESS
+                                )
+                            } catch (e: Exception) {
+                                ToastUtils.show(
+                                    applicationContext,
+                                    getString(R.string.cant_load_version),
+                                    ToastUtils.SHORT, ToastUtils.ERROR
+                                )
                             }
-
-                            toolbar_title.text = boardDataItem!!.title
-                            board_sender.text = boardDataItem!!.name
-                            board_desc.text = boardDataItem!!.desc
-                            board_good_count.text = boardDataItem!!.good_count.toString()
-                            board_bad_count.text = boardDataItem!!.bad_count.toString()
-
-                            ToastUtils.show(applicationContext,
-                                getString(R.string.load_version_success),
-                                ToastUtils.SHORT, ToastUtils.SUCCESS
-                            )
                         }
-                        catch(e: Exception){
-                            ToastUtils.show(applicationContext,
-                                getString(R.string.cant_load_version),
+
+                        override fun onCancelled(databaseError: DatabaseError) {
+                            ToastUtils.show(
+                                applicationContext,
+                                databaseError.message,
                                 ToastUtils.SHORT, ToastUtils.ERROR
                             )
                         }
-                    }
-                    override fun onCancelled(databaseError: DatabaseError) {
-                        ToastUtils.show(applicationContext,
-                            databaseError.message,
-                            ToastUtils.SHORT, ToastUtils.ERROR
-                        )
-                    }
-                })
+                    })
             }
             dialog.show()
         }
 
-        if(id == 2){
+        if (id == 2) {
             val ctx = this@PostViewActivity
             val dialog = AlertDialog.Builder(ctx)
             dialog.setTitle(boardDataItem!!.source!!.replace("js", ".js"))
@@ -468,12 +468,15 @@ class PostViewActivity : AppCompatActivity() {
             //view.text = JsHighlighter().apply(SpannableStringBuilder("function test(){\nreturn \"\t\t\t\tThis is making function...\"\n}"))
             layout.addView(view)
 
-            dialog.setView(LayoutUtils.putMargin(
-                ctx, layout
-            ))
+            dialog.setView(
+                LayoutUtils.putMargin(
+                    layout
+                )
+            )
             dialog.show()
-            ToastUtils.show(applicationContext,
-                getString(R.string.is_making),
+            ToastUtils.show(
+                applicationContext,
+                getString(R.string.developing),
                 ToastUtils.SHORT, ToastUtils.INFO
             )
         }

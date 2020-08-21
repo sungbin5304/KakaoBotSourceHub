@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:fontFamily="@font/nanumgothic"
-            android:text="@string/string_done"
+            android:text="@string/done"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_welcome" />
 
@@ -400,7 +400,7 @@
                             android:fontFamily="@font/nanumgothic"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/limit_html_parse_time"
+                            android:text="@string/limit_timeout"
                             android:textColor="@color/colorBlack"
                             android:layout_centerVertical="true"
                             android:layout_alignParentStart="true"
@@ -411,7 +411,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
-                            android:text="@string/string_notice_default"
+                            android:text="@string/default_limit_timeout"
                             android:textColor="@color/colorGray" />
 
                 </LinearLayout>
@@ -440,7 +440,7 @@
                             android:layout_height="wrap_content"
                             android:ellipsize="start"
                             android:gravity="center_horizontal"
-                            android:text="@string/string_default_num"
+                            android:text="@string/number_five"
                             android:inputType="number"
                             android:digits="0123456789"
                             android:maxLines="1"
@@ -463,7 +463,7 @@
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                     android:layout_marginTop="@dimen/margin_twice"
                     android:layout_marginBottom="@dimen/margin_half"
-                    android:text="@string/set_black_list"
+                    android:text="@string/setting_black_list"
                     android:layout_gravity="center"/>
 
             <TextView
@@ -595,7 +595,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_half"
-                    android:text="@string/delete_ad"
+                    android:text="@string/remove_ad"
                     android:id="@+id/btn_remove_ad"/>
 
             <LinearLayout

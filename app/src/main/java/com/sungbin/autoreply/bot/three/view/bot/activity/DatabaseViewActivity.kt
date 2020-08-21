@@ -27,7 +27,7 @@ class DatabaseViewActivity : AppCompatActivity() {
 
         val path = intent!!.getStringExtra("path")!!
         val content = StorageUtils.read(path, "")!!
-        if(path.toLowerCase(Locale.getDefault()).contains(".json")) {
+        if (path.toLowerCase(Locale.getDefault()).contains(".json")) {
             try {
                 ToastUtils.show(
                     this,
@@ -53,8 +53,7 @@ class DatabaseViewActivity : AppCompatActivity() {
                 et_viewer.visibility = View.VISIBLE
                 et_viewer.text = StringUtils.toEditable(content)
             }
-        }
-        else {
+        } else {
             jv_viewer.visibility = View.GONE
             et_viewer.visibility = View.VISIBLE
             et_viewer.text = StringUtils.toEditable(content)

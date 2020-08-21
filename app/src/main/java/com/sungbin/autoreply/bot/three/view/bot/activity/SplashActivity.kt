@@ -1,9 +1,9 @@
 package com.sungbin.autoreply.bot.three.view.bot.activity
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -22,35 +22,36 @@ class SplashActivity : AppCompatActivity() {
 
         FirebaseDatabase.getInstance().reference.child("User")
             .addChildEventListener(object : ChildEventListener {
-            override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
-                try {
-                    val item = dataSnapshot.getValue(UserItem::class.java)!!
-                    val user = User(item.id!!, item.name!!, item.avatar!!, item.isOnline!!,
-                        item.roomList, item.friendsList)
-                    ChatModuleUtils.addUser(user)
+                override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
+                    try {
+                        val item = dataSnapshot.getValue(UserItem::class.java)!!
+                        val user = User(
+                            item.id!!, item.name!!, item.avatar!!, item.isOnline!!,
+                            item.roomList, item.friendsList
+                        )
+                        ChatModuleUtils.addUser(user)
+                    } catch (e: Exception) {
+                        Utils.error(applicationContext, e, "init messages")
+                    }
+
                 }
-                catch (e: Exception) {
-                    Utils.error(applicationContext, e, "init messages")
+
+                override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {
+
                 }
 
-            }
+                override fun onChildRemoved(dataSnapshot: DataSnapshot) {
 
-            override fun onChildChanged(dataSnapshot: DataSnapshot, s: String?) {
+                }
 
-            }
+                override fun onChildMoved(dataSnapshot: DataSnapshot, s: String?) {
 
-            override fun onChildRemoved(dataSnapshot: DataSnapshot) {
+                }
 
-            }
+                override fun onCancelled(databaseError: DatabaseError) {
 
-            override fun onChildMoved(dataSnapshot: DataSnapshot, s: String?) {
-
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-
-            }
-        })
+                }
+            })
 
         Handler().postDelayed({
             finish()

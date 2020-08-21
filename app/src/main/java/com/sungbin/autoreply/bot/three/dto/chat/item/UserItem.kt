@@ -8,7 +8,7 @@ class UserItem {
     var roomList: ArrayList<String>? = null
     var friendsList: ArrayList<String>? = null
 
-    constructor(){}
+    constructor()
     constructor(
         id: String?,
         name: String?,

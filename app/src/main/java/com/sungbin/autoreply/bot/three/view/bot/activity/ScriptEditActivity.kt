@@ -67,7 +67,8 @@ class ScriptEditActivity : AppCompatActivity() {
         val textSize = DataUtils.readData(applicationContext, "TextSize", "17").toInt()
         val autoSave = DataUtils.readData(applicationContext, "AutoSave", "true").toBoolean()
         val notHighting = DataUtils.readData(applicationContext, "NotHighting", "false").toBoolean()
-        val notErrorHighting = DataUtils.readData(applicationContext, "NotErrorHighting", "false").toBoolean()
+        val notErrorHighting =
+            DataUtils.readData(applicationContext, "NotErrorHighting", "false").toBoolean()
 
         val headerView = LayoutInflater
             .from(applicationContext)
@@ -84,14 +85,14 @@ class ScriptEditActivity : AppCompatActivity() {
 
         etFind.imeOptions = EditorInfo.IME_ACTION_SEARCH
         etFind.setOnEditorActionListener { _, id, _ ->
-            if(id == EditorInfo.IME_ACTION_SEARCH){
+            if (id == EditorInfo.IME_ACTION_SEARCH) {
                 val items = ArrayList<EditorFindItem>()
                 val result = sce_editor.findText(
                     etFind.text.toString(),
                     swIgnoreUpper.isChecked
                 )
-                if(result.isNotEmpty()){
-                    for(i in result.indices){
+                if (result.isNotEmpty()) {
+                    for (i in result.indices) {
                         val array = result[i]
                         val item = EditorFindItem(
                             editText.text.split("\n")[array[0]],
@@ -101,8 +102,7 @@ class ScriptEditActivity : AppCompatActivity() {
                         )
                         items.add(item)
                     }
-                }
-                else {
+                } else {
                     items.add(
                         EditorFindItem(
                             getString(R.string.find_none),
@@ -114,7 +114,7 @@ class ScriptEditActivity : AppCompatActivity() {
                 }
                 val adapter = EditorFindAdapter(items)
                 adapter.setOnItemClickListener { findText, _, line, index ->
-                    if(index > 0) {
+                    if (index > 0) {
                         val i = getStartIndex(editText, line, index)
                         editText.setSelection(i, i + findText.length)
                     }
@@ -122,8 +122,7 @@ class ScriptEditActivity : AppCompatActivity() {
                 }
                 rvList.adapter = adapter
                 adapter.notifyDataSetChanged()
-            }
-            else return@setOnEditorActionListener false
+            } else return@setOnEditorActionListener false
             return@setOnEditorActionListener true
         }
 
@@ -133,7 +132,7 @@ class ScriptEditActivity : AppCompatActivity() {
         editText.typeface = typeface
 
         editText.textSize = textSize.toFloat()
-        if(autoSave){
+        if (autoSave) {
             timer.schedule(
                 AutoSaveTimer(
                     this,
@@ -146,7 +145,7 @@ class ScriptEditActivity : AppCompatActivity() {
         }
 
         toolbar_title.text = scriptName
-        if(notHighting) sce_editor.applyHighlight = false
+        if (notHighting) sce_editor.applyHighlight = false
 
         val suggestList: ArrayList<String> = ArrayList()
         val list = ArrayList<String>()
@@ -189,9 +188,9 @@ class ScriptEditActivity : AppCompatActivity() {
             "default",
             "prototype"
         )
-        for(element in items) list.add(element)
+        for (element in items) list.add(element)
         var highlightRuleString = ""
-        for(element in list){
+        for (element in list) {
             highlightRuleString += "|$element"
         }
         highlightRuleString = highlightRuleString.replaceFirst("|", "")
@@ -206,7 +205,7 @@ class ScriptEditActivity : AppCompatActivity() {
             )
             ToastUtils.show(
                 applicationContext,
-                getString(R.string.save_success),
+                getString(R.string.saved),
                 ToastUtils.SHORT,
                 ToastUtils.SUCCESS
             )
@@ -215,30 +214,30 @@ class ScriptEditActivity : AppCompatActivity() {
         ib_menu.setOnClickListener {
             val popupMenu = popupMenu {
                 section {
-                    title = getString(R.string.string_editor)
+                    title = getString(R.string.editor)
                     item {
-                        labelRes = R.string.string_undo
+                        labelRes = R.string.undo
                         icon = R.drawable.ic_undo_white_24dp
                         callback = {
                             sce_editor.undo()
                         }
                     }
                     item {
-                        labelRes = R.string.string_redo
+                        labelRes = R.string.redo
                         icon = R.drawable.ic_redo_white_24dp
                         callback = {
                             sce_editor.redo()
                         }
                     }
                     item {
-                        labelRes = R.string.string_search_kr
+                        labelRes = R.string.search_kr
                         icon = R.drawable.ic_search_white_24dp
                         callback = {
                             dl_drawer.openDrawer(GravityCompat.START)
                         }
                     }
                     item {
-                        labelRes = R.string.string_replace
+                        labelRes = R.string.replace
                         icon = R.drawable.ic_find_replace_white_24dp
                         callback = {
                             //바꾸기
@@ -246,16 +245,16 @@ class ScriptEditActivity : AppCompatActivity() {
                     }
                 }
                 section {
-                    title = getString(R.string.string_setting_kr)
+                    title = getString(R.string.setting_kr)
                     item {
-                        labelRes = R.string.string_highlighting
+                        labelRes = R.string.highlighting
                         icon = R.drawable.ic_highlight_white_24dp
                         callback = {
                             //하이라이트 설정
                         }
                     }
                     item {
-                        labelRes = R.string.string_auto_complete
+                        labelRes = R.string.auto_complete
                         icon = R.drawable.ic_flash_auto_white_24dp
                         callback = {
                             //자동완성 설정
@@ -263,9 +262,9 @@ class ScriptEditActivity : AppCompatActivity() {
                     }
                 }
                 section {
-                    title = getString(R.string.string_other)
+                    title = getString(R.string.other)
                     item {
-                        labelRes = R.string.string_save
+                        labelRes = R.string.save
                         icon = R.drawable.ic_save_white_24dp
                         callback = {
                             StorageUtils.save(
@@ -274,7 +273,7 @@ class ScriptEditActivity : AppCompatActivity() {
                             )
                             ToastUtils.show(
                                 applicationContext,
-                                getString(R.string.save_success),
+                                getString(R.string.saved),
                                 ToastUtils.SHORT,
                                 ToastUtils.SUCCESS
                             )
@@ -344,22 +343,22 @@ class ScriptEditActivity : AppCompatActivity() {
                         .trim().split(" ").size - 1]
                     Log.d("DDD", now)
                     val all = s.toString()
-                    for(element in classNameList) {
+                    for (element in classNameList) {
                         Log.d("TTT", element)
-                        if(!list.contains(element))
+                        if (!list.contains(element))
                             list.add(element)
                     }
                     for (i in list.indices) {
                         Log.d("SSS", list[i])
                         if (list[i].startsWith(now) && list[i] != now
-                            && now.isNotBlank() && now.replace(" ", "").length > 1) {
+                            && now.isNotBlank() && now.replace(" ", "").length > 1
+                        ) {
                             suggestList.add(list[i])
                         }
                     }
-                    if(suggestList.size == 0) {
+                    if (suggestList.size == 0) {
                         append_auto.visibility = View.GONE
-                    }
-                    else {
+                    } else {
                         if (suggestList.isNotEmpty()) {
                             if (suggestList.size == 1) {
                                 append_auto.visibility = View.VISIBLE
@@ -372,8 +371,7 @@ class ScriptEditActivity : AppCompatActivity() {
                                     }
                                 }
                             }
-                        }
-                        else if (suggestList.size != list.size &&
+                        } else if (suggestList.size != list.size &&
                             !all.split("\n")[layout.getLineForOffset(selectionStart)].isBlank()
                         ) {
                             append_auto.visibility = View.VISIBLE
@@ -429,8 +427,7 @@ class ScriptEditActivity : AppCompatActivity() {
                 true
             }
             parser.parse(source, null, 1).visitAll(nv)
-        }
-        catch (e: Exception){
+        } catch (e: Exception) {
         }
     }
 
@@ -439,11 +436,11 @@ class ScriptEditActivity : AppCompatActivity() {
     }
 
     private class AutoSaveTimer
-        constructor(
-                    private val activity: Activity,
-                    private val editText: EditText,
-                    private val scriptName: String
-        ) : TimerTask() {
+    constructor(
+        private val activity: Activity,
+        private val editText: EditText,
+        private val scriptName: String
+    ) : TimerTask() {
 
         override fun run() {
             StorageUtils.save(

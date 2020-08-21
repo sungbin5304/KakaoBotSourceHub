@@ -29,10 +29,14 @@ object Utils {
 
     fun makeNoti(title: String, content: String) {
         NotificationUtils.setGroupName(ctx!!.getString(R.string.app_name))
-        NotificationUtils.createChannel(ctx!!,
-            ctx!!.getString(R.string.app_name), ctx!!.getString(R.string.app_name))
-        NotificationUtils.showNormalNotification(ctx!!,
-            1, title, content, R.drawable.icon)
+        NotificationUtils.createChannel(
+            ctx!!,
+            ctx!!.getString(R.string.app_name), ctx!!.getString(R.string.app_name)
+        )
+        NotificationUtils.showNormalNotification(
+            ctx!!,
+            1, title, content, R.drawable.icon
+        )
     }
 
     fun makeVibration(time: Int) {
@@ -44,7 +48,9 @@ object Utils {
             ctx!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clipData = ClipData.newPlainText("label", content)
         clipboardManager.setPrimaryClip(clipData)
-        ToastUtils.show(ctx!!, ctx!!.getString(R.string.copied_clipboard),
-            ToastUtils.SHORT, ToastUtils.SUCCESS)
+        ToastUtils.show(
+            ctx!!, ctx!!.getString(R.string.copied_clipboard),
+            ToastUtils.SHORT, ToastUtils.SUCCESS
+        )
     }
 }

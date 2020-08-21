@@ -8,7 +8,7 @@ import com.sungbin.sungbintool.DataUtils.saveData
 object Black {
     @SuppressLint("StaticFieldLeak")
     private var ctx: Context? = null
-    
+
     fun init(context: Context?) {
         ctx = context
     }

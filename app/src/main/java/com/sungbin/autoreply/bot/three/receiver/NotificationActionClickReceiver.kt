@@ -3,7 +3,6 @@ package com.sungbin.autoreply.bot.three.receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import com.sungbin.autoreply.bot.three.R
 import com.sungbin.autoreply.bot.three.utils.bot.BotNotificationManager
 import com.sungbin.sungbintool.DataUtils
@@ -15,7 +14,7 @@ import com.sungbin.sungbintool.ToastUtils
 
 class NotificationActionClickReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        when(intent.getStringExtra("value")!!){
+        when (intent.getStringExtra("value")!!) {
             "stop" -> {
                 DataUtils.saveData(context, "BotOn", "false")
                 BotNotificationManager.create(context)
@@ -36,7 +35,8 @@ class NotificationActionClickReceiver : BroadcastReceiver() {
                     ToastUtils.INFO
                 )
             }
-            "reload" -> {}
+            "reload" -> {
+            }
             "delete" -> {
                 BotNotificationManager.delete(context)
             }

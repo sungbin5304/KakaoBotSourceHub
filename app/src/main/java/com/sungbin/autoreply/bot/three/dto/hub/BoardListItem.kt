@@ -7,7 +7,7 @@ class BoardListItem {
     var bad_count: Int? = null
     var uuid: String? = null
 
-    constructor() {}
+    constructor()
     constructor(title: String?, desc: String?, good_count: Int?, bad_count: Int?, uuid: String?) {
         this.title = title
         this.desc = desc

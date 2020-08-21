@@ -10,13 +10,13 @@ import java.io.ByteArrayOutputStream
 
 object Base64Utils {
 
-    fun bitmap2base64(bitmap: Bitmap): String{
+    fun bitmap2base64(bitmap: Bitmap): String {
         val baos = ByteArrayOutputStream()
         bitmap.compress(CompressFormat.PNG, 100, baos)
-        return  Base64.encodeToString(baos.toByteArray(), 0)
+        return Base64.encodeToString(baos.toByteArray(), 0)
     }
 
-    fun base642bitmap(base64: String): Bitmap{
+    fun base642bitmap(base64: String): Bitmap {
         val bais = ByteArrayInputStream(Base64.decode(base64, 0))
         return BitmapFactory.decodeStream(bais)
     }

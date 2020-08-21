@@ -27,8 +27,10 @@ import com.sungbin.sungbintool.ToastUtils
 
 
 @Suppress("DEPRECATION")
-class ScriptListAdapter(private val list: ArrayList<ScriptListItem>?,
-                        private val act: Activity) :
+class ScriptListAdapter(
+    private val list: ArrayList<ScriptListItem>?,
+    private val act: Activity
+) :
     RecyclerView.Adapter<ScriptListAdapter.ScriptListViewHolder>() {
 
     private var ctx: Context? = null
@@ -73,10 +75,9 @@ class ScriptListAdapter(private val list: ArrayList<ScriptListItem>?,
         val image = list[position].image!!
         val originName = name
 
-        name = if(type == 1){
+        name = if (type == 1) {
             name.replace(".bot", "")
-        }
-        else {
+        } else {
             name.replace(".js", "")
         }
 
@@ -84,9 +85,11 @@ class ScriptListAdapter(private val list: ArrayList<ScriptListItem>?,
             BotPowerUtils.setOnOff(ctx!!, originName, tf)
         }
 
-        if(onoff) {
-            viewholder.state.background = ContextCompat.getDrawable(ctx!!,
-                R.drawable.reload_done_view)
+        if (onoff) {
+            viewholder.state.background = ContextCompat.getDrawable(
+                ctx!!,
+                R.drawable.reload_done_view
+            )
         }
 
         viewholder.type.setImageResource(image)
@@ -96,13 +99,16 @@ class ScriptListAdapter(private val list: ArrayList<ScriptListItem>?,
 
         if (type == 1) {
             viewholder.onoff.setOnCheckedChangeListener { _, boolean ->
-                if(boolean){
-                    viewholder.state.background = ContextCompat.getDrawable(ctx!!,
-                        R.drawable.reload_done_view)
-                }
-                else {
-                    viewholder.state.background = ContextCompat.getDrawable(ctx!!,
-                        R.drawable.reload_none_view)
+                if (boolean) {
+                    viewholder.state.background = ContextCompat.getDrawable(
+                        ctx!!,
+                        R.drawable.reload_done_view
+                    )
+                } else {
+                    viewholder.state.background = ContextCompat.getDrawable(
+                        ctx!!,
+                        R.drawable.reload_none_view
+                    )
                 }
             }
         }
@@ -110,25 +116,29 @@ class ScriptListAdapter(private val list: ArrayList<ScriptListItem>?,
         viewholder.menu.setOnClickListener { view ->
             val popupMenu = popupMenu {
                 section {
-                    title = act.getString(R.string.string_edit)
+                    title = act.getString(R.string.edit)
                     item {
-                        labelRes = R.string.string_bot_name
+                        labelRes = R.string.name
                         icon = R.drawable.ic_title_white_24dp
                         callback = {
-                            ToastUtils.show(act, "눌림",
-                            ToastUtils.SHORT, ToastUtils.INFO)
+                            ToastUtils.show(
+                                act, "눌림",
+                                ToastUtils.SHORT, ToastUtils.INFO
+                            )
                         }
                     }
                     item {
-                        labelRes = R.string.string_description
+                        labelRes = R.string.description
                         icon = R.drawable.ic_description_white_24dp
                         callback = {
-                            ToastUtils.show(act, "눌림",
-                                ToastUtils.SHORT, ToastUtils.INFO)
+                            ToastUtils.show(
+                                act, "눌림",
+                                ToastUtils.SHORT, ToastUtils.INFO
+                            )
                         }
                     }
                     item {
-                        labelRes = R.string.string_source
+                        labelRes = R.string.source
                         icon = R.drawable.ic_code_white_24dp
                         callback = {
                             if (type == 1) {
@@ -136,8 +146,7 @@ class ScriptListAdapter(private val list: ArrayList<ScriptListItem>?,
                                     Intent(act, SimpleEditActivity::class.java)
                                         .putExtra("name", name)
                                 )
-                            }
-                            else {
+                            } else {
                                 act.startActivity(
                                     Intent(act, ScriptEditActivity::class.java)
                                         .putExtra("name", name)
@@ -166,9 +175,9 @@ class ScriptListAdapter(private val list: ArrayList<ScriptListItem>?,
                 }
                 section {
                     title = "기타"
-                    if(type == 0){
+                    if (type == 0) {
                         item {
-                            labelRes = R.string.string_reload
+                            labelRes = R.string.reload
                             icon = R.drawable.ic_autorenew_white_24dp
                             callback = {
                                 lateinit var statue: String
@@ -181,7 +190,7 @@ class ScriptListAdapter(private val list: ArrayList<ScriptListItem>?,
                                     act,
                                     R.color.colorPrimary
                                 )
-                                pDialog.titleText = act.getString(R.string.string_reloading)
+                                pDialog.titleText = act.getString(R.string.reloading)
                                 pDialog.setCancelable(false)
                                 val thread = Thread {
                                     statue = KakaoTalkListener.initializeJavaScript(name)
@@ -206,12 +215,13 @@ class ScriptListAdapter(private val list: ArrayList<ScriptListItem>?,
                                         R.drawable.reload_error_view
                                     )
 
-                                    if(!DataUtils.readData(ctx!!, "KeepScope", "false").toBoolean()){
+                                    if (!DataUtils.readData(ctx!!, "KeepScope", "false")
+                                            .toBoolean()
+                                    ) {
                                         viewholder.onoff.isChecked = false
                                         BotPowerUtils.setOnOff(ctx!!, name, false)
                                     }
-                                }
-                                else {
+                                } else {
                                     pDialog.changeAlertType(SweetAlertDialog.SUCCESS_TYPE)
                                     pDialog.titleText = "리로드 성공"
                                     pDialog.contentText = "리로드가 완료되었습니다.<br>" +
@@ -225,27 +235,28 @@ class ScriptListAdapter(private val list: ArrayList<ScriptListItem>?,
                         }
                     }
                     item {
-                        labelRes = R.string.string_share
+                        labelRes = R.string.share
                         icon = R.drawable.ic_share_white_24dp
                         callback = {
-                            ToastUtils.show(act, "눌림",
-                                ToastUtils.SHORT, ToastUtils.INFO)
+                            ToastUtils.show(
+                                act, "눌림",
+                                ToastUtils.SHORT, ToastUtils.INFO
+                            )
                         }
                     }
                 }
                 section {
                     title = act.getString(R.string.string_danger)
                     item {
-                        labelRes = R.string.string_delete
+                        labelRes = R.string.delete
                         icon = R.drawable.ic_delete_white_24dp
                         callback = {
                             if (type == 1) {
                                 StorageUtils.deleteAll("${BotPathManager.SIMPLE}/$name")
-                            }
-                            else {
+                            } else {
                                 StorageUtils.delete("${BotPathManager.JS}/$name.js")
                             }
-                            if(listener != null) listener!!.onRemoved()
+                            if (listener != null) listener!!.onRemoved()
                         }
                     }
                 }
@@ -271,16 +282,15 @@ class ScriptListAdapter(private val list: ArrayList<ScriptListItem>?,
         return list!![position]
     }
 
-    fun sortSearch(search: String){
+    fun sortSearch(search: String) {
         var item: ScriptListItem? = null
-        for(element in list!!){
-            if(element.name!!.contains(search)){
+        for (element in list!!) {
+            if (element.name!!.contains(search)) {
                 item = element
                 break
-            }
-            else continue
+            } else continue
         }
-        if(item != null){
+        if (item != null) {
             list.remove(item)
             list.add(0, item)
         }

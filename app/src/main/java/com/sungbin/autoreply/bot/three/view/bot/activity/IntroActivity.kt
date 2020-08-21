@@ -18,8 +18,7 @@ class IntroActivity : AppCompatActivity() {
         if (DataUtils.readData(applicationContext, "logined", "false").toBoolean()) {
             startActivity(Intent(this, SplashActivity::class.java))
             finish()
-        }
-        else {
+        } else {
             setContentView(R.layout.content_intro)
 
             val fadein = AlphaAnimation(0.0f, 1.0f)

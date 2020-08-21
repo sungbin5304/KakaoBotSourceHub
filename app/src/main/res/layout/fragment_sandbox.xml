@@ -55,7 +55,7 @@
                         android:layout_height="wrap_content"
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/nanumgothic"
-                        android:text="@string/string_next"
+                        android:text="@string/next"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_welcome" />
 
@@ -112,7 +112,7 @@
                             android:fontFamily="@font/nanumgothic"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="@string/string_input"
+                            android:hint="@string/input"
                             android:maxHeight="150dp"
                             tools:height="150dp"
                             android:id="@+id/et_input"
@@ -123,7 +123,7 @@
                     <ImageButton
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
-                            android:contentDescription="@string/string_send"
+                            android:contentDescription="@string/send"
                             android:background="@null"
                             android:tint="@color/colorPrimary"
                             android:adjustViewBounds="true"

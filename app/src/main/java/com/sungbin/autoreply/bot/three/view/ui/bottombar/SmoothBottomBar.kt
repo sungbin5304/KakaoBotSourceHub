@@ -253,7 +253,8 @@ class SmoothBottomBar @JvmOverloads constructor(
             attrs,
             R.styleable.SmoothBottomBar,
             defStyleAttr,
-            0)
+            0
+        )
 
         try {
             barBackgroundColor = typedArray.getColor(
@@ -412,19 +413,20 @@ class SmoothBottomBar @JvmOverloads constructor(
 
             item.icon.mutate()
             item.icon.setBounds(
-                item.rect.centerX().toInt() - itemIconSize.toInt() / 2 - ((textLength / 2) * (1 - (OPAQUE - item.alpha) / OPAQUE.toFloat())).toInt(),
+                item.rect.centerX()
+                    .toInt() - itemIconSize.toInt() / 2 - ((textLength / 2) * (1 - (OPAQUE - item.alpha) / OPAQUE.toFloat())).toInt(),
                 height / 2 - itemIconSize.toInt() / 2,
-                item.rect.centerX().toInt() + itemIconSize.toInt() / 2 - ((textLength / 2) * (1 - (OPAQUE - item.alpha) / OPAQUE.toFloat())).toInt(),
+                item.rect.centerX()
+                    .toInt() + itemIconSize.toInt() / 2 - ((textLength / 2) * (1 - (OPAQUE - item.alpha) / OPAQUE.toFloat())).toInt(),
                 height / 2 + itemIconSize.toInt() / 2
             )
 
-            if(index == alwaysWhiteTintIndex) {
+            if (index == alwaysWhiteTintIndex) {
                 DrawableCompat.setTint(
                     item.icon,
                     ContextCompat.getColor(context, R.color.colorWhite)
                 )
-            }
-            else {
+            } else {
                 DrawableCompat.setTint(
                     item.icon,
                     if (index == itemActiveIndex) currentIconTint else itemIconTint
@@ -449,7 +451,7 @@ class SmoothBottomBar @JvmOverloads constructor(
     override fun onTouchEvent(event: MotionEvent): Boolean {
         if (event.action == MotionEvent.ACTION_UP && abs(event.downTime - event.eventTime) < 500) {
             for ((i, item) in items.withIndex()) {
-                if(i == ignoredIndex) continue
+                if (i == ignoredIndex) continue
                 if (item.rect.contains(event.x, event.y)) {
                     if (i != itemActiveIndex) {
                         itemActiveIndex = i
@@ -509,11 +511,11 @@ class SmoothBottomBar @JvmOverloads constructor(
         }
     }
 
-    fun setupWithNavController(menu: Menu, navController: NavController){
-        NavigationComponentHelper.setupWithNavController(menu,this,navController)
+    fun setupWithNavController(menu: Menu, navController: NavController) {
+        NavigationComponentHelper.setupWithNavController(menu, this, navController)
     }
 
-    fun setActiveItem(index: Int){
+    fun setActiveItem(index: Int) {
         this._itemActiveIndex = index
         applyItemActiveIndex()
     }

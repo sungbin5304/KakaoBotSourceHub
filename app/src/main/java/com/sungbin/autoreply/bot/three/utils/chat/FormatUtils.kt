@@ -12,7 +12,7 @@ object FormatUtils {
         return formatter.format(date)
     }
 
-    fun createDate(date: Date): String{
+    fun createDate(date: Date): String {
         val formatter = SimpleDateFormat("a hh:mm", Locale.KOREA)
         formatter.timeZone = TimeZone.getTimeZone("GMT+0900")
         return formatter.format(date)

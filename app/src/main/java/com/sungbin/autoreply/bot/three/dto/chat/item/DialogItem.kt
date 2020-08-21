@@ -1,9 +1,6 @@
 package com.sungbin.autoreply.bot.three.dto.chat.item
 
-import com.sungbin.autoreply.bot.three.dto.chat.MessageType
-import com.sungbin.autoreply.bot.three.dto.chat.model.Message
-import com.sungbin.autoreply.bot.three.dto.chat.model.User
-import java.util.ArrayList
+import java.util.*
 
 class DialogItem {
     var id: String? = null
@@ -15,7 +12,7 @@ class DialogItem {
     var unreadCount: Int? = null
     var messageType: Int? = null
 
-    constructor(){}
+    constructor()
     constructor(
         id: String?,
         owner: String?,

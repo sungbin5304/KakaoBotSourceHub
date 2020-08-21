@@ -70,7 +70,7 @@
                 android:fontFamily="@font/nanumgothic"
                 android:textSize="18sp"
                 android:layout_marginTop="@dimen/margin_default"
-                android:text="@string/string_welcome"
+                android:text="@string/welcome"
                 app:layout_constraintTop_toBottomOf="@+id/lav_welcome" />
 
         <Button
@@ -83,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/nanumgothic"
-                android:text="@string/string_next"
+                android:text="@string/next"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_welcome" />
 
@@ -94,7 +94,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_default"
                 android:fontFamily="@font/poppins"
-                android:text="@string/string_bots"
+                android:text="@string/bots"
                 android:textColor="#000"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -118,7 +118,7 @@
                     android:layout_marginEnd="@dimen/margin_default"
                     android:fontFamily="@font/poppins"
                     android:textColor="@color/colorGray"
-                    android:hint="@string/string_search"
+                    android:hint="@string/saerch"
                     android:layout_width="match_parent"
                     android:background="@null"
                     android:visibility="invisible"
@@ -133,7 +133,7 @@
                     android:background="@null"
                     android:paddingBottom="@dimen/margin_half"
                     android:fontFamily="@font/poppins"
-                    android:text="@string/string_search"
+                    android:text="@string/saerch"
                     android:textAllCaps="false"
                     android:textColor="@color/colorPrimary" />
 
@@ -197,7 +197,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_default"
                 android:layout_marginTop="@dimen/margin_default"
-                android:text="@string/string_logs"
+                android:text="@string/logs"
                 android:textColor="#000"
                 android:textSize="20sp"
                 android:fontFamily="@font/poppins"
@@ -212,7 +212,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@null"
-                android:text="@string/string_viewall"
+                android:text="@string/view_all"
                 android:textAllCaps="false"
                 android:textColor="@color/colorPrimary"
                 android:layout_marginTop="@dimen/margin_half"
@@ -280,7 +280,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_default"
                 android:layout_marginTop="@dimen/margin_default"
-                android:text="@string/string_databases"
+                android:text="@string/databases"
                 android:textColor="#000"
                 android:textSize="20sp"
                 android:fontFamily="@font/poppins"
@@ -296,7 +296,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@null"
-                android:text="@string/string_viewall"
+                android:text="@string/view_all"
                 android:textAllCaps="false"
                 android:textColor="@color/colorPrimary"
                 android:layout_marginTop="@dimen/margin_half"

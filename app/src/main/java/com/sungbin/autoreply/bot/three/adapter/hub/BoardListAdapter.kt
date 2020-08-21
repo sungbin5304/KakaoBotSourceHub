@@ -16,10 +16,12 @@ import com.sungbin.autoreply.bot.three.dto.hub.BoardListItem
 import com.sungbin.autoreply.bot.three.view.hub.activity.PostViewActivity
 import com.sungbin.sungbintool.ToastUtils
 
-class BoardListAdapter(private val list: ArrayList<BoardListItem>?,
-                       private val good: ArrayList<String>?,
-                       private val bad: ArrayList<String>?,
-                       private val act: Activity?) :
+class BoardListAdapter(
+    private val list: ArrayList<BoardListItem>?,
+    private val good: ArrayList<String>?,
+    private val bad: ArrayList<String>?,
+    private val act: Activity?
+) :
     RecyclerView.Adapter<BoardListAdapter.BoardViewHolder>() {
 
     private var ctx: Context? = null
@@ -33,7 +35,8 @@ class BoardListAdapter(private val list: ArrayList<BoardListItem>?,
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): BoardViewHolder {
-        val view = LayoutInflater.from(viewGroup.context).inflate(R.layout.view_board_list, viewGroup, false)
+        val view = LayoutInflater.from(viewGroup.context)
+            .inflate(R.layout.view_board_list, viewGroup, false)
         ctx = viewGroup.context
         return BoardViewHolder(view)
     }
@@ -50,20 +53,23 @@ class BoardListAdapter(private val list: ArrayList<BoardListItem>?,
         viewholder.good_count.text = good_count.toString()
         viewholder.bad_count.text = bad_count.toString()
 
-        if(good!!.contains(uuid)) viewholder.good_count.setTypeface(null, Typeface.BOLD)
-        if(bad!!.contains(uuid)) viewholder.bad_count.setTypeface(null, Typeface.BOLD)
+        if (good!!.contains(uuid)) viewholder.good_count.setTypeface(null, Typeface.BOLD)
+        if (bad!!.contains(uuid)) viewholder.bad_count.setTypeface(null, Typeface.BOLD)
 
         viewholder.view.setOnClickListener {
-            ToastUtils.show(ctx!!,
-                act!!.getString(R.string.string_loading),
+            ToastUtils.show(
+                ctx!!,
+                act!!.getString(R.string.loading),
                 ToastUtils.SHORT, ToastUtils.INFO
             )
-            ctx!!.startActivity(Intent(ctx, PostViewActivity::class.java)
-                .putExtra("uuid", uuid)
-                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            ctx!!.startActivity(
+                Intent(ctx, PostViewActivity::class.java)
+                    .putExtra("uuid", uuid)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             )
         }
     }
+
     override fun getItemCount(): Int {
         return list?.size ?: 0
     }

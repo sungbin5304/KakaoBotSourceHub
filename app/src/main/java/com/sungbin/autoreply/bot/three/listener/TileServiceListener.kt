@@ -2,7 +2,6 @@ package com.sungbin.autoreply.bot.three.listener
 
 import android.annotation.TargetApi
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import com.sungbin.autoreply.bot.three.R
@@ -51,7 +50,7 @@ class TileServiceListener : TileService() {
 
     override fun onTileAdded() {
         val tile = qsTile
-        tile.state = if(DataUtils.readData(applicationContext, "BotOn", "false").toBoolean()){
+        tile.state = if (DataUtils.readData(applicationContext, "BotOn", "false").toBoolean()) {
             Tile.STATE_ACTIVE
         } else Tile.STATE_INACTIVE
         tile.updateTile()

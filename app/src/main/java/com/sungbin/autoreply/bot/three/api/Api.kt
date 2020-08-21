@@ -9,7 +9,6 @@ import com.sungbin.autoreply.bot.three.listener.KakaoTalkListener
 import com.sungbin.autoreply.bot.three.listener.KakaoTalkListener.Companion.showAll
 import com.sungbin.autoreply.bot.three.utils.bot.StackUtils
 import com.sungbin.sungbintool.DataUtils
-import com.sungbin.sungbintool.Utils
 import org.apache.http.NameValuePair
 import org.apache.http.client.entity.UrlEncodedFormEntity
 import org.apache.http.client.methods.HttpPost
@@ -20,8 +19,6 @@ import org.mozilla.javascript.NativeArray
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.URL
-import java.util.*
-import kotlin.collections.ArrayList
 
 object Api {
     private var ctx: Context? = null
@@ -53,8 +50,7 @@ object Api {
                 return str
             }
             return null
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             return e.toString()
         }
     }
@@ -67,7 +63,7 @@ object Api {
             .toString()
     }
 
-   fun replyRoom(room: String, msg: String): Boolean {
+    fun replyRoom(room: String, msg: String): Boolean {
         return if (StackUtils.sessions.containsKey(room)) {
             KakaoTalkListener.reply(StackUtils.sessions[room]!!, msg)
             true
@@ -98,7 +94,7 @@ object Api {
         postData: NativeArray
     ): String {
         var result = "false"
-        if(postName.size != postData.size) return "postName과 postData의 크기가 같아야 합니다!"
+        if (postName.size != postData.size) return "postName과 postData의 크기가 같아야 합니다!"
         else {
             Thread(Runnable {
                 try {

@@ -16,7 +16,7 @@ import com.sungbin.autoreply.bot.three.dto.apps.AppInfo
  * Created by SungBin on 2020-05-10.
  */
 
-class AppListAdapter (private val list: ArrayList<AppInfo>) :
+class AppListAdapter(private val list: ArrayList<AppInfo>) :
     RecyclerView.Adapter<AppListAdapter.AppListViewHolder>() {
 
     private var listener: OnAppClickListener? = null
@@ -103,14 +103,13 @@ class AppListAdapter (private val list: ArrayList<AppInfo>) :
 
     fun search(name: String) {
         var item: AppInfo? = null
-        for(element in list){
-            if(element.name.contains(name)){
+        for (element in list) {
+            if (element.name.contains(name)) {
                 item = element
                 break
-            }
-            else continue
+            } else continue
         }
-        if(item != null){
+        if (item != null) {
             list.remove(item)
             list.add(0, item)
         }

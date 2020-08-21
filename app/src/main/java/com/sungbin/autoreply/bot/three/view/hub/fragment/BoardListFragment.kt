@@ -42,7 +42,11 @@ class BoardListFragment : Fragment() {
     private var alert: AlertDialog? = null
     private var boardListView: RecyclerView? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
         uid = ChatModuleUtils.getDeviceId(context!!)
@@ -78,16 +82,20 @@ class BoardListFragment : Fragment() {
         })
 
         post_board.setOnClickListener {
-            ToastUtils.show(context!!,
-                getString(R.string.string_loading),
+            ToastUtils.show(
+                context!!,
+                getString(R.string.loading),
                 ToastUtils.SHORT, ToastUtils.INFO
             )
-            startActivity(Intent(context, PostActivity::class.java)
-                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-           ToastUtils.show(context!!,
-               getString(R.string.press_long_sort_board),
+            startActivity(
+                Intent(context, PostActivity::class.java)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            )
+            ToastUtils.show(
+                context!!,
+                getString(R.string.press_long_sort_board),
                 ToastUtils.SHORT, ToastUtils.INFO
-           )
+            )
         }
 
         post_board.setOnLongClickListener {
@@ -101,10 +109,11 @@ class BoardListFragment : Fragment() {
                     try {
                         val actionData = dataSnapshot.getValue(BoardActionItem::class.java)
                         goodBoardList!!.add(actionData!!.uuid!!)
-                    }
-                    catch (e: Exception) {
-                        Utils.error(context!!,
-                            e, "Load board_good listener.")
+                    } catch (e: Exception) {
+                        Utils.error(
+                            context!!,
+                            e, "Load board_good listener."
+                        )
                     }
 
                 }
@@ -128,10 +137,11 @@ class BoardListFragment : Fragment() {
                     try {
                         val actionData = dataSnapshot.getValue(BoardActionItem::class.java)
                         badBoardList!!.add(actionData!!.uuid!!)
-                    }
-                    catch (e: Exception) {
-                        Utils.error(context!!,
-                            e, "Load board_bad listener.")
+                    } catch (e: Exception) {
+                        Utils.error(
+                            context!!,
+                            e, "Load board_bad listener."
+                        )
                     }
 
                 }
@@ -154,7 +164,7 @@ class BoardListFragment : Fragment() {
             override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
                 try {
                     val boardDataItem = dataSnapshot.getValue(BoardDataItem::class.java)
-                    if(!boardCash!!.contains(boardDataItem)) {
+                    if (!boardCash!!.contains(boardDataItem)) {
                         val boardListItem =
                             BoardListItem(
                                 boardDataItem!!.title,
@@ -165,10 +175,11 @@ class BoardListFragment : Fragment() {
                         adapter!!.notifyDataSetChanged()
                         boardCash!!.add(boardDataItem)
                     }
-                }
-                catch (e: Exception) {
-                    Utils.error(context!!,
-                        e, "Load board list listener.")
+                } catch (e: Exception) {
+                    Utils.error(
+                        context!!,
+                        e, "Load board list listener."
+                    )
                 }
 
             }
@@ -193,14 +204,16 @@ class BoardListFragment : Fragment() {
         return view
     }
 
-    private fun showSortDialog(){
+    private fun showSortDialog() {
         val dialog = AlertDialog.Builder(activity!!)
-        val action = arrayOf(getString(R.string.sort_good_count),
-            getString(R.string.sort_hate_count),
-            getString(R.string.sort_date_new),
-            getString(R.string.sort_date_old))
+        val action = arrayOf(
+            getString(R.string.sort_good),
+            getString(R.string.sort_hate),
+            getString(R.string.sort_new),
+            getString(R.string.sort_old)
+        )
         dialog.setTitle(getString(R.string.board_sort))
-        dialog.setNegativeButton(getString(R.string.string_cancel), null)
+        dialog.setNegativeButton(getString(R.string.cancel), null)
         dialog.setSingleChoiceItems(action, -1) { _, which ->
             alert!!.cancel()
             /*when(which){
@@ -234,8 +247,9 @@ class BoardListFragment : Fragment() {
                     alert!!.cancel()
                 }
             }*/
-            ToastUtils.show(context!!,
-                getString(R.string.string_making),
+            ToastUtils.show(
+                context!!,
+                getString(R.string.developing),
                 ToastUtils.SHORT, ToastUtils.INFO
             )
         }

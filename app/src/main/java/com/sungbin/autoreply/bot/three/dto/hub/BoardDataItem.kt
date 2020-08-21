@@ -11,7 +11,7 @@ class BoardDataItem {
     var name: String? = null
     var content: String? = null
 
-    constructor() {}
+    constructor()
     constructor(
         title: String?,
         desc: String?,

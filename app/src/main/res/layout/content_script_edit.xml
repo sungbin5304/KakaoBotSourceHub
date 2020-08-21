@@ -55,7 +55,7 @@
                     android:layout_height="48dp"
                     android:background="@null"
                     android:backgroundTint="@color/colorWhite"
-                    android:contentDescription="@string/string_indent"
+                    android:contentDescription="@string/indent"
                     android:src="@drawable/ic_format_indent_increase_black_24dp" />
 
 

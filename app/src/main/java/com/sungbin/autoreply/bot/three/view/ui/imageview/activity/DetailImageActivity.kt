@@ -114,7 +114,11 @@ class DetailImageActivity : AppCompatActivity() {
                 sharedElements: MutableList<View>,
                 sharedElementSnapshots: MutableList<View>
             ) {
-                super.onSharedElementStart(sharedElementNames, sharedElements, sharedElementSnapshots)
+                super.onSharedElementStart(
+                    sharedElementNames,
+                    sharedElements,
+                    sharedElementSnapshots
+                )
 
                 for (view in sharedElements) {
                     if (view is RoundedImageView) {
@@ -147,7 +151,8 @@ class DetailImageActivity : AppCompatActivity() {
                     } else {
                         null
                     }
-                sharedElementEnterRadius = roundedImageTransform?.getFromRadius() ?: sharedElementEnterRadius
+                sharedElementEnterRadius =
+                    roundedImageTransform?.getFromRadius() ?: sharedElementEnterRadius
             }
 
             override fun onTransitionEnd(p0: Transition?) {

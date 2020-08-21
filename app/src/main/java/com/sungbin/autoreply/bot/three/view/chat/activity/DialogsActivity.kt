@@ -45,7 +45,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-@Suppress("VARIABLE_WITH_REDUNDANT_INITIALIZER","DEPRECATION")
+@Suppress("VARIABLE_WITH_REDUNDANT_INITIALIZER", "DEPRECATION")
 class DialogsActivity : AppCompatActivity() {
 
     @SuppressLint("InflateParams")
@@ -63,8 +63,7 @@ class DialogsActivity : AppCompatActivity() {
             .addOnCompleteListener { task: Task<Void?> ->
                 if (task.isSuccessful) {
                     remoteConfig.activateFetched()
-                }
-                else {
+                } else {
                     ToastUtils.show(
                         this,
                         getString(R.string.error_get_data),
@@ -90,23 +89,33 @@ class DialogsActivity : AppCompatActivity() {
                     val item = dataSnapshot.getValue(DialogItem::class.java)!!
                     val dialogItem = item.lastMessage!!
                     val dialogUser = dialogItem.user!!
-                    val dialogUserItem = User(dialogUser.id!!, dialogUser.name!!,
+                    val dialogUserItem = User(
+                        dialogUser.id!!, dialogUser.name!!,
                         dialogUser.avatar!!, dialogUser.isOnline!!,
-                        dialogUser.roomList, dialogUser.friendsList)
-                    val message = Message(dialogItem.id!!, dialogItem.dialogIdString!!,
+                        dialogUser.roomList, dialogUser.friendsList
+                    )
+                    val message = Message(
+                        dialogItem.id!!, dialogItem.dialogIdString!!,
                         dialogUserItem, dialogItem.text!!, dialogItem.createdAt!!,
-                        dialogItem.messageStatue!!, dialogItem.messageContent)
+                        dialogItem.messageStatue!!, dialogItem.messageContent
+                    )
                     val userList = ArrayList<User>()
-                    for(element in item.users!!){
-                        userList.add(User(element.id!!, element.name!!,
-                            element.avatar!!, element.isOnline!!,
-                            element.roomList, element.friendsList))
+                    for (element in item.users!!) {
+                        userList.add(
+                            User(
+                                element.id!!, element.name!!,
+                                element.avatar!!, element.isOnline!!,
+                                element.roomList, element.friendsList
+                            )
+                        )
                     }
-                    val dialog = Dialog(item.id!!, item.owner!!, item.dialogName!!, item.dialogPhoto!!,
-                        userList, message, item.unreadCount!!, item.messageType!!)
+                    val dialog = Dialog(
+                        item.id!!, item.owner!!, item.dialogName!!, item.dialogPhoto!!,
+                        userList, message, item.unreadCount!!, item.messageType!!
+                    )
                     ChatModuleUtils.addDialog(dialog)
 
-                    if(!groupItems.contains(dialog)) groupItems.add(dialog)
+                    if (!groupItems.contains(dialog)) groupItems.add(dialog)
 
                     val viewPagerAdapter =
                         DialogListAdapter(
@@ -119,8 +128,7 @@ class DialogsActivity : AppCompatActivity() {
                     viewPagerAdapter.refresh()
                     view_pager.adapter = viewPagerAdapter
                     tab.setViewPager(view_pager)
-                }
-                catch (e: Exception) {
+                } catch (e: Exception) {
                 }
             }
 
@@ -147,23 +155,33 @@ class DialogsActivity : AppCompatActivity() {
                     val item = dataSnapshot.getValue(DialogItem::class.java)!!
                     val dialogItem = item.lastMessage!!
                     val dialogUser = dialogItem.user!!
-                    val dialogUserItem = User(dialogUser.id!!, dialogUser.name!!,
+                    val dialogUserItem = User(
+                        dialogUser.id!!, dialogUser.name!!,
                         dialogUser.avatar!!, dialogUser.isOnline!!,
-                        dialogUser.roomList, dialogUser.friendsList)
-                    val message = Message(dialogItem.id!!, dialogItem.dialogIdString!!,
+                        dialogUser.roomList, dialogUser.friendsList
+                    )
+                    val message = Message(
+                        dialogItem.id!!, dialogItem.dialogIdString!!,
                         dialogUserItem, dialogItem.text!!, dialogItem.createdAt!!,
-                        dialogItem.messageStatue!!, dialogItem.messageContent)
+                        dialogItem.messageStatue!!, dialogItem.messageContent
+                    )
                     val userList = ArrayList<User>()
-                    for(element in item.users!!){
-                        userList.add(User(element.id!!, element.name!!,
-                            element.avatar!!, element.isOnline!!,
-                            element.roomList, element.friendsList))
+                    for (element in item.users!!) {
+                        userList.add(
+                            User(
+                                element.id!!, element.name!!,
+                                element.avatar!!, element.isOnline!!,
+                                element.roomList, element.friendsList
+                            )
+                        )
                     }
-                    val dialog = Dialog(item.id!!, item.owner!!, item.dialogName!!, item.dialogPhoto!!,
-                        userList, message, item.unreadCount!!, item.messageType!!)
+                    val dialog = Dialog(
+                        item.id!!, item.owner!!, item.dialogName!!, item.dialogPhoto!!,
+                        userList, message, item.unreadCount!!, item.messageType!!
+                    )
                     ChatModuleUtils.addDialog(dialog)
 
-                    if(!openItems.contains(dialog)) openItems.add(dialog)
+                    if (!openItems.contains(dialog)) openItems.add(dialog)
 
                     val viewPagerAdapter = DialogListAdapter(
                         act,
@@ -175,8 +193,7 @@ class DialogsActivity : AppCompatActivity() {
                     viewPagerAdapter.refresh()
                     view_pager.adapter = viewPagerAdapter
                     tab.setViewPager(view_pager)
-                }
-                catch (e: Exception) {
+                } catch (e: Exception) {
                     Utils.error(applicationContext, e, "init open dialogs")
                 }
             }
@@ -212,10 +229,12 @@ class DialogsActivity : AppCompatActivity() {
 
         fab.setOnClickListener {
             try {
-                if(!remoteConfig.getString("can_storage").replace("\"", "").toBoolean()){
-                    ToastUtils.show(applicationContext,
+                if (!remoteConfig.getString("can_storage").replace("\"", "").toBoolean()) {
+                    ToastUtils.show(
+                        applicationContext,
                         getString(R.string.server_down_chat_image),
-                        ToastUtils.SHORT, ToastUtils.WARNING)
+                        ToastUtils.SHORT, ToastUtils.WARNING
+                    )
                     return@setOnClickListener
                 }
                 var isClickMessageType = 0
@@ -231,8 +250,10 @@ class DialogsActivity : AppCompatActivity() {
                 val alert = BottomSheetDialog(this)
                 alert.setContentView(view)
 
-                ImageUtils.set(myUserData!!.avatar,
-                    imageView, applicationContext)
+                ImageUtils.set(
+                    myUserData!!.avatar,
+                    imageView, applicationContext
+                )
                 imageView.setOnClickListener {
                     TedImagePicker.with(this)
                         .mediaType(MediaType.IMAGE)
@@ -243,18 +264,19 @@ class DialogsActivity : AppCompatActivity() {
                 }
 
                 rgLayout.setOnCheckedChangeListener { _, i ->
-                    isClickMessageType = when(i){
+                    isClickMessageType = when (i) {
                         R.id.rb_group -> MessageType.NORMAL
                         else -> MessageType.OPEN
                     }
                 }
 
                 done.setOnClickListener {
-                    if(input.text.toString().isBlank()){
-                        ToastUtils.show(applicationContext, "방 이름을 입력해 주세요.",
-                            ToastUtils.SHORT, ToastUtils.WARNING)
-                    }
-                    else {
+                    if (input.text.toString().isBlank()) {
+                        ToastUtils.show(
+                            applicationContext, "방 이름을 입력해 주세요.",
+                            ToastUtils.SHORT, ToastUtils.WARNING
+                        )
+                    } else {
                         val randomUuid = ChatModuleUtils.randomUuid
                         val message = MessageItem(
                             randomUuid, randomUuid,
@@ -276,8 +298,7 @@ class DialogsActivity : AppCompatActivity() {
                                 openReference.child(randomUuid).setValue(dialog)
                                 alert.cancel()
                             }
-                        }
-                        else {
+                        } else {
                             val link = if (imageUrl.startsWith("file://")) {
                                 imageUrl.replaceFirst("file://", "")
                             } else imageUrl
@@ -336,8 +357,7 @@ class DialogsActivity : AppCompatActivity() {
                     }
                 }
                 alert.show()
-            }
-            catch (e: Exception){
+            } catch (e: Exception) {
                 Log.d("EEEEEE", e.toString())
                 //Utils.error(applicationContext, e, "add dialog")
             }

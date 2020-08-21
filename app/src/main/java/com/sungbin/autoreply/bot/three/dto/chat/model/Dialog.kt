@@ -1,7 +1,6 @@
 package com.sungbin.autoreply.bot.three.dto.chat.model
 
 import com.stfalcon.chatkit.commons.models.IDialog
-import com.sungbin.autoreply.bot.three.dto.chat.MessageType
 import java.util.*
 
 class Dialog(

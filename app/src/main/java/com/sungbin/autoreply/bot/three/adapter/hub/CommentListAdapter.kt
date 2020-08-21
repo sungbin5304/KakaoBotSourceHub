@@ -3,7 +3,8 @@ package com.sungbin.autoreply.bot.three.adapter.hub
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
-import android.text.*
+import android.text.InputFilter
+import android.text.SpannableStringBuilder
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -21,11 +22,12 @@ import com.sungbin.autoreply.bot.three.utils.chat.ChatModuleUtils
 import com.sungbin.sungbintool.LayoutUtils
 import com.sungbin.sungbintool.ReadMoreUtils
 import com.sungbin.sungbintool.ToastUtils
-import kotlin.collections.ArrayList
 
-class CommentListAdapter(private val list: ArrayList<CommentListItem>?,
-                         private val act: Activity,
-                         private val uuid: String) :
+class CommentListAdapter(
+    private val list: ArrayList<CommentListItem>?,
+    private val act: Activity,
+    private val uuid: String
+) :
     RecyclerView.Adapter<CommentListAdapter.CommentViewHolder>() {
 
     private var ctx: Context? = null
@@ -38,7 +40,8 @@ class CommentListAdapter(private val list: ArrayList<CommentListItem>?,
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): CommentViewHolder {
-        val view = LayoutInflater.from(viewGroup.context).inflate(R.layout.view_comment_list, viewGroup, false)
+        val view = LayoutInflater.from(viewGroup.context)
+            .inflate(R.layout.view_comment_list, viewGroup, false)
         ctx = viewGroup.context
         return CommentViewHolder(view)
     }
@@ -55,61 +58,65 @@ class CommentListAdapter(private val list: ArrayList<CommentListItem>?,
         ReadMoreUtils.setReadMoreLine(viewholder.comment, content!!, 3)
 
         viewholder.view.setOnLongClickListener {
-            if(uid != ChatModuleUtils.getDeviceId(ctx!!)) {
-                ToastUtils.show(ctx!!,
-                    act.getString(R.string.can_action_my_comment),
+            if (uid != ChatModuleUtils.getDeviceId(ctx!!)) {
+                ToastUtils.show(
+                    ctx!!,
+                    act.getString(R.string.only_manage_own_comment),
                     ToastUtils.SHORT, ToastUtils.WARNING
                 )
                 return@setOnLongClickListener false
             }
             val dialog = AlertDialog.Builder(act)
-            val action = arrayOf(act.getString(R.string.string_edit_comment),
-                act.getString(R.string.string_delete_comment))
-            dialog.setTitle(act.getString(R.string.choose_want_action))
-            dialog.setNegativeButton(act.getString(R.string.string_cancel), null)
+            val action = arrayOf(
+                act.getString(R.string.edit),
+                act.getString(R.string.delete)
+            )
+            dialog.setTitle(act.getString(R.string.choose_action))
+            dialog.setNegativeButton(act.getString(R.string.cancel), null)
             dialog.setSingleChoiceItems(action, -1) { _, which ->
                 alert!!.cancel()
-                when(which){
+                when (which) {
                     0 -> { //수정
                         val builder = AlertDialog.Builder(act)
-                        dialog.setTitle(act.getString(R.string.string_edit_comment))
+                        dialog.setTitle(act.getString(R.string.edit))
 
                         val layout = LinearLayout(act)
                         layout.orientation = LinearLayout.VERTICAL
 
                         val textview = TextView(act)
-                        textview.text = act.getString(R.string.max_length_one_fiive_zero)
+                        textview.text = act.getString(R.string.max_length)
                         textview.gravity = Gravity.CENTER
                         layout.addView(textview)
 
                         val input = EditText(act)
-                        input.hint = act.getString(R.string.string_comment)
+                        input.hint = act.getString(R.string.comment)
                         input.text = SpannableStringBuilder(content)
                         input.filters = arrayOf(InputFilter.LengthFilter(150))
                         layout.addView(input)
 
                         builder.setView(
                             LayoutUtils.putMargin(
-                                ctx!!, layout
+                                layout
                             )
                         )
-                        builder.setNegativeButton(act.getString(R.string.string_cancel), null)
+                        builder.setNegativeButton(act.getString(R.string.cancel), null)
                         builder.setPositiveButton(act.getString(R.string.post_complete)) { _, _ ->
                             val comment = input.text.toString()
-                            if(comment.isBlank()){
-                                ToastUtils.show(ctx!!,
+                            if (comment.isBlank()) {
+                                ToastUtils.show(
+                                    ctx!!,
                                     act.getString(R.string.please_input_comment),
                                     ToastUtils.SHORT, ToastUtils.WARNING
                                 )
-                            }
-                            else {
+                            } else {
                                 val item =
                                     CommentListItem(
                                         name,
                                         comment, uuid, uid, key
                                     )
                                 reference.child(key!!).setValue(item)
-                                ToastUtils.show(ctx!!,
+                                ToastUtils.show(
+                                    ctx!!,
                                     act.getString(R.string.comment_edit_success),
                                     ToastUtils.SHORT, ToastUtils.SUCCESS
                                 )
@@ -119,7 +126,8 @@ class CommentListAdapter(private val list: ArrayList<CommentListItem>?,
                     }
                     1 -> { //삭제
                         reference.child(key!!).removeValue()
-                        ToastUtils.show(ctx!!,
+                        ToastUtils.show(
+                            ctx!!,
                             act.getString(R.string.comment_delete_success),
                             ToastUtils.SHORT,
                             ToastUtils.SUCCESS
@@ -133,7 +141,7 @@ class CommentListAdapter(private val list: ArrayList<CommentListItem>?,
         }
     }
 
-    fun deleteItem(position: Int){
+    fun deleteItem(position: Int) {
         list!!.removeAt(position)
         notifyDataSetChanged()
     }

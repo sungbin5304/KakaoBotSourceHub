@@ -19,7 +19,7 @@ import com.sungbin.autoreply.bot.three.dto.bot.EditorFindItem
  * Created by SungBin on 2020-05-12.
  */
 
-class EditorFindAdapter (private val list: ArrayList<EditorFindItem>) :
+class EditorFindAdapter(private val list: ArrayList<EditorFindItem>) :
     RecyclerView.Adapter<EditorFindAdapter.EditorFindViewHolder>() {
 
     private var ctx: Context? = null
@@ -58,7 +58,7 @@ class EditorFindAdapter (private val list: ArrayList<EditorFindItem>) :
         val index = list[position].index
         viewholder.textview.isSelected = true
 
-        if(index > 0){
+        if (index > 0) {
             val span = SpannableStringBuilder(text)
             span.setSpan(
                 ForegroundColorSpan(
@@ -69,11 +69,10 @@ class EditorFindAdapter (private val list: ArrayList<EditorFindItem>) :
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
             )
             viewholder.textview.text = span
-        }
-        else viewholder.textview.text = text
+        } else viewholder.textview.text = text
 
         viewholder.textview.setOnClickListener {
-            if(listener != null) {
+            if (listener != null) {
                 listener!!.onItemClick(findText, text, line, index)
             }
         }

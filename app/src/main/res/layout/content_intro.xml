@@ -14,7 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_twice"
-            android:text="@string/string_hello"
+            android:text="@string/hello"
             android:fontFamily="@font/nanumgothic"
             android:textColor="@color/colorPrimary"
             android:textSize="50sp"
@@ -71,7 +71,7 @@
                 app:elevation="0dp"
                 android:elevation="0dp"
                 android:background="@drawable/login_button_design"
-                android:text="@string/string_continue" />
+                android:text="@string/_continue" />
 
     </RelativeLayout>
 

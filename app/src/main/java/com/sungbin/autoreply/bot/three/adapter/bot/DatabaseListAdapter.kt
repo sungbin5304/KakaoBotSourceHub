@@ -17,9 +17,11 @@ import com.sungbin.autoreply.bot.three.view.bot.activity.DatabaseViewActivity
 import com.sungbin.sungbintool.StorageUtils
 import com.sungbin.sungbintool.ToastUtils
 
-class DatabaseListAdapter(private val list: ArrayList<DatabaseListItem>?,
-                          private val act: Activity) :
-        RecyclerView.Adapter<DatabaseListAdapter.DatabaseListViewHolder>() {
+class DatabaseListAdapter(
+    private val list: ArrayList<DatabaseListItem>?,
+    private val act: Activity
+) :
+    RecyclerView.Adapter<DatabaseListAdapter.DatabaseListViewHolder>() {
 
     private var ctx: Context? = null
 
@@ -82,7 +84,7 @@ class DatabaseListAdapter(private val list: ArrayList<DatabaseListItem>?,
                 ToastUtils.SHORT,
                 ToastUtils.SUCCESS
             )
-            if(listener != null) listener!!.onRemoved()
+            if (listener != null) listener!!.onRemoved()
             return@setOnLongClickListener true
         }
     }

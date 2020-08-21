@@ -156,11 +156,11 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
             layout.orientation = LinearLayout.VERTICAL
 
             val title = EditText(ctx)
-            title.setHint(R.string.input_image_title)
+            title.setHint(R.string.image_title)
             layout.addView(title)
 
             val adress = EditText(ctx)
-            adress.setHint(R.string.input_image_adress)
+            adress.setHint(R.string.input_image_address)
             layout.addView(adress)
 
             dialog.setView(layout)
@@ -170,7 +170,7 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
                 val addressStr = adress.text.toString()
 
                 if (titleStr.isBlank() || addressStr.isBlank()) {
-                    ToastUtils.show(ctx, getString(R.string.plz_input_all),
+                    ToastUtils.show(ctx, getString(R.string.please_input_all),
                         ToastUtils.SHORT, ToastUtils.WARNING)
                 } else {
                     mEditor!!.insertImage(addressStr, titleStr)
@@ -190,16 +190,16 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
             layout.orientation = LinearLayout.VERTICAL
 
             val title = EditText(ctx)
-            title.setHint(R.string.input_adress_title)
+            title.setHint(R.string.address_title)
             layout.addView(title)
 
             val adress = EditText(ctx)
-            adress.setHint(R.string.input_link_adress)
+            adress.setHint(R.string.address_link)
             layout.addView(adress)
 
             dialog.setView(
                 LayoutUtils.putMargin(
-                    ctx, layout
+                    layout
                 )
             )
             dialog.setNegativeButton("취소", null)
@@ -207,7 +207,7 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
                 val titleStr = title.text.toString()
                 val addressStr = adress.text.toString()
                 if (titleStr.isBlank() || addressStr.isBlank()) {
-                    ToastUtils.show(ctx, getString(R.string.plz_input_all),
+                    ToastUtils.show(ctx, getString(R.string.please_input_all),
                         ToastUtils.SHORT, ToastUtils.WARNING)
                 } else {
                     mEditor!!.insertImage(addressStr, titleStr)
@@ -225,7 +225,7 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menu.add(0, 1, 0, resources.getString(R.string.upload_string)).setIcon(R.drawable.ic_save_white_24dp)
+        menu.add(0, 1, 0, resources.getString(R.string.upload)).setIcon(R.drawable.ic_save_white_24dp)
             .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         return true
     }
@@ -264,7 +264,7 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
                     finish()
                 } else {
                     val dialog = AlertDialog.Builder(ctx)
-                    dialog.setTitle(getString(R.string.set_script_version))
+                    dialog.setTitle(getString(R.string.description_script_version))
 
                     val layout = LinearLayout(ctx)
                     layout.orientation = LinearLayout.VERTICAL
@@ -275,13 +275,13 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
                     layout.addView(textview)
 
                     val input = EditText(ctx)
-                    input.hint = getString(R.string.string_script_version)
+                    input.hint = getString(R.string.value_script_version)
                     input.inputType = 0x00000002
                     input.filters = arrayOf(InputFilter.LengthFilter(3))
                     layout.addView(input)
 
                     dialog.setView(LayoutUtils.putMargin(
-                        ctx, layout
+                        layout
                     ))
                     dialog.setNeutralButton(getString(R.string.cancel_script_upload)) { _, _ ->
                         val root = reference.child(key)
@@ -298,7 +298,7 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
                         )
                         finish()
                     }
-                    dialog.setPositiveButton(getString(R.string.string_upload)) { _, _ ->
+                    dialog.setPositiveButton(getString(R.string.upload)) { _, _ ->
                         version = input.text.toString()
                         if (version.isBlank()) {
                             ToastUtils.show(ctx,
@@ -322,7 +322,7 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
                             }.addOnSuccessListener { taskSnapshot ->
                                 pDialog.dismissWithAnimation()
                                ToastUtils.show(ctx,
-                                   resources.getString(R.string.script_upload_done),
+                                   resources.getString(R.string.script_uploaded),
                                 ToastUtils.SHORT, ToastUtils.SUCCESS
                                )
                                 val root = reference.child(key)
@@ -343,7 +343,7 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
                 }
             } else {
                 ToastUtils.show(applicationContext,
-                    getString(R.string.plz_input_all),
+                    getString(R.string.please_input_all),
                     ToastUtils.SHORT, ToastUtils.WARNING
                 )
             }
@@ -374,7 +374,7 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
         save.setOnClickListener { view ->
             val color = picker.color
             mEditor!!.setTextColor(color)
-            ToastUtils.show(ctx, getString(R.string.color_select),
+            ToastUtils.show(ctx, getString(R.string.color_selected),
                 ToastUtils.SHORT, ToastUtils.SUCCESS
             )
             alert!!.cancel()
@@ -382,7 +382,7 @@ class PostActivity : AppCompatActivity(), FileDialog.OnFileSelectedListener {
         layout.addView(save)
         dialog.setView(
             LayoutUtils.putMargin(
-                ctx, layout
+                layout
             )
         )
 

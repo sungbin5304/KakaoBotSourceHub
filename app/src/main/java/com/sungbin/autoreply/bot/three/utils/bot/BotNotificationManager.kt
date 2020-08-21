@@ -19,27 +19,27 @@ object BotNotificationManager {
     private val smallIcon: Int
         get() = R.drawable.icon
 
-    private fun getAppName(context: Context): String{
+    private fun getAppName(context: Context): String {
         return context.getString(R.string.app_name)
     }
 
-    private fun getTitle(context: Context): String{
+    private fun getTitle(context: Context): String {
         return context.getString(R.string.kakaotalk_bot)
     }
 
-    private fun getBotOnContent(context: Context): String{
+    private fun getBotOnContent(context: Context): String {
         return context.getString(R.string.now_bot_working)
     }
 
-    private fun getBotOffContent(context: Context): String{
+    private fun getBotOffContent(context: Context): String {
         return context.getString(R.string.now_bot_stop)
     }
 
     fun createChannel(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val group = NotificationChannelGroup(
-               getAppName(context),
-               getAppName(context)
+                getAppName(context),
+                getAppName(context)
             )
             getManager(context).createNotificationChannelGroup(group)
 
@@ -61,7 +61,7 @@ object BotNotificationManager {
         return context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     }
 
-    private fun setBuilder(context: Context, builder: NotificationCompat.Builder){
+    private fun setBuilder(context: Context, builder: NotificationCompat.Builder) {
         val startPendingIntent = PendingIntent.getBroadcast(
             context,
             0,
@@ -97,7 +97,7 @@ object BotNotificationManager {
         )
         val deleteAction = NotificationCompat.Action(
             R.drawable.icon,
-            context.getString(R.string.string_close),
+            context.getString(R.string.close),
             deletePendingIntent
         )
 
@@ -123,11 +123,10 @@ object BotNotificationManager {
             )
 
         val botPowerOn = DataUtils.readData(context, "BotOn", "true").toBoolean()
-        if(botPowerOn) { //봇 켜짐 -> 봇 끄기
+        if (botPowerOn) { //봇 켜짐 -> 봇 끄기
             builder.addAction(stopAction)
             builder.setContentText(getBotOnContent(context))
-        }
-        else { //봇 꺼짐 -> 봇 켜기, 노티 닫기
+        } else { //봇 꺼짐 -> 봇 켜기, 노티 닫기
             builder.addAction(startAction)
             builder.addAction(deleteAction)
             builder.setContentText(getBotOffContent(context))
@@ -151,8 +150,7 @@ object BotNotificationManager {
             setBuilder(context, builder)
 
             getManager(context).notify(1000, builder.build())
-        }
-        else {
+        } else {
             val builder = NotificationCompat.Builder(context)
                 .setContentTitle(getTitle(context))
                 .setSmallIcon(smallIcon)

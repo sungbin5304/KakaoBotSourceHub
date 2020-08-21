@@ -20,10 +20,11 @@ import com.sungbin.autoreply.bot.three.view.chat.activity.MessagesActivity
 import com.sungbin.autoreply.bot.three.view.chat.viewholder.dialog.DialogViewHolder
 import com.sungbin.sungbintool.ToastUtils
 
-class DialogListAdapter constructor(act: Activity, chatList: ArrayList<Dialog>?,
-                                    openChatList: ArrayList<Dialog>?,
-                                    fabItem: ExtendedFloatingActionButton)
-    : PagerAdapter(), DialogsListAdapter.OnDialogClickListener<Dialog?>,
+class DialogListAdapter constructor(
+    act: Activity, chatList: ArrayList<Dialog>?,
+    openChatList: ArrayList<Dialog>?,
+    fabItem: ExtendedFloatingActionButton
+) : PagerAdapter(), DialogsListAdapter.OnDialogClickListener<Dialog?>,
     DialogsListAdapter.OnDialogLongClickListener<Dialog?> {
 
     var dialogsAdapter: DialogsListAdapter<Dialog?>? = null
@@ -41,17 +42,17 @@ class DialogListAdapter constructor(act: Activity, chatList: ArrayList<Dialog>?,
         }
         val dialogsList = view.findViewById<DialogsList>(R.id.dialogsList)
 
-         dialogsAdapter = DialogsListAdapter(
+        dialogsAdapter = DialogsListAdapter(
             R.layout.item_dialog_viewholder,
             DialogViewHolder::class.java,
             imageLoader
-         )
+        )
 
-         dialogsAdapter!!.setOnDialogClickListener(this)
-         dialogsAdapter!!.setOnDialogLongClickListener(this)
-         dialogsList!!.setAdapter(dialogsAdapter)
+        dialogsAdapter!!.setOnDialogClickListener(this)
+        dialogsAdapter!!.setOnDialogLongClickListener(this)
+        dialogsList!!.setAdapter(dialogsAdapter)
 
-         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             dialogsList.setOnScrollChangeListener { _, _, y, _, oldY ->
                 if (y > oldY) {
                     //Down
@@ -62,16 +63,16 @@ class DialogListAdapter constructor(act: Activity, chatList: ArrayList<Dialog>?,
                     fab.extend()
                 }
             }
-         }
+        }
 
-         when(position){
+        when (position) {
             0 -> {
                 dialogsAdapter!!.setItems(chatItem as List<Dialog?>)
             }
             else -> {
                 dialogsAdapter!!.setItems(openChatItem as List<Dialog?>)
             }
-         }
+        }
 
         refresh()
         container.addView(view)
@@ -79,13 +80,17 @@ class DialogListAdapter constructor(act: Activity, chatList: ArrayList<Dialog>?,
     }
 
     override fun onDialogClick(dialog: Dialog?) {
-        ctx.startActivity(Intent(ctx, MessagesActivity::class.java)
-            .putExtra("dialogId", dialog!!.id))
+        ctx.startActivity(
+            Intent(ctx, MessagesActivity::class.java)
+                .putExtra("dialogId", dialog!!.id)
+        )
     }
 
     override fun onDialogLongClick(dialog: Dialog?) {
-        ToastUtils.show(ctx, "${dialog!!.dialogName} 롱클릭",
-            ToastUtils.SHORT, ToastUtils.INFO)
+        ToastUtils.show(
+            ctx, "${dialog!!.dialogName} 롱클릭",
+            ToastUtils.SHORT, ToastUtils.INFO
+        )
     }
 
     override fun destroyItem(
@@ -105,13 +110,13 @@ class DialogListAdapter constructor(act: Activity, chatList: ArrayList<Dialog>?,
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
-        return when(position){
+        return when (position) {
             0 -> "채팅"
             else -> "오픈채팅"
         }
     }
 
-    fun refresh(){
+    fun refresh() {
         //dialogsAdapter!!.notifyDataSetChanged()
     }
 }

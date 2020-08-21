@@ -28,7 +28,7 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:maxLength="20"
-                android:hint="@string/title_string"/>
+                android:hint="@string/title"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -49,14 +49,14 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:maxLength="30"
-                android:hint="@string/desc_string"/>
+                android:hint="@string/description_post"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/script_upload_string"
+            android:text="@string/script_upload"
             android:textColor="@android:color/white"
             android:background="@color/colorPrimary"
             android:layout_marginTop="@dimen/margin_half"
@@ -83,7 +83,7 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="@null"
-                        android:contentDescription="@string/undo_string"
+                        android:contentDescription="@string/undo"
                         android:src="@drawable/ic_undo_white_24dp"  />
 
                 <ImageButton
@@ -91,7 +91,7 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="@null"
-                        android:contentDescription="@string/redo_string"
+                        android:contentDescription="@string/redo"
                         android:src="@drawable/ic_redo_white_24dp"/>
 
                 <ImageButton
@@ -99,7 +99,7 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="@null"
-                        android:contentDescription="@string/bold_string"
+                        android:contentDescription="@string/bold"
                         android:src="@drawable/ic_format_bold_white_24dp"  />
 
                 <ImageButton
@@ -107,7 +107,7 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="@null"
-                        android:contentDescription="@string/italic_string"
+                        android:contentDescription="@string/italic"
                         android:src="@drawable/ic_format_italic_white_24dp"/>
 
                 <ImageButton
@@ -115,7 +115,7 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="@null"
-                        android:contentDescription="@string/strikethrough_string"
+                        android:contentDescription="@string/strikethrough"
                         android:src="@drawable/ic_strikethrough_s_white_24dp"  />
 
                 <ImageButton
@@ -123,7 +123,7 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="@null"
-                        android:contentDescription="@string/underlined_string"
+                        android:contentDescription="@string/underlined"
                         android:src="@drawable/ic_format_underlined_white_24dp" />
 
                 <ImageButton
@@ -131,7 +131,7 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="@null"
-                        android:contentDescription="@string/text_color_string"
+                        android:contentDescription="@string/text_color"
                         android:src="@drawable/ic_format_color_text_white_24dp" />
 
                 <ImageButton
@@ -139,7 +139,7 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="@null"
-                        android:contentDescription="@string/indent_increase_string"
+                        android:contentDescription="@string/indent_increase"
                         android:src="@drawable/ic_format_indent_increase_white_24dp"  />
 
                 <ImageButton
@@ -147,7 +147,7 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="@null"
-                        android:contentDescription="@string/indent_outdent_string"
+                        android:contentDescription="@string/indent_outdent"
                         android:src="@drawable/ic_format_indent_outdent_white_24dp" />
 
                 <ImageButton
@@ -155,7 +155,7 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="@null"
-                        android:contentDescription="@string/align_left_string"
+                        android:contentDescription="@string/align_left"
                         android:src="@drawable/ic_format_align_left_white_24dp"/>
 
                 <ImageButton
@@ -163,7 +163,7 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="@null"
-                        android:contentDescription="@string/align_center_string"
+                        android:contentDescription="@string/align_center"
                         android:src="@drawable/ic_format_align_center_white_24dp" />
 
                 <ImageButton
@@ -171,7 +171,7 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="@null"
-                        android:contentDescription="@string/align_right_string"
+                        android:contentDescription="@string/align_right"
                         android:src="@drawable/ic_format_align_right_white_24dp" />
 
                 <ImageButton
@@ -179,7 +179,7 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="@null"
-                        android:contentDescription="@string/list_bulleted_string"
+                        android:contentDescription="@string/list_bullet"
                         android:src="@drawable/ic_format_list_bulleted_white_24dp"  />
 
                 <ImageButton
@@ -187,7 +187,7 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="@null"
-                        android:contentDescription="@string/list_numbered_string"
+                        android:contentDescription="@string/list_number"
                         android:src="@drawable/ic_format_list_numbered_white_24dp" />
 
                 <ImageButton
@@ -195,7 +195,7 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="@null"
-                        android:contentDescription="@string/quote_string"
+                        android:contentDescription="@string/quote"
                         android:src="@drawable/ic_format_quote_white_24dp"/>
 
                 <ImageButton
@@ -203,7 +203,7 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="@null"
-                        android:contentDescription="@string/insert_image_string"
+                        android:contentDescription="@string/insert_image"
                         android:src="@drawable/ic_image_white_24dp" />
 
                 <ImageButton
@@ -211,7 +211,7 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="@null"
-                        android:contentDescription="@string/insert_link_string"
+                        android:contentDescription="@string/insert_link"
                         android:src="@drawable/ic_insert_link_white_24dp" />
 
             </LinearLayout>

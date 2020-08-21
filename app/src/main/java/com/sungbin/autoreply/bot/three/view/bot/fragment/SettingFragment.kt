@@ -39,11 +39,12 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class SettingFragment constructor(private val fragmentManage: FragmentManager,
-                                  private val view: Int,
-                                  private val bottombar: SmoothBottomBar,
-                                  private val textview: TextView,
-                                  private val isTutorial: Boolean
+class SettingFragment constructor(
+    private val fragmentManage: FragmentManager,
+    private val view: Int,
+    private val bottombar: SmoothBottomBar,
+    private val textview: TextView,
+    private val isTutorial: Boolean
 ) : Fragment(), CaulyAdViewListener, CaulyInterstitialAdListener {
 
     private var showInterstitial = false
@@ -79,8 +80,10 @@ class SettingFragment constructor(private val fragmentManage: FragmentManager,
     private lateinit var tvWelcome: TextView
     private lateinit var btnDone: Button
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         val view = inflater.inflate(R.layout.fragment_setting, container, false)
 
         swAutoSave = view.findViewById(R.id.sw_auto_save)
@@ -133,15 +136,16 @@ class SettingFragment constructor(private val fragmentManage: FragmentManager,
 
         fabSave!!.hide()
 
-        if(isTutorial){
+        if (isTutorial) {
             lavWelcome.visibility = View.VISIBLE
             lavWelcome.playAnimation()
             tvWelcome.visibility = View.VISIBLE
             btnDone.visibility = View.VISIBLE
             btnDone.setOnClickListener {
-                textview.text = getString(R.string.string_dashboard)
+                textview.text = getString(R.string.dashboard)
                 val fragmentTransaction = fragmentManage.beginTransaction()
-                fragmentTransaction.replace(view,
+                fragmentTransaction.replace(
+                    view,
                     DashboardFragment(fragmentManage, view, bottombar, textview, true)
                 ).commit()
                 bottombar.setActiveItem(0)
@@ -203,7 +207,8 @@ class SettingFragment constructor(private val fragmentManage: FragmentManager,
         val favoriteFanguage = DataUtils.readData(context!!, "FavoriteLanguage", "null")
         val notHighting = DataUtils.readData(context!!, "NotHighting", "false").toBoolean()
         val errorBotOff = DataUtils.readData(context!!, "ErrorBotOff", "false").toBoolean()
-        val notErrorHighting = DataUtils.readData(context!!, "NotErrorHighting", "false").toBoolean()
+        val notErrorHighting =
+            DataUtils.readData(context!!, "NotErrorHighting", "false").toBoolean()
 
         swAutoSave!!.isChecked = autoSave
         swKeepScope!!.isChecked = keepScope
@@ -218,11 +223,10 @@ class SettingFragment constructor(private val fragmentManage: FragmentManager,
         etBlackRoom!!.text = StringUtils.toEditable(Black.readRoom().trim())
         etBlackSender!!.text = StringUtils.toEditable(Black.readSender().trim())
 
-        if(favoriteFanguage != "null"){
-            if(favoriteFanguage == "자바스크립트"){
+        if (favoriteFanguage != "null") {
+            if (favoriteFanguage == "자바스크립트") {
                 tblFavorateLanguage!!.setToggled(R.id.javascript, true)
-            }
-            else {
+            } else {
                 tblFavorateLanguage!!.setToggled(R.id.simple, true)
             }
         }
@@ -230,10 +234,9 @@ class SettingFragment constructor(private val fragmentManage: FragmentManager,
         swBotOnoff!!.isChecked = DataUtils.readData(context!!, "BotOn", "false").toBoolean()
         swBotOnoff!!.setOnCheckedChangeListener { _, boolean ->
             DataUtils.saveData(context!!, "BotOn", boolean.toString())
-            if(boolean){
+            if (boolean) {
                 BotNotificationManager.create(context!!)
-            }
-            else {
+            } else {
                 BotNotificationManager.delete(context!!)
             }
         }
@@ -307,14 +310,12 @@ class SettingFragment constructor(private val fragmentManage: FragmentManager,
                             ToastUtils.SHORT,
                             ToastUtils.WARNING
                         )
-                    }
-                    else {
+                    } else {
                         sbTextSize!!.progress = i
                         tvPreviewSize!!.textSize = i.toFloat()
                         DataUtils.saveData(context!!, "TextSize", i.toString())
                     }
-                }
-                catch (e: Exception) {
+                } catch (e: Exception) {
                     ToastUtils.show(
                         context!!,
                         getString(R.string.can_set_one_thirty),
@@ -353,13 +354,11 @@ class SettingFragment constructor(private val fragmentManage: FragmentManager,
                             ToastUtils.SHORT,
                             ToastUtils.WARNING
                         )
-                    }
-                    else {
+                    } else {
                         sbHtmlLimitTime!!.progress = i
                         DataUtils.saveData(context!!, "HtmlLimitTime", i.toString())
                     }
-                }
-                catch (e: Exception) {
+                } catch (e: Exception) {
                     ToastUtils.show(
                         context!!,
                         getString(R.string.can_set_one_ten),
@@ -373,7 +372,7 @@ class SettingFragment constructor(private val fragmentManage: FragmentManager,
         btnShowAd!!.setOnClickListener {
             ToastUtils.show(
                 context!!,
-                getString(R.string.string_thanks),
+                getString(R.string.thanks),
                 ToastUtils.LONG,
                 ToastUtils.SUCCESS
             )
@@ -395,7 +394,7 @@ class SettingFragment constructor(private val fragmentManage: FragmentManager,
         }
 
         tblFavorateLanguage!!.onToggledListener = { _, toggle, select ->
-            if(select) {
+            if (select) {
                 DataUtils.saveData(
                     context!!,
                     "FavoriteLanguage",
@@ -416,7 +415,7 @@ class SettingFragment constructor(private val fragmentManage: FragmentManager,
 
             ToastUtils.show(
                 context!!,
-                getString(R.string.string_saved),
+                getString(R.string.saved),
                 ToastUtils.SHORT,
                 ToastUtils.SUCCESS
             )
@@ -514,7 +513,7 @@ class SettingFragment constructor(private val fragmentManage: FragmentManager,
     }
 
     @SuppressLint("InflateParams")
-    private fun showAppSelectDialog(){
+    private fun showAppSelectDialog() {
         ToastUtils.show(
             context!!,
             context!!.getString(R.string.load_app_list),
@@ -580,7 +579,7 @@ class SettingFragment constructor(private val fragmentManage: FragmentManager,
         }.start()
     }
 
-    private fun showLicenseDialog(){
+    private fun showLicenseDialog() {
         LicenserDialog(activity)
             .setTitle("Opensource Licenses")
             .setCustomNoticeTitle("Licenses for Libraries: ")
@@ -588,7 +587,8 @@ class SettingFragment constructor(private val fragmentManage: FragmentManager,
                 Library(
                     "Kotlin",
                     "https://github.com/JetBrains/kotlin",
-                    License.APACHE2)
+                    License.APACHE2
+                )
             )
             .setLibrary(
                 Library(

@@ -7,7 +7,7 @@ class ScriptListItem {
     var lastTime: String? = null
     var image: Int? = null
 
-    constructor(){}
+    constructor()
     constructor(name: String?, onOff: Boolean, type: Int?, lastTime: String?, image: Int) {
         this.name = name
         this.onOff = onOff

@@ -21,40 +21,41 @@ class MainActivity : AppCompatActivity() {
 
     private var fm: FragmentManager? = null
     private var fragmentTransaction: FragmentTransaction? = null
-    private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        when (item.itemId) {
-            R.id.navigation_chatting -> {
-                startActivity(Intent(this, DialogsActivity::class.java))
-                fragmentTransaction = fm!!.beginTransaction().apply {
-                    replace(R.id.page, BoardListFragment())
-                    commit()
+    private val onNavigationItemSelectedListener =
+        BottomNavigationView.OnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_chatting -> {
+                    startActivity(Intent(this, DialogsActivity::class.java))
+                    fragmentTransaction = fm!!.beginTransaction().apply {
+                        replace(R.id.page, BoardListFragment())
+                        commit()
+                    }
+                    return@OnNavigationItemSelectedListener true
                 }
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_board -> {
-                fragmentTransaction = fm!!.beginTransaction().apply {
-                    replace(R.id.page, BoardListFragment())
-                    commit()
+                R.id.navigation_board -> {
+                    fragmentTransaction = fm!!.beginTransaction().apply {
+                        replace(R.id.page, BoardListFragment())
+                        commit()
+                    }
+                    return@OnNavigationItemSelectedListener true
                 }
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_rank -> {
-                fragmentTransaction = fm!!.beginTransaction().apply {
-                    replace(R.id.page, BoardListFragment())
-                    commit()
+                R.id.navigation_rank -> {
+                    fragmentTransaction = fm!!.beginTransaction().apply {
+                        replace(R.id.page, BoardListFragment())
+                        commit()
+                    }
+                    return@OnNavigationItemSelectedListener true
                 }
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_notifications -> {
-                fragmentTransaction = fm!!.beginTransaction().apply {
-                    replace(R.id.page, BoardListFragment())
-                    commit()
+                R.id.navigation_notifications -> {
+                    fragmentTransaction = fm!!.beginTransaction().apply {
+                        replace(R.id.page, BoardListFragment())
+                        commit()
+                    }
+                    return@OnNavigationItemSelectedListener true
                 }
-                return@OnNavigationItemSelectedListener true
             }
+            false
         }
-        false
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,12 +73,18 @@ class MainActivity : AppCompatActivity() {
 
         val reference = FirebaseDatabase.getInstance().reference.child("User Nickname")
         reference.child(
-            DataUtils.readData(applicationContext,
-            "uid", "null")).addValueEventListener(object : ValueEventListener {
+            DataUtils.readData(
+                applicationContext,
+                "uid", "null"
+            )
+        ).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                DataUtils.saveData(applicationContext,
-                    "nickname", dataSnapshot.value.toString())
+                DataUtils.saveData(
+                    applicationContext,
+                    "nickname", dataSnapshot.value.toString()
+                )
             }
+
             override fun onCancelled(databaseError: DatabaseError) {
 
             }

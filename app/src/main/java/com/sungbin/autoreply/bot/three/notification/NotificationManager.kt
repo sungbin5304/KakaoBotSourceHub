@@ -34,7 +34,11 @@ object NotificationManager {
             getManager(context).createNotificationChannelGroup(group1)
 
             val channelMessage =
-                NotificationChannel(Channel.NAME, name, android.app.NotificationManager.IMPORTANCE_DEFAULT)
+                NotificationChannel(
+                    Channel.NAME,
+                    name,
+                    android.app.NotificationManager.IMPORTANCE_DEFAULT
+                )
             channelMessage.description = description
             channelMessage.group = GROUP_NAME
             channelMessage.lightColor = R.color.colorAccent
@@ -51,7 +55,8 @@ object NotificationManager {
     fun showNormalNotification(context: Context, id: Int, title: String, content: String) {
 
         val intent = Intent(context, MainActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent =
+            PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             val builder = Notification.Builder(context, Channel.NAME)
@@ -75,7 +80,13 @@ object NotificationManager {
         }
     }
 
-    fun showInboxStyleNotification(context: Context, id: Int, title: String, content: String, boxText: Array<String>) {
+    fun showInboxStyleNotification(
+        context: Context,
+        id: Int,
+        title: String,
+        content: String,
+        boxText: Array<String>
+    ) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             val builder = Notification.Builder(context, Channel.NAME)
                 .setContentTitle(title)
@@ -117,8 +128,8 @@ object NotificationManager {
     fun deleteNotification(context: Context, id: Int) {
         try {
             NotificationManagerCompat.from(context).cancel(id)
+        } catch (e: java.lang.Exception) {
         }
-        catch (e: java.lang.Exception){ }
     }
 
     annotation class Channel {

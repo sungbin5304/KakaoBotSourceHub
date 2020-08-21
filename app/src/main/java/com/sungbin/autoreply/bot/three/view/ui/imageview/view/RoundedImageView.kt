@@ -25,8 +25,17 @@ class RoundedImageView : AppCompatImageView {
 
     constructor(context: Context) : this(context, null, 0)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        val typedArray = context.theme.obtainStyledAttributes(attrs, R.styleable.RoundedImageView, defStyleAttr, 0)
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
+        val typedArray = context.theme.obtainStyledAttributes(
+            attrs,
+            R.styleable.RoundedImageView,
+            defStyleAttr,
+            0
+        )
         initialize(typedArray)
     }
 
@@ -34,7 +43,10 @@ class RoundedImageView : AppCompatImageView {
         clipPath = Path()
 
         if (typedArray != null) {
-            radius = typedArray.getDimensionPixelSize(R.styleable.RoundedImageView_radius, DEFAULT_RADIUS)
+            radius = typedArray.getDimensionPixelSize(
+                R.styleable.RoundedImageView_radius,
+                DEFAULT_RADIUS
+            )
             typedArray.recycle()
         }
     }
@@ -48,7 +60,12 @@ class RoundedImageView : AppCompatImageView {
     override fun onDraw(canvas: Canvas) {
         if (radius != 0) {
             clipPath!!.reset()
-            clipPath!!.addRoundRect(bitmapRect!!, radius.toFloat(), radius.toFloat(), Path.Direction.CW)
+            clipPath!!.addRoundRect(
+                bitmapRect!!,
+                radius.toFloat(),
+                radius.toFloat(),
+                Path.Direction.CW
+            )
             canvas.clipPath(clipPath!!)
         }
 

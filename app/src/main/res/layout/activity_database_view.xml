@@ -35,7 +35,7 @@
                         tools:ignore="RelativeOverlap" />
 
                 <ImageButton
-                        android:contentDescription="@string/string_open"
+                        android:contentDescription="@string/expand"
                         android:id="@+id/ib_open"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
@@ -48,7 +48,7 @@
 
                 <ImageButton
                         android:tint="@color/colorWhite"
-                        android:contentDescription="@string/string_close"
+                        android:contentDescription="@string/close"
                         android:id="@+id/ib_close"
                         android:layout_width="25dp"
                         android:layout_height="25dp"

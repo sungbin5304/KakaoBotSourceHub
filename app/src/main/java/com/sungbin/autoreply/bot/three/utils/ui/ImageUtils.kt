@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.AsyncTask
 import android.util.Log
 import android.widget.ImageView
-import com.sungbin.autoreply.bot.three.utils.ui.ImageUtils.replaceLast
 import com.sungbin.sungbintool.StorageUtils
 import java.io.File
 import java.io.FileOutputStream
@@ -25,7 +24,7 @@ object ImageUtils {
         ).execute(path, url)
     }
 
-    fun checkDownloadFileExist(name: String): Boolean{
+    fun checkDownloadFileExist(name: String): Boolean {
         return File(
             getDownloadFilePath(
                 name
@@ -57,29 +56,29 @@ object ImageUtils {
         }
     }
 
-    fun getDownloadFilePath(path: String): String{
+    fun getDownloadFilePath(path: String): String {
         var name: String
         try {
             name = path.replaceLast("/", "*").split("*")[1]
             if (name.contains("?")) name = name.split("?")[0]
-        }
-        catch (e: Exception){
+        } catch (e: Exception) {
             name = path
         }
         return StorageUtils.sdcard +
                 "/Android/data/com.sungbin.autoreply.bot.three/chat/content/picture/$name"
     }
 
-    private fun String.replaceLast(regex: String, replacement: String): String{
+    private fun String.replaceLast(regex: String, replacement: String): String {
         val regexIndexOf = this.lastIndexOf(regex)
-        return if(regexIndexOf == -1) this
+        return if (regexIndexOf == -1) this
         else {
-            this.substring(0, regexIndexOf) + this.substring(regexIndexOf).replace(regex, replacement)
+            this.substring(0, regexIndexOf) + this.substring(regexIndexOf)
+                .replace(regex, replacement)
         }
     }
 
-    private class ImageDownloadTask constructor(context: Context)
-        : AsyncTask<String?, Void?, Void?>() {
+    private class ImageDownloadTask constructor(context: Context) :
+        AsyncTask<String?, Void?, Void?>() {
 
         private val ctx = context
 
@@ -108,7 +107,7 @@ object ImageUtils {
             } catch (e: Exception) {
                 Log.e("image error", e.toString())
                 StorageUtils.createFolder("KTBH Error")
-                StorageUtils.save("KTBH Error/${e.stackTrace[0]}.log",  e.toString())
+                StorageUtils.save("KTBH Error/${e.stackTrace[0]}.log", e.toString())
             }
             return null
         }

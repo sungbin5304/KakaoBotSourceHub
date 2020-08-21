@@ -21,12 +21,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/comment_sender"
-                android:text="@string/string_name"/>
+                android:text="@string/owner"/>
 
         <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/string_comment"
+                android:text="@string/comment"
                 android:id="@+id/comment_content"
                 android:textStyle="bold"
                 android:textSize="16sp"/>

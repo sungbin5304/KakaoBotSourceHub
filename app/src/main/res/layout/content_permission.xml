@@ -90,7 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_default"
             android:layout_marginTop="@dimen/margin_half"
-            android:text="@string/why_need_storage_permission"
+            android:text="@string/reason_for_storage_permission"
             app:layout_constraintStart_toEndOf="@+id/storage_icon_frame"
             app:layout_constraintTop_toBottomOf="@+id/storage_title" />
 
@@ -153,7 +153,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_default"
             android:layout_marginTop="@dimen/margin_half"
-            android:text="@string/why_need_read_notification_permission"
+            android:text="@string/reason_for_read_notification_permission"
             app:layout_constraintStart_toEndOf="@+id/notification_icon_frame"
             app:layout_constraintTop_toBottomOf="@+id/notification_title" />
 
@@ -205,7 +205,7 @@
                 android:paddingStart="@dimen/margin_half"
                 android:paddingEnd="@dimen/margin_half"
                 android:background="@drawable/login_button_design"
-                android:text="@string/string_continue" />
+                android:text="@string/_continue" />
 
     </RelativeLayout>
 

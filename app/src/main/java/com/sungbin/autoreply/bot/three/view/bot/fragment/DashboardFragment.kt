@@ -49,14 +49,16 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-@Suppress("DEPRECATED_IDENTITY_EQUALS", "UNUSED_VARIABLE",
+@Suppress(
+    "DEPRECATED_IDENTITY_EQUALS", "UNUSED_VARIABLE",
     "RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS"
 )
-class DashboardFragment constructor(private val fragmentManage: FragmentManager,
-                                    private val view: Int,
-                                    private val bottombar: SmoothBottomBar,
-                                    private val textview: TextView,
-                                    private val isTutorialEnd: Boolean
+class DashboardFragment constructor(
+    private val fragmentManage: FragmentManager,
+    private val view: Int,
+    private val bottombar: SmoothBottomBar,
+    private val textview: TextView,
+    private val isTutorialEnd: Boolean
 ) : Fragment() {
 
     private var searchEt: EditText? = null
@@ -83,8 +85,10 @@ class DashboardFragment constructor(private val fragmentManage: FragmentManager,
     private lateinit var mdvView: MarkdownView
     private lateinit var ivBanner: ImageView
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         val view = inflater.inflate(R.layout.fragment_dashboard, container, false)
         searchBtn = view.findViewById(R.id.btn_script_search)
         searchEt = view.findViewById(R.id.et_search)
@@ -121,7 +125,7 @@ class DashboardFragment constructor(private val fragmentManage: FragmentManager,
             "true"
         ).toBoolean()
 
-        if(isTutorial) {
+        if (isTutorial) {
             searchBtn!!.alpha = 0.1f
             searchEt!!.alpha = 0.1f
             scriptsRc!!.alpha = 0.1f
@@ -157,7 +161,7 @@ class DashboardFragment constructor(private val fragmentManage: FragmentManager,
             tvDatabases.isEnabled = false
 
             btnNext.setOnClickListener {
-                textview.text = getString(R.string.string_sandbox)
+                textview.text = getString(R.string.sandbox)
                 val fragmentTransaction = fragmentManage.beginTransaction()
                 fragmentTransaction.replace(
                     view,
@@ -415,7 +419,7 @@ class DashboardFragment constructor(private val fragmentManage: FragmentManager,
             })
 
             for (i in logList.indices) {
-                if(i >= 2) break
+                if (i >= 2) break
                 val name = logList[i].name
                 val content = LogUtils.get(name, "content")
                 val time = LogUtils.get(name, "time")
@@ -435,7 +439,7 @@ class DashboardFragment constructor(private val fragmentManage: FragmentManager,
             })
 
             for (i in databaseList.indices) {
-                if(i >= 2) break
+                if (i >= 2) break
                 val name = databaseList[i].name
                 val item = DatabaseListItem(
                     name, StorageUtils.getFileSize(databaseList[i])
@@ -448,8 +452,7 @@ class DashboardFragment constructor(private val fragmentManage: FragmentManager,
             botsNoneCl!!.visibility = View.VISIBLE
             scriptsRc!!.visibility = View.INVISIBLE
             botsNoneLav!!.playAnimation()
-        }
-        else {
+        } else {
             botsNoneCl!!.visibility = View.INVISIBLE
             scriptsRc!!.visibility = View.VISIBLE
         }
@@ -463,8 +466,7 @@ class DashboardFragment constructor(private val fragmentManage: FragmentManager,
             logsNoneCl!!.visibility = View.VISIBLE
             logsRc!!.visibility = View.INVISIBLE
             logsNoneLav!!.playAnimation()
-        }
-        else {
+        } else {
             logsNoneCl!!.visibility = View.INVISIBLE
             logsRc!!.visibility = View.VISIBLE
         }
@@ -474,12 +476,11 @@ class DashboardFragment constructor(private val fragmentManage: FragmentManager,
             logsNoneLav!!.playAnimation()
         }
 
-        if (databaseItem.isEmpty()){
+        if (databaseItem.isEmpty()) {
             databasesNoneCl!!.visibility = View.VISIBLE
             databasesRc!!.visibility = View.INVISIBLE
             databasesNoneLav!!.playAnimation()
-        }
-        else {
+        } else {
             databasesNoneCl!!.visibility = View.INVISIBLE
             databasesRc!!.visibility = View.VISIBLE
         }
@@ -531,8 +532,7 @@ class DashboardFragment constructor(private val fragmentManage: FragmentManager,
                 botsNoneCl!!.visibility = View.VISIBLE
                 scriptsRc!!.visibility = View.INVISIBLE
                 botsNoneLav!!.playAnimation()
-            }
-            else {
+            } else {
                 botsNoneCl!!.visibility = View.INVISIBLE
                 scriptsRc!!.visibility = View.VISIBLE
             }
@@ -548,7 +548,7 @@ class DashboardFragment constructor(private val fragmentManage: FragmentManager,
                 })
 
                 for (i in databaseList.indices) {
-                    if(i >= 2) break
+                    if (i >= 2) break
                     val name = databaseList[i].name
                     val item = DatabaseListItem(
                         name, StorageUtils.getFileSize(databaseList[i])
@@ -559,12 +559,11 @@ class DashboardFragment constructor(private val fragmentManage: FragmentManager,
 
             databaseListAdapter.notifyDataSetChanged()
 
-            if (databaseItem.isEmpty()){
+            if (databaseItem.isEmpty()) {
                 databasesNoneCl!!.visibility = View.VISIBLE
                 databasesRc!!.visibility = View.INVISIBLE
                 databasesNoneLav!!.playAnimation()
-            }
-            else {
+            } else {
                 databasesNoneCl!!.visibility = View.INVISIBLE
                 databasesRc!!.visibility = View.VISIBLE
             }
@@ -586,12 +585,12 @@ class DashboardFragment constructor(private val fragmentManage: FragmentManager,
 
         searchEt!!.imeOptions = EditorInfo.IME_ACTION_DONE
         searchEt!!.setOnEditorActionListener { _, id, _ ->
-            when(id){
+            when (id) {
                 EditorInfo.IME_ACTION_DONE -> {
                     scriptListAdapter.sortSearch(searchEt!!.text.toString())
                     scriptsRc!!.scrollToPosition(0)
                     YoYo.with(Techniques.FadeOut)
-                        .withListener(object : Animator.AnimatorListener{
+                        .withListener(object : Animator.AnimatorListener {
                             override fun onAnimationRepeat(p0: Animator?) {
 
                             }
@@ -607,7 +606,7 @@ class DashboardFragment constructor(private val fragmentManage: FragmentManager,
 
                             override fun onAnimationStart(p0: Animator?) {
                                 YoYo.with(Techniques.FadeIn)
-                                    .withListener(object : Animator.AnimatorListener{
+                                    .withListener(object : Animator.AnimatorListener {
                                         override fun onAnimationRepeat(p0: Animator?) {
 
                                         }

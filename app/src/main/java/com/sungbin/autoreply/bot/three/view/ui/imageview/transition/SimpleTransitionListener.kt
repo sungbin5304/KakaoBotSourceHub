@@ -2,7 +2,7 @@ package com.sungbin.autoreply.bot.three.view.ui.imageview.transition
 
 import android.transition.Transition
 
-abstract class SimpleTransitionListener :  Transition.TransitionListener{
+abstract class SimpleTransitionListener : Transition.TransitionListener {
     override fun onTransitionEnd(p0: Transition?) {
     }
 

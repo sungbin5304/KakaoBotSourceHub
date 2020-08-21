@@ -20,7 +20,6 @@ import com.sungbin.sungbintool.StorageUtils
 import com.sungbin.sungbintool.ToastUtils
 import kotlinx.android.synthetic.main.activity_script_edit.*
 import kotlinx.android.synthetic.main.content_simple_edit.*
-import java.lang.Exception
 
 
 /**
@@ -43,7 +42,7 @@ class SimpleEditActivity : AppCompatActivity() {
 
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
-        if(SimpleBotUtils.get(scriptName, "reply").isNotBlank()) {
+        if (SimpleBotUtils.get(scriptName, "reply").isNotBlank()) {
             btn_setting_done!!.backgroundTintList = ContextCompat.getColorStateList(
                 applicationContext,
                 R.color.colorPrimary
@@ -56,17 +55,17 @@ class SimpleEditActivity : AppCompatActivity() {
         et_sender.text = SpannableStringBuilder(SimpleBotUtils.get(scriptName, "sender"))
         et_message.text = SpannableStringBuilder(SimpleBotUtils.get(scriptName, "message"))
 
-        if(SimpleBotUtils.get(scriptName, "type") != "null" &&
-            SimpleBotUtils.get(scriptName, "type") != ""){
-            if(SimpleBotUtils.get(scriptName, "type").toBoolean()){
+        if (SimpleBotUtils.get(scriptName, "type") != "null" &&
+            SimpleBotUtils.get(scriptName, "type") != ""
+        ) {
+            if (SimpleBotUtils.get(scriptName, "type").toBoolean()) {
                 tbl_group.setToggled(R.id.solo_chat, true)
-            }
-            else {
+            } else {
                 tbl_group.setToggled(R.id.open_chat, true)
             }
         }
 
-        et_room.visibility = if(et_room.text.isNotBlank()) {
+        et_room.visibility = if (et_room.text.isNotBlank()) {
             iv_room_show.rotation = 180f
             isRoomExpand = true
             View.VISIBLE
@@ -74,7 +73,7 @@ class SimpleEditActivity : AppCompatActivity() {
             View.GONE
         }
 
-        et_sender.visibility = if(et_sender.text.isNotBlank()) {
+        et_sender.visibility = if (et_sender.text.isNotBlank()) {
             iv_sender_show.rotation = 180f
             isSenderExpand = true
             View.VISIBLE
@@ -82,7 +81,7 @@ class SimpleEditActivity : AppCompatActivity() {
             View.GONE
         }
 
-        et_message.visibility = if(et_message.text.isNotBlank()) {
+        et_message.visibility = if (et_message.text.isNotBlank()) {
             iv_message_show.rotation = 180f
             isMessageExpand = true
             View.VISIBLE
@@ -90,8 +89,9 @@ class SimpleEditActivity : AppCompatActivity() {
             View.GONE
         }
 
-        tbl_group.visibility = if(SimpleBotUtils.get(scriptName, "type") != "null" &&
-            SimpleBotUtils.get(scriptName, "type") != ""){
+        tbl_group.visibility = if (SimpleBotUtils.get(scriptName, "type") != "null" &&
+            SimpleBotUtils.get(scriptName, "type") != ""
+        ) {
             iv_group_show.rotation = 180f
             isGroupExpand = true
             View.VISIBLE
@@ -101,14 +101,13 @@ class SimpleEditActivity : AppCompatActivity() {
 
         et_reply.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(editable: Editable?) {
-                if(editable.toString().isNotBlank()){
+                if (editable.toString().isNotBlank()) {
                     btn_setting_done!!.backgroundTintList = ContextCompat.getColorStateList(
                         applicationContext,
                         R.color.colorPrimary
                     )
                     btn_setting_done!!.isEnabled = true
-                }
-                else {
+                } else {
                     btn_setting_done!!.backgroundTintList = ContextCompat.getColorStateList(
                         applicationContext,
                         R.color.colorAccent
@@ -140,12 +139,11 @@ class SimpleEditActivity : AppCompatActivity() {
                 SimpleBotUtils.save(scriptName, sender, room, group, message, reply)
                 ToastUtils.show(
                     applicationContext,
-                    getString(R.string.save_success),
+                    getString(R.string.saved),
                     ToastUtils.SHORT,
                     ToastUtils.SUCCESS
                 )
-            }
-            catch (e: Exception){
+            } catch (e: Exception) {
                 StorageUtils.save("AAAAA.txt", e.toString())
             }
         }
@@ -189,7 +187,7 @@ class SimpleEditActivity : AppCompatActivity() {
         rotate360.interpolator = LinearInterpolator()
 
         iv_message_show.setOnClickListener {
-            if(!isMessageExpand){
+            if (!isMessageExpand) {
                 iv_message_show.startAnimation(rotate180)
                 iv_message_show.rotation = 180f
                 et_message.visibility = View.VISIBLE
@@ -198,14 +196,13 @@ class SimpleEditActivity : AppCompatActivity() {
                 YoYo.with(Techniques.FadeInDown)
                     .duration(250)
                     .playOn(et_message)
-            }
-            else {
+            } else {
                 iv_message_show.startAnimation(rotate360)
                 iv_message_show.rotation = 360f
                 isMessageExpand = false
 
                 YoYo.with(Techniques.FadeOutUp)
-                    .withListener(object : Animator.AnimatorListener{
+                    .withListener(object : Animator.AnimatorListener {
                         override fun onAnimationRepeat(p0: Animator?) {
                         }
 
@@ -225,7 +222,7 @@ class SimpleEditActivity : AppCompatActivity() {
         }
 
         iv_room_show.setOnClickListener {
-            if(!isRoomExpand){
+            if (!isRoomExpand) {
                 iv_room_show.startAnimation(rotate180)
                 iv_room_show.rotation = 180f
                 et_room.visibility = View.VISIBLE
@@ -234,14 +231,13 @@ class SimpleEditActivity : AppCompatActivity() {
                 YoYo.with(Techniques.FadeInDown)
                     .duration(250)
                     .playOn(et_room)
-            }
-            else {
+            } else {
                 iv_room_show.startAnimation(rotate360)
                 iv_room_show.rotation = 360f
                 isRoomExpand = false
 
                 YoYo.with(Techniques.FadeOutUp)
-                    .withListener(object : Animator.AnimatorListener{
+                    .withListener(object : Animator.AnimatorListener {
                         override fun onAnimationRepeat(p0: Animator?) {
                         }
 
@@ -261,7 +257,7 @@ class SimpleEditActivity : AppCompatActivity() {
         }
 
         iv_sender_show.setOnClickListener {
-            if(!isSenderExpand){
+            if (!isSenderExpand) {
                 iv_sender_show.startAnimation(rotate180)
                 iv_sender_show.rotation = 180f
                 et_sender.visibility = View.VISIBLE
@@ -270,14 +266,13 @@ class SimpleEditActivity : AppCompatActivity() {
                 YoYo.with(Techniques.FadeInDown)
                     .duration(250)
                     .playOn(et_sender)
-            }
-            else {
+            } else {
                 iv_sender_show.startAnimation(rotate360)
                 iv_sender_show.rotation = 360f
                 isSenderExpand = false
 
                 YoYo.with(Techniques.FadeOutUp)
-                    .withListener(object : Animator.AnimatorListener{
+                    .withListener(object : Animator.AnimatorListener {
                         override fun onAnimationRepeat(p0: Animator?) {
                         }
 
@@ -297,7 +292,7 @@ class SimpleEditActivity : AppCompatActivity() {
         }
 
         iv_group_show.setOnClickListener {
-            if(!isGroupExpand){
+            if (!isGroupExpand) {
                 iv_group_show.startAnimation(rotate180)
                 iv_group_show.rotation = 180f
                 tbl_group.visibility = View.VISIBLE
@@ -306,14 +301,13 @@ class SimpleEditActivity : AppCompatActivity() {
                 YoYo.with(Techniques.FadeInDown)
                     .duration(250)
                     .playOn(tbl_group)
-            }
-            else {
+            } else {
                 iv_group_show.startAnimation(rotate360)
                 iv_group_show.rotation = 360f
                 isGroupExpand = false
 
                 YoYo.with(Techniques.FadeOutUp)
-                    .withListener(object : Animator.AnimatorListener{
+                    .withListener(object : Animator.AnimatorListener {
                         override fun onAnimationRepeat(p0: Animator?) {
                         }
 

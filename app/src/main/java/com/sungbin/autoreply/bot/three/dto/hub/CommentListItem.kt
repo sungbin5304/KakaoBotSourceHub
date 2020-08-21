@@ -7,7 +7,7 @@ class CommentListItem {
     var uid: String? = null
     var key: String? = null
 
-    constructor() {}
+    constructor()
     constructor(name: String?, comment: String?, uuid: String?, uid: String?, key: String?) {
         this.name = name
         this.comment = comment

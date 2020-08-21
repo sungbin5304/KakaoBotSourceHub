@@ -21,7 +21,7 @@ class DialogViewHolder(itemView: View) : DialogViewHolder<Dialog>(itemView) {
                 onlineIndicator.setBackgroundResource(R.drawable.shape_bubble_offline)
             }
         }
-        if(dialog.unreadCount == 0) unreadBubble.visibility = View.GONE
+        if (dialog.unreadCount == 0) unreadBubble.visibility = View.GONE
     }
 
 }

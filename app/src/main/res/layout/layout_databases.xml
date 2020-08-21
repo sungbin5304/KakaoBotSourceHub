@@ -50,7 +50,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/nanumgothic"
                     android:maxLength="12"
-                    android:text="@string/string_databases"
+                    android:text="@string/databases"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -97,7 +97,7 @@
                     android:background="@drawable/round_button_pink"
                     android:elevation="8dp"
                     android:fontFamily="@font/nanumgothic"
-                    android:text="@string/string_remove"
+                    android:text="@string/remove"
                     android:textAllCaps="false"
                     android:textColor="#fff"
                     app:elevation="8dp" />

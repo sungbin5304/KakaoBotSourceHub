@@ -53,11 +53,12 @@ class LoginActivity : AppCompatActivity() {
             override fun onChildAdded(dataSnapshot: DataSnapshot, s: String?) {
                 try {
                     val item = dataSnapshot.getValue(UserItem::class.java)!!
-                    val user = User(item.id!!, item.name!!, item.avatar!!, item.isOnline!!,
-                        item.roomList, item.friendsList)
+                    val user = User(
+                        item.id!!, item.name!!, item.avatar!!, item.isOnline!!,
+                        item.roomList, item.friendsList
+                    )
                     ChatModuleUtils.addUser(user)
-                }
-                catch (e: Exception) {
+                } catch (e: Exception) {
                     Utils.error(applicationContext, e, "init messages")
                 }
 
@@ -78,18 +79,25 @@ class LoginActivity : AppCompatActivity() {
             override fun onCancelled(databaseError: DatabaseError) {
 
             }
-       })
+        })
 
         sessionCallback = object : ISessionCallback {
             override fun onSessionOpened() {
                 UserManagement.getInstance().me(object : MeV2ResponseCallback() {
                     override fun onSuccess(result: MeV2Response) {
-                        ToastUtils.show(applicationContext, getString(R.string.login_success),
-                            ToastUtils.SHORT, ToastUtils.SUCCESS)
-                        val user = UserItem(deviceId, result.kakaoAccount.profile.nickname,
-                            result.kakaoAccount.profile.profileImageUrl ?:
-                            "https://cdn.pixabay.com/photo/2020/03/28/15/20/cat-4977436_960_720.jpg", true,
-                            ArrayList<String>(), ArrayList<String>())
+                        ToastUtils.show(
+                            applicationContext, getString(R.string.login_success),
+                            ToastUtils.SHORT, ToastUtils.SUCCESS
+                        )
+                        val user = UserItem(
+                            deviceId,
+                            result.kakaoAccount.profile.nickname,
+                            result.kakaoAccount.profile.profileImageUrl
+                                ?: "https://cdn.pixabay.com/photo/2020/03/28/15/20/cat-4977436_960_720.jpg",
+                            true,
+                            ArrayList<String>(),
+                            ArrayList<String>()
+                        )
                         reference.child(deviceId).setValue(user)
 
                         finish()
@@ -99,7 +107,11 @@ class LoginActivity : AppCompatActivity() {
                     }
 
                     override fun onSessionClosed(errorResult: ErrorResult) {
-                        Utils.error(applicationContext, Exception(errorResult.errorMessage), "Kakao Login")
+                        Utils.error(
+                            applicationContext,
+                            Exception(errorResult.errorMessage),
+                            "Kakao Login"
+                        )
                     }
                 })
             }
@@ -129,48 +141,77 @@ class LoginActivity : AppCompatActivity() {
         }
 
         btn_login.setOnClickListener {
-            if(et_id.text.toString().isBlank() ||
-                et_pw.text.toString().isBlank()){
-                ToastUtils.show(applicationContext, getString(R.string.please_input_all),
-                    ToastUtils.SHORT, ToastUtils.WARNING)
-            }
-            else if(!Patterns.EMAIL_ADDRESS.matcher(
-                    et_id.text.toString()).matches()) {
-                ToastUtils.show(applicationContext, getString(R.string.please_input_email_type),
-                    ToastUtils.SHORT, ToastUtils.WARNING)
-            }
-            else if(et_pw.text.toString().length < 6) {
-                ToastUtils.show(applicationContext, getString(R.string.min_pw_length_six),
-                    ToastUtils.SHORT, ToastUtils.WARNING)
-            }
-            else {
+            if (et_id.text.toString().isBlank() ||
+                et_pw.text.toString().isBlank()
+            ) {
+                ToastUtils.show(
+                    applicationContext, getString(R.string.please_input_all),
+                    ToastUtils.SHORT, ToastUtils.WARNING
+                )
+            } else if (!Patterns.EMAIL_ADDRESS.matcher(
+                    et_id.text.toString()
+                ).matches()
+            ) {
+                ToastUtils.show(
+                    applicationContext, getString(R.string.please_input_email_type),
+                    ToastUtils.SHORT, ToastUtils.WARNING
+                )
+            } else if (et_pw.text.toString().length < 6) {
+                ToastUtils.show(
+                    applicationContext, getString(R.string.min_pw_length_six),
+                    ToastUtils.SHORT, ToastUtils.WARNING
+                )
+            } else {
                 FirebaseAuth.getInstance().signInWithEmailAndPassword(
-                    et_id.text.toString(), et_pw.text.toString())
+                    et_id.text.toString(), et_pw.text.toString()
+                )
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            ToastUtils.show(applicationContext, getString(R.string.login_success),
-                                ToastUtils.SHORT, ToastUtils.SUCCESS)
-                            val user = UserItem(deviceId, "사용자 ${Random().nextInt(1000)}",
-                                "https://cdn.pixabay.com/photo/2020/03/28/15/20/cat-4977436_960_720.jpg", true,
-                                ArrayList<String>(), ArrayList<String>())
+                            ToastUtils.show(
+                                applicationContext, getString(R.string.login_success),
+                                ToastUtils.SHORT, ToastUtils.SUCCESS
+                            )
+                            val user = UserItem(
+                                deviceId,
+                                "사용자 ${Random().nextInt(1000)}",
+                                "https://cdn.pixabay.com/photo/2020/03/28/15/20/cat-4977436_960_720.jpg",
+                                true,
+                                ArrayList<String>(),
+                                ArrayList<String>()
+                            )
                             reference.child(deviceId).setValue(user)
 
                             finish()
-                            startActivity(Intent(applicationContext, PermissionActivity::class.java))
-                            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                            startActivity(
+                                Intent(
+                                    applicationContext,
+                                    PermissionActivity::class.java
+                                )
+                            )
+                            overridePendingTransition(
+                                android.R.anim.fade_in,
+                                android.R.anim.fade_out
+                            )
                         } else {
-                            ToastUtils.show(applicationContext, getString(R.string.register_account),
-                                ToastUtils.SHORT, ToastUtils.INFO)
+                            ToastUtils.show(
+                                applicationContext, getString(R.string.register_account),
+                                ToastUtils.SHORT, ToastUtils.INFO
+                            )
 
                             FirebaseAuth.getInstance().createUserWithEmailAndPassword(
-                                et_id.text.toString(), et_pw.text.toString())
+                                et_id.text.toString(), et_pw.text.toString()
+                            )
                                 .addOnCompleteListener { task2 ->
                                     if (task2.isSuccessful) {
-                                        ToastUtils.show(applicationContext, getString(R.string.please_do_login),
-                                            ToastUtils.SHORT, ToastUtils.SUCCESS)
+                                        ToastUtils.show(
+                                            applicationContext, getString(R.string.please_do_login),
+                                            ToastUtils.SHORT, ToastUtils.SUCCESS
+                                        )
                                     } else {
-                                        ToastUtils.show(applicationContext, task2.exception.toString(),
-                                            ToastUtils.LONG, ToastUtils.ERROR)
+                                        ToastUtils.show(
+                                            applicationContext, task2.exception.toString(),
+                                            ToastUtils.LONG, ToastUtils.ERROR
+                                        )
                                     }
                                 }
                         }
@@ -191,12 +232,17 @@ class LoginActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     val googleUser = auth.currentUser!!
                     var profileImage = googleUser.photoUrl.toString()
-                    if(profileImage == "null")
-                        profileImage = "https://cdn.pixabay.com/photo/2020/03/28/15/20/cat-4977436_960_720.jpg"
-                    ToastUtils.show(applicationContext, getString(R.string.login_success),
-                        ToastUtils.SHORT, ToastUtils.SUCCESS)
-                    val user = UserItem(deviceId, googleUser.displayName!!, profileImage, true,
-                        ArrayList<String>(), ArrayList<String>())
+                    if (profileImage == "null")
+                        profileImage =
+                            "https://cdn.pixabay.com/photo/2020/03/28/15/20/cat-4977436_960_720.jpg"
+                    ToastUtils.show(
+                        applicationContext, getString(R.string.login_success),
+                        ToastUtils.SHORT, ToastUtils.SUCCESS
+                    )
+                    val user = UserItem(
+                        deviceId, googleUser.displayName!!, profileImage, true,
+                        ArrayList<String>(), ArrayList<String>()
+                    )
                     reference.child(deviceId).setValue(user)
 
                     finish()
@@ -219,8 +265,10 @@ class LoginActivity : AppCompatActivity() {
         if (requestCode == RC_SIGN_IN) { //Google Login
             val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)!!
             if (result.isSuccess) {
-                ToastUtils.show(applicationContext, getString(R.string.process_on_login),
-                    ToastUtils.SHORT, ToastUtils.INFO)
+                ToastUtils.show(
+                    applicationContext, getString(R.string.process_on_login),
+                    ToastUtils.SHORT, ToastUtils.INFO
+                )
                 val account = result.signInAccount
                 firebaseAuthWithGoogle(account!!)
             } else {

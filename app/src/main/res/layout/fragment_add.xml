@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:fontFamily="@font/nanumgothic"
-            android:text="@string/string_next"
+            android:text="@string/next"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_welcome" />
 
@@ -75,7 +75,7 @@
                 android:fontFamily="@font/nanumgothic"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:hint="@string/input_bot_name"
+                android:hint="@string/bot_name"
                 android:textCursorDrawable="@drawable/cursor_drawable_light_gray"
                 android:textColor="#000"
                 android:layout_gravity="center"
@@ -99,7 +99,7 @@
             android:textStyle="bold"
             android:background="@drawable/round_button_lightgray"
             android:fontFamily="@font/nanumgothic"
-            android:text="@string/string_bot_add"
+            android:text="@string/bot_add"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

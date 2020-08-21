@@ -20,13 +20,13 @@ class OutcomingImageMessageViewHolder(
     payload
 ) {
     private val imageView: TagableRoundImageView = itemView!!.findViewById(R.id.image)
-    private  val messageDate: TextView = itemView!!.findViewById(R.id.messageDate)
+    private val messageDate: TextView = itemView!!.findViewById(R.id.messageDate)
     private val context = itemView!!.context
     override fun onBind(message: Message) {
         super.onBind(message)
         messageDate.text = FormatUtils.createDate(message.createdAt)
 
-        if(!message.content!!.url.toString().contains("jpg")) {
+        if (!message.content!!.url.toString().contains("jpg")) {
             val imageName = message.content!!.url.toString()
             when {
                 imageName.contains("gif") -> imageView.set("gif")
@@ -35,12 +35,14 @@ class OutcomingImageMessageViewHolder(
         }
 
         imageView.setOnClickListener {
-            val transitionName = context.getString(R.string.transition_name)
+            val transitionName = context.getString(R.string.transition)
             val intent = Intent(context, DetailImageActivity::class.java)
                 .putExtra("image", message.content!!.url.toString())
                 .putExtra("name", message.text).putExtra("avatar", message.user.avatar)
-            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(context as Activity,
-                imageView, transitionName)
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                context as Activity,
+                imageView, transitionName
+            )
             context.startActivity(intent, options.toBundle())
         }
     }

@@ -10,14 +10,13 @@ import androidx.drawerlayout.widget.DrawerLayout
  */
 
 class DrawerLayout : DrawerLayout {
-    constructor(context: Context?) : super(context!!) {}
-    constructor(context: Context?, attrs: AttributeSet?) : super(context!!, attrs) {}
+    constructor(context: Context?) : super(context!!)
+    constructor(context: Context?, attrs: AttributeSet?) : super(context!!, attrs)
     constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(
         context!!,
         attrs,
         defStyle
-    ) {
-    }
+    )
 
     override fun onMeasure(widthMeasureSpecInt: Int, heightMeasureSpecInt: Int) {
         var widthMeasureSpec = widthMeasureSpecInt

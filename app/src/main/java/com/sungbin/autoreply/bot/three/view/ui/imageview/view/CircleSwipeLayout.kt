@@ -13,17 +13,18 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
 import android.util.AttributeSet
-import android.view.*
+import android.view.GestureDetector
+import android.view.MotionEvent
 import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
 import androidx.annotation.FloatRange
 import androidx.core.view.GestureDetectorCompat
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
+import com.cascade.widget.util.BitmapUtil
 import com.sungbin.autoreply.bot.three.view.ui.imageview.drawable.CircularDrawable
 import com.sungbin.autoreply.bot.three.view.ui.imageview.transition.SimpleAnimationListener
-import com.cascade.widget.util.BitmapUtil
-import kotlin.math.sqrt
 import kotlin.math.pow
+import kotlin.math.sqrt
 import kotlin.properties.Delegates
 
 class CircleSwipeLayout : FrameLayout, GestureDetector.OnGestureListener {
@@ -72,10 +73,14 @@ class CircleSwipeLayout : FrameLayout, GestureDetector.OnGestureListener {
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
 
     init {
-            stateAnimTypeEvaluator = TypeEvaluator { fraction, startValues, endValues ->
+        stateAnimTypeEvaluator = TypeEvaluator { fraction, startValues, endValues ->
             val leftStart = startValues[0]
             val topStart = startValues[1]
             val radiusStart = startValues[2]
@@ -139,7 +144,12 @@ class CircleSwipeLayout : FrameLayout, GestureDetector.OnGestureListener {
         return false
     }
 
-    override fun onFling(ev1: MotionEvent, ev2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+    override fun onFling(
+        ev1: MotionEvent,
+        ev2: MotionEvent,
+        velocityX: Float,
+        velocityY: Float
+    ): Boolean {
         return if (velocityY > 1000) {
             listener?.onSwipedFling()
             true
@@ -148,7 +158,12 @@ class CircleSwipeLayout : FrameLayout, GestureDetector.OnGestureListener {
         }
     }
 
-    override fun onScroll(ev1: MotionEvent, ev2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
+    override fun onScroll(
+        ev1: MotionEvent,
+        ev2: MotionEvent,
+        distanceX: Float,
+        distanceY: Float
+    ): Boolean {
         lastScrollPoint = PointF(ev2.x, ev2.y)
 
         val scrolledDistance = ev2.y - lastDownPoint!!.y
@@ -271,8 +286,10 @@ class CircleSwipeLayout : FrameLayout, GestureDetector.OnGestureListener {
                         else
                             differenceTop / (height - lastProgressBeforeMoveTop)
 
-                    val targetLeft = -(progressLeft * MOVE_LAYER_PROGRESS_MULTIPLIER * halfWidth * 2f).toInt()
-                    val targetTop = -(progressTop * MOVE_LAYER_PROGRESS_MULTIPLIER * halfHeight * 2f).toInt()
+                    val targetLeft =
+                        -(progressLeft * MOVE_LAYER_PROGRESS_MULTIPLIER * halfWidth * 2f).toInt()
+                    val targetTop =
+                        -(progressTop * MOVE_LAYER_PROGRESS_MULTIPLIER * halfHeight * 2f).toInt()
 
                     updateCircularDrawableLayerInset(targetLeft, targetTop, 0, 0)
                     updateCircularDrawableMatrixForLayerInset(targetLeft, targetTop)

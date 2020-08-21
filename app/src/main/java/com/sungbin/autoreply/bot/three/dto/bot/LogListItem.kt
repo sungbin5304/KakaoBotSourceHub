@@ -1,12 +1,12 @@
 package com.sungbin.autoreply.bot.three.dto.bot
 
-class LogListItem  {
+class LogListItem {
     var name: String? = null
     var time: String? = null
     var content: String? = null
     var type: String? = null
 
-    constructor() {}
+    constructor()
     constructor(name: String?, time: String?, content: String?, type: String?) {
         this.name = name
         this.time = time

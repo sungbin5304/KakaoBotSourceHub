@@ -85,7 +85,7 @@
                         android:id="@+id/tv_script_run_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/string_last_runtime"
+                        android:text="@string/last_runtime"
                         android:textSize="13sp"
                         android:maxLines="1"
                         android:textColor="@color/colorGray"/>

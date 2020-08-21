@@ -18,8 +18,12 @@ class PermissionActivity : AppCompatActivity() {
         DataUtils.saveData(applicationContext, "logined", "true")
 
         btn_request_storage.setOnClickListener {
-            ActivityCompat.requestPermissions(this,
-                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE),
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ),
                 1000
             )
         }

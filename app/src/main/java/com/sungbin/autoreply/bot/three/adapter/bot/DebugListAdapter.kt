@@ -15,9 +15,11 @@ import com.sungbin.autoreply.bot.three.dto.bot.DebugMessageItem
 import com.sungbin.sungbintool.ReadMoreUtils
 import com.sungbin.sungbintool.Utils
 
-class DebugListAdapter (private val message: ArrayList<DebugMessageItem>?,
-                        private val myName: String,
-                        private val act: Activity) :
+class DebugListAdapter(
+    private val message: ArrayList<DebugMessageItem>?,
+    private val myName: String,
+    private val act: Activity
+) :
     RecyclerView.Adapter<DebugListAdapter.DebugListViewHolder>() {
 
     private var ctx: Context? = null
@@ -36,12 +38,13 @@ class DebugListAdapter (private val message: ArrayList<DebugMessageItem>?,
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): DebugListViewHolder {
         ctx = viewGroup.context
-        val view = LayoutInflater.from(ctx).inflate(R.layout.view_debug_items_list, viewGroup, false)
+        val view =
+            LayoutInflater.from(ctx).inflate(R.layout.view_debug_items_list, viewGroup, false)
         return DebugListViewHolder(view)
     }
 
     override fun onBindViewHolder(@NonNull viewholder: DebugListViewHolder, position: Int) {
-        if(message != null) {
+        if (message != null) {
             val sender = message[position].sender
             val message = message[position].message
 
@@ -51,15 +54,14 @@ class DebugListAdapter (private val message: ArrayList<DebugMessageItem>?,
                     viewholder.msg_R,
                     message,
                     500,
-                    ctx!!.getString(R.string.show_all),
+                    ctx!!.getString(R.string.view_all),
                     ContextCompat.getColor(ctx!!, R.color.colorPrimary)
                 )
                 viewholder.view_R.setOnLongClickListener {
                     Utils.copy(act, message)
                     return@setOnLongClickListener false
                 }
-            }
-            else { //봇
+            } else { //봇
                 viewholder.content_R.visibility = View.GONE
                 viewholder.content_L.visibility = View.VISIBLE
 
@@ -68,7 +70,7 @@ class DebugListAdapter (private val message: ArrayList<DebugMessageItem>?,
                     viewholder.msg_L,
                     message,
                     500,
-                    ctx!!.getString(R.string.show_all),
+                    ctx!!.getString(R.string.view_all),
                     ContextCompat.getColor(ctx!!, R.color.colorPrimary)
                 )
                 viewholder.view_L.setOnLongClickListener {

@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_triple_and_half"
             android:layout_marginStart="@dimen/margin_default"
-            android:text="@string/string_sender"
+            android:text="@string/sender"
             app:layout_constraintTop_toTopOf="@+id/et_room"
             app:layout_constraintStart_toStartOf="parent"/>
 
@@ -96,7 +96,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_twice"
             android:layout_marginStart="@dimen/margin_default"
-            android:text="@string/string_room"
+            android:text="@string/room"
             app:layout_constraintTop_toBottomOf="@+id/ms_sender"
             app:layout_constraintStart_toStartOf="parent"/>
 

@@ -3005,7 +3005,7 @@ SES
 사이클로헥실설파민산나트륨
     """
 
-    fun getData(type: Int): String{
+    fun getData(type: Int): String {
         return when (type) {
             0 -> FOOD
             1 -> ARTIST

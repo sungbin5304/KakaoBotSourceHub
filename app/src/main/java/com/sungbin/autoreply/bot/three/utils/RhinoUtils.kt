@@ -19,10 +19,10 @@ class RhinoUtils constructor(ctx: android.content.Context) {
         ApiClass.setContext(ctx)
     }
 
-    fun runJs(source: String): String{
+    fun runJs(source: String): String {
         return try {
             val rhino = RhinoAndroidHelper().enterContext()
-            rhino.languageVersion =  Context.VERSION_ES6
+            rhino.languageVersion = Context.VERSION_ES6
             rhino.optimizationLevel = -1
 
             val scope = rhino.initStandardObjects()

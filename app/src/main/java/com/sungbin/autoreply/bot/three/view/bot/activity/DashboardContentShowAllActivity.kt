@@ -40,7 +40,7 @@ class DashboardContentShowAllActivity : AppCompatActivity() {
         val databaseList = File(databasePath).listFiles()
 
         rv_view.layoutManager = LinearLayoutManager(this)
-        if(type == "전체 로그"){
+        if (type == "전체 로그") {
             if (logList!!.isNotEmpty()) {
                 Collections.sort(logList.asList(), kotlin.Comparator { t, t2 ->
                     return@Comparator t.lastModified().compareTo(t2.lastModified())
@@ -60,14 +60,12 @@ class DashboardContentShowAllActivity : AppCompatActivity() {
                     logItem.add(item)
                 }
                 rv_view.adapter = LogListAdapter(logItem, this)
-            }
-            else {
+            } else {
                 rv_view.visibility = View.GONE
                 tv_view.visibility = View.VISIBLE
                 lav_view.visibility = View.VISIBLE
             }
-        }
-        else {
+        } else {
             if (databaseList!!.isNotEmpty()) {
                 Collections.sort(databaseList.asList(), kotlin.Comparator { t, t2 ->
                     return@Comparator t.lastModified().compareTo(t2.lastModified())
@@ -82,8 +80,7 @@ class DashboardContentShowAllActivity : AppCompatActivity() {
                 }
 
                 rv_view.adapter = DatabaseListAdapter(databaseItem, this)
-            }
-            else {
+            } else {
                 rv_view.visibility = View.GONE
                 tv_view.visibility = View.VISIBLE
                 lav_view.visibility = View.VISIBLE

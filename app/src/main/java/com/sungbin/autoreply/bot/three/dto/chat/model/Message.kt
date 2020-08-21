@@ -3,8 +3,6 @@ package com.sungbin.autoreply.bot.three.dto.chat.model
 import com.stfalcon.chatkit.commons.models.IMessage
 import com.stfalcon.chatkit.commons.models.MessageContentType
 import com.sungbin.autoreply.bot.three.dto.chat.Content
-import com.sungbin.autoreply.bot.three.dto.chat.ContentType
-import com.sungbin.autoreply.bot.three.dto.chat.MessageType
 import java.util.*
 
 class Message(

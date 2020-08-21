@@ -20,7 +20,7 @@ object Game {
         val index = Random().nextInt(words.size)
         val word = words[index]
         val chosungs = ArrayList<String>()
-        for (i in 0 until word.length){
+        for (i in 0 until word.length) {
             chosungs.add(HangulParser.disassemble(word[i])[0])
         }
         array.add(subject)

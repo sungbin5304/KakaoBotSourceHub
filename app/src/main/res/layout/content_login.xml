@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_default"
             android:layout_marginStart="@dimen/margin_default"
-            android:text="@string/app_login"
+            android:text="@string/login"
             android:fontFamily="@font/nanumgothic"
             android:textColor="@color/colorPrimary"
             android:textSize="40sp"
@@ -88,7 +88,7 @@
             android:id="@+id/textview_pw"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/string_password"
+            android:text="@string/password"
             android:textColor="#000"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -199,7 +199,7 @@
                 android:elevation="0dp"
                 android:layout_alignParentEnd="true"
                 android:background="@drawable/login_button_design"
-                android:text="@string/string_login" />
+                android:text="@string/login_with_arrow" />
 
     </RelativeLayout>
 

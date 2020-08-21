@@ -15,11 +15,11 @@ object ChosungType {
     const val CHEMISTRY = 9
     const val WORDS = 10
 
-    fun getRandom(): Int{
+    fun getRandom(): Int {
         return Random().nextInt(11)
     }
 
-    fun getName(type: Int): String{
+    fun getName(type: Int): String {
         return when (type) {
             0 -> "간식"
             1 -> "국내 가수"

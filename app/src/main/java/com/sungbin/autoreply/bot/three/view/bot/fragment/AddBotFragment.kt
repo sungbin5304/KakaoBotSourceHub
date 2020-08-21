@@ -22,11 +22,12 @@ import com.sungbin.sungbintool.DataUtils
 import com.sungbin.sungbintool.StorageUtils
 import com.sungbin.sungbintool.ToastUtils
 
-class AddBotFragment constructor(private val fragmentManage: FragmentManager,
-                                 private val view: Int,
-                                 private val bottombar: SmoothBottomBar,
-                                 private val textview: TextView,
-                                 private val isTutorial: Boolean
+class AddBotFragment constructor(
+    private val fragmentManage: FragmentManager,
+    private val view: Int,
+    private val bottombar: SmoothBottomBar,
+    private val textview: TextView,
+    private val isTutorial: Boolean
 ) : Fragment() {
 
     var botTypeTs: ToggleButtonLayout? = null
@@ -39,7 +40,11 @@ class AddBotFragment constructor(private val fragmentManage: FragmentManager,
     private lateinit var btnNext: Button
     private lateinit var lavWelcome: LottieAnimationView
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?):
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ):
             View {
         val view = inflater.inflate(R.layout.fragment_add, container, false)
         botTypeTs = view.findViewById(R.id.tbl_langauge)
@@ -56,7 +61,7 @@ class AddBotFragment constructor(private val fragmentManage: FragmentManager,
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        if(isTutorial) {
+        if (isTutorial) {
             botTypeTs!!.alpha = 0.1f
             inputBotNameEt!!.alpha = 0.1f
             addBotBtn!!.alpha = 0.1f
@@ -74,9 +79,10 @@ class AddBotFragment constructor(private val fragmentManage: FragmentManager,
         }
 
         btnNext.setOnClickListener {
-            textview.text = getString(R.string.string_setting)
+            textview.text = getString(R.string.setting)
             val fragmentTransaction = fragmentManage.beginTransaction()
-            fragmentTransaction.replace(view,
+            fragmentTransaction.replace(
+                view,
                 SettingFragment(fragmentManage, view, bottombar, textview, true)
             ).commit()
             bottombar.setActiveItem(4)
@@ -84,30 +90,32 @@ class AddBotFragment constructor(private val fragmentManage: FragmentManager,
         }
 
         val favoriteFanguage = DataUtils.readData(context!!, "FavoriteLanguage", "null")
-        if(favoriteFanguage != "null"){
-            if(favoriteFanguage == "자바스크립트"){
+        if (favoriteFanguage != "null") {
+            if (favoriteFanguage == "자바스크립트") {
                 botTypeTs!!.setToggled(R.id.javascript, true)
-            }
-            else {
+            } else {
                 botTypeTs!!.setToggled(R.id.simple, true)
                 isJsBot = false
             }
         }
 
         botTypeTs!!.onToggledListener = { _, toggle, selected ->
-            if(toggle.id == R.id.simple && selected) isJsBot = false
-            else if(toggle.id == R.id.javascript && selected) isJsBot = true
+            if (toggle.id == R.id.simple && selected) isJsBot = false
+            else if (toggle.id == R.id.javascript && selected) isJsBot = true
         }
-        inputBotNameEt!!.addTextChangedListener(object : TextWatcher{
+        inputBotNameEt!!.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(editable: Editable?) {
-                if(editable.toString().isNotBlank()){
-                    addBotBtn!!.backgroundTintList = ContextCompat.getColorStateList(context!!,
-                        R.color.colorPrimary)
+                if (editable.toString().isNotBlank()) {
+                    addBotBtn!!.backgroundTintList = ContextCompat.getColorStateList(
+                        context!!,
+                        R.color.colorPrimary
+                    )
                     addBotBtn!!.isEnabled = true
-                }
-                else {
-                    addBotBtn!!.backgroundTintList = ContextCompat.getColorStateList(context!!,
-                        R.color.colorAccent)
+                } else {
+                    addBotBtn!!.backgroundTintList = ContextCompat.getColorStateList(
+                        context!!,
+                        R.color.colorAccent
+                    )
                     addBotBtn!!.isEnabled = false
                 }
             }
@@ -120,14 +128,16 @@ class AddBotFragment constructor(private val fragmentManage: FragmentManager,
         })
         addBotBtn!!.setOnClickListener {
             if (botTypeTs!!.selectedToggles().isEmpty() && addBotBtn!!.isClickable) {
-                ToastUtils.show(context!!, getString(R.string.choose_bot_type),
-                    ToastUtils.SHORT, ToastUtils.WARNING)
-            }
-            else {
+                ToastUtils.show(
+                    context!!, getString(R.string.choose_bot_type),
+                    ToastUtils.SHORT, ToastUtils.WARNING
+                )
+            } else {
                 val botNameText = inputBotNameEt!!.text.toString()
                 val fragmentTransaction = fragmentManage.beginTransaction()
-                textview.text = getString(R.string.string_dashboard)
-                fragmentTransaction.replace(view,
+                textview.text = getString(R.string.dashboard)
+                fragmentTransaction.replace(
+                    view,
                     DashboardFragment(
                         fragmentManage,
                         view,
@@ -153,13 +163,12 @@ class AddBotFragment constructor(private val fragmentManage: FragmentManager,
                         }    
                     """.trimIndent()
                     )
-                }
-                else {
+                } else {
                     StorageUtils.createFolder("${BotPathManager.SIMPLE}/$botNameText")
                 }
                 ToastUtils.show(
                     context!!,
-                    getString(R.string.add_new_bot),
+                    getString(R.string.added_new_bot),
                     ToastUtils.SHORT, ToastUtils.SUCCESS
                 )
             }

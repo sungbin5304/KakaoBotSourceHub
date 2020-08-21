@@ -110,8 +110,7 @@ class MessagesActivity : AppCompatActivity(),
             .addOnCompleteListener { task: Task<Void?> ->
                 if (task.isSuccessful) {
                     remoteConfig.activateFetched()
-                }
-                else {
+                } else {
                     ToastUtils.show(
                         this,
                         getString(R.string.error_get_data),
@@ -131,7 +130,7 @@ class MessagesActivity : AppCompatActivity(),
         dialog = ChatModuleUtils.getDialog(intent.getStringExtra("dialogId")!!)
         imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
-        if(dialog == null){
+        if (dialog == null) {
             ToastUtils.show(
                 applicationContext,
                 getString(R.string.cant_load_chat_module),
@@ -148,8 +147,8 @@ class MessagesActivity : AppCompatActivity(),
         val input = findViewById<MessageInput>(R.id.input)
         val payload = IncomingTextMessageViewHolder.Payload()
         val imageLoader = ImageLoader { imageView: ImageView?, url: String?, _: Any? ->
-                ImageUtils.set(url!!, imageView!!, this@MessagesActivity)
-            }
+            ImageUtils.set(url!!, imageView!!, this@MessagesActivity)
+        }
         val holdersConfig = MessageHolders()
             .setIncomingTextConfig(
                 IncomingTextMessageViewHolder::class.java,
@@ -176,6 +175,7 @@ class MessagesActivity : AppCompatActivity(),
                 /*ToastUtils.show(applicationContext, "메시지 입력 시작",
                     ToastUtils.SHORT, ToastUtils.INFO)*/
             }
+
             override fun onStopTyping() {
                 /*ToastUtils.show(applicationContext, "메시지 입력 종료",
                     ToastUtils.SHORT, ToastUtils.INFO)*/
@@ -191,8 +191,10 @@ class MessagesActivity : AppCompatActivity(),
 
         payload.avatarClickListener = object : IncomingTextMessageViewHolder.OnAvatarClickListener {
             override fun onAvatarClick() {
-                ToastUtils.show(applicationContext, "Text message avatar clicked",
-                    ToastUtils.SHORT, ToastUtils.SUCCESS)
+                ToastUtils.show(
+                    applicationContext, "Text message avatar clicked",
+                    ToastUtils.SHORT, ToastUtils.SUCCESS
+                )
             }
         }
 
@@ -219,30 +221,36 @@ class MessagesActivity : AppCompatActivity(),
                 try {
                     val item = dataSnapshot.getValue(MessageItem::class.java)!!
 
-                    if(lastMessageId < item.id!!.toInt())
+                    if (lastMessageId < item.id!!.toInt())
                         lastMessageId = item.id!!.toInt()
 
-                    if(lastMessage == item.text) return
+                    if (lastMessage == item.text) return
                     else lastMessage = item.text!!
 
                     val messageUser = item.user!!
-                    val user = User(messageUser.id!!, messageUser.name!!, messageUser.avatar!!,
-                        messageUser.isOnline!!, messageUser.roomList, messageUser.friendsList)
+                    val user = User(
+                        messageUser.id!!, messageUser.name!!, messageUser.avatar!!,
+                        messageUser.isOnline!!, messageUser.roomList, messageUser.friendsList
+                    )
 
                     var message: Message
 
-                    if(item.messageContent != null &&
-                        !remoteConfig.getString("can_storage").replace("\"", "").toBoolean()) {
-                        message = Message(item.id!!, item.dialogIdString!!, user,
+                    if (item.messageContent != null &&
+                        !remoteConfig.getString("can_storage").replace("\"", "").toBoolean()
+                    ) {
+                        message = Message(
+                            item.id!!, item.dialogIdString!!, user,
                             "컨텐츠 보기 기능은 파일 저정소 서버 할당량 초과로 임시 비활성화 되었습니다.",
-                            item.createdAt!!, item.messageStatue!!, null)
+                            item.createdAt!!, item.messageStatue!!, null
+                        )
                     }
 
-                    message = Message(item.id!!, item.dialogIdString!!, user, item.text!!,
-                        item.createdAt!!, item.messageStatue!!, item.messageContent)
+                    message = Message(
+                        item.id!!, item.dialogIdString!!, user, item.text!!,
+                        item.createdAt!!, item.messageStatue!!, item.messageContent
+                    )
                     messagesAdapter!!.addToStart(message, isAutoScroll)
-                }
-                catch (e: Exception) {
+                } catch (e: Exception) {
                     Utils.error(applicationContext, e, "init messages")
                 }
 
@@ -297,7 +305,7 @@ class MessagesActivity : AppCompatActivity(),
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             rvPhoto!!.setOnScrollChangeListener { _, _, y, _, oldY ->
                 if (y < oldY) { //Up
-                    if(!isAnimatied) {
+                    if (!isAnimatied) {
                         rlAttachment!!.visibility = View.VISIBLE
                         YoYo.with(Techniques.FadeInUp)
                             .duration(500)
@@ -307,7 +315,7 @@ class MessagesActivity : AppCompatActivity(),
                 }
 
                 if (y > oldY) { //Down
-                    if(isAnimatied) {
+                    if (isAnimatied) {
                         YoYo.with(Techniques.FadeOutDown)
                             .withListener(object : Animator.AnimatorListener {
                                 override fun onAnimationRepeat(p0: Animator?) {
@@ -334,11 +342,15 @@ class MessagesActivity : AppCompatActivity(),
 
     override fun onSubmit(input: CharSequence): Boolean {
         val myUserData = ChatModuleUtils.getUser(deviceId!!)!!
-        val user = UserItem(deviceId!!, myUserData.name,
-            myUserData.avatar, true, myUserData.rooms, myUserData.friends)
+        val user = UserItem(
+            deviceId!!, myUserData.name,
+            myUserData.avatar, true, myUserData.rooms, myUserData.friends
+        )
         val messageId = (lastMessageId + 1).toString()
-        val item = MessageItem(messageId, dialog!!.id,
-            user, input.toString(), Date(), MessageState.SENT, null)
+        val item = MessageItem(
+            messageId, dialog!!.id,
+            user, input.toString(), Date(), MessageState.SENT, null
+        )
         reference.child(messageId).setValue(item)
         return true
     }
@@ -412,31 +424,38 @@ class MessagesActivity : AppCompatActivity(),
     }
 
     @Suppress("NAME_SHADOWING")
-    private fun addVideo(linkString: String){
-        if(!remoteConfig.getString("can_storage").replace("\"", "").toBoolean()){
-            ToastUtils.show(applicationContext,
+    private fun addVideo(linkString: String) {
+        if (!remoteConfig.getString("can_storage").replace("\"", "").toBoolean()) {
+            ToastUtils.show(
+                applicationContext,
                 "컨텐츠 첨부 기능은 파일 저정소 서버 할당량 초과로 임시 비활성화 되었습니다.",
-                ToastUtils.SHORT, ToastUtils.WARNING)
+                ToastUtils.SHORT, ToastUtils.WARNING
+            )
             return
         }
         val link = URLDecoder.decode(linkString.replaceFirst("file:///", ""), "UTF-8")
         val pDialog = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
-        pDialog.progressHelper.barColor = ContextCompat.getColor(applicationContext,
-            R.color.colorAccent)
+        pDialog.progressHelper.barColor = ContextCompat.getColor(
+            applicationContext,
+            R.color.colorAccent
+        )
         pDialog.titleText = getString(R.string.uploading_image)
         pDialog.setCancelable(false)
         pDialog.show()
 
         val myUserData = ChatModuleUtils.getUser(deviceId!!)!!
-        val user = UserItem(deviceId!!, myUserData.name, myUserData.avatar, true,
-            myUserData.rooms, myUserData.friends)
+        val user = UserItem(
+            deviceId!!, myUserData.name, myUserData.avatar, true,
+            myUserData.rooms, myUserData.friends
+        )
         val file = Uri.fromFile(File(link))
         val storageRef = FirebaseStorage.getInstance().reference
         val messageId = (lastMessageId + 1).toString()
         val videoRef = storageRef.child("Chat/${dialog!!.id}/Video/$messageId.mp4")
         val videoUploadTask = videoRef.putFile(file)
         videoUploadTask.addOnFailureListener {
-            val item = MessageItem(messageId, dialog!!.id,
+            val item = MessageItem(
+                messageId, dialog!!.id,
                 user, "비디오 업로드에 실패했습니다.\n\n${it.message}",
                 Date(), MessageState.SENT,
                 null
@@ -448,7 +467,8 @@ class MessagesActivity : AppCompatActivity(),
                     getFileSize(taskSnapshot.totalByteCount.toInt())
         }.addOnSuccessListener {
             videoRef.downloadUrl.addOnSuccessListener {
-                val item = MessageItem(messageId, dialog!!.id,
+                val item = MessageItem(
+                    messageId, dialog!!.id,
                     user, file.lastPathSegment, Date(), MessageState.SENT,
                     Content(it.toString(), ContentType.VIDEO)
                 )
@@ -456,7 +476,8 @@ class MessagesActivity : AppCompatActivity(),
                 pDialog.cancel()
             }
             videoRef.downloadUrl.addOnFailureListener {
-                val item = MessageItem(messageId, dialog!!.id,
+                val item = MessageItem(
+                    messageId, dialog!!.id,
                     user, "비디오 다운로드 링크 추출에 실패했습니다.\n\n${it.message}",
                     Date(), MessageState.SENT,
                     null
@@ -469,35 +490,42 @@ class MessagesActivity : AppCompatActivity(),
         doAnimated()
     }
 
-    private fun addPicture(linkString: String){
-        if(!remoteConfig.getString("can_storage").replace("\"", "").toBoolean()){
-            ToastUtils.show(applicationContext,
+    private fun addPicture(linkString: String) {
+        if (!remoteConfig.getString("can_storage").replace("\"", "").toBoolean()) {
+            ToastUtils.show(
+                applicationContext,
                 "컨텐츠 첨부 기능은 파일 저정소 서버 할당량 초과로 임시 비활성화 되었습니다.",
-                ToastUtils.SHORT, ToastUtils.WARNING)
+                ToastUtils.SHORT, ToastUtils.WARNING
+            )
             return
         }
         val link = URLDecoder.decode(linkString.replaceFirst("file:///", ""), "UTF-8")
         Log.d("video link", link)
         val pDialog = SweetAlertDialog(this, SweetAlertDialog.PROGRESS_TYPE)
-        pDialog.progressHelper.barColor = ContextCompat.getColor(applicationContext,
-            R.color.colorAccent)
+        pDialog.progressHelper.barColor = ContextCompat.getColor(
+            applicationContext,
+            R.color.colorAccent
+        )
         pDialog.titleText = getString(R.string.uploading_image)
         pDialog.setCancelable(false)
         pDialog.show()
 
         val myUserData = ChatModuleUtils.getUser(deviceId!!)!!
-        val user = UserItem(deviceId!!, myUserData.name, myUserData.avatar, true,
-            myUserData.rooms, myUserData.friends)
+        val user = UserItem(
+            deviceId!!, myUserData.name, myUserData.avatar, true,
+            myUserData.rooms, myUserData.friends
+        )
         val file = Uri.fromFile(File(link))
         val storageRef = FirebaseStorage.getInstance().reference
         val messageId = (lastMessageId + 1).toString()
         var prefix = "jpg"
-        if(linkString.toLowerCase(Locale.getDefault()).contains(".gif")) prefix = "gif"
+        if (linkString.toLowerCase(Locale.getDefault()).contains(".gif")) prefix = "gif"
         val riversRef = storageRef.child("Chat/${dialog!!.id}/Picture/$messageId.$prefix")
         val uploadTask = riversRef.putFile(file)
         uploadTask.addOnFailureListener {
             val exception = it as StorageException
-            val item = MessageItem(messageId, dialog!!.id,
+            val item = MessageItem(
+                messageId, dialog!!.id,
                 user, "이미지 업로드에 실패했습니다.\n\n${exception.errorCode}",
                 Date(), MessageState.SENT,
                 null
@@ -509,7 +537,8 @@ class MessagesActivity : AppCompatActivity(),
                     getFileSize(taskSnapshot.totalByteCount.toInt())
         }.addOnSuccessListener {
             riversRef.downloadUrl.addOnSuccessListener {
-                val item = MessageItem(messageId, dialog!!.id,
+                val item = MessageItem(
+                    messageId, dialog!!.id,
                     user, file.lastPathSegment, Date(), MessageState.SENT,
                     Content(it.toString(), ContentType.IMAGE)
                 )
@@ -518,7 +547,8 @@ class MessagesActivity : AppCompatActivity(),
             }
             riversRef.downloadUrl.addOnFailureListener {
                 val exception = it as StorageException
-                val item = MessageItem(messageId, dialog!!.id,
+                val item = MessageItem(
+                    messageId, dialog!!.id,
                     user, "이미지 다운로드 링크 추출에 실패했습니다.\n\n${exception.message}",
                     Date(), MessageState.SENT,
                     null
@@ -541,14 +571,14 @@ class MessagesActivity : AppCompatActivity(),
         ).toString() + " " + units[digitGroups]
     }
 
-    private fun doAnimated(){
+    private fun doAnimated() {
         inputLayout!!.visibility = View.VISIBLE
         YoYo.with(Techniques.SlideInUp)
             .duration(500)
             .playOn(inputLayout)
 
         YoYo.with(Techniques.FadeOutDown)
-            .withListener(object : Animator.AnimatorListener{
+            .withListener(object : Animator.AnimatorListener {
                 override fun onAnimationRepeat(p0: Animator?) {
                 }
 
@@ -565,10 +595,10 @@ class MessagesActivity : AppCompatActivity(),
             .duration(500)
             .playOn(rvPhoto!!)
 
-        if(isAnimatied){
+        if (isAnimatied) {
             isAnimatied = false
             YoYo.with(Techniques.FadeOutDown)
-                .withListener(object : Animator.AnimatorListener{
+                .withListener(object : Animator.AnimatorListener {
                     override fun onAnimationRepeat(p0: Animator?) {
                     }
 
@@ -588,8 +618,10 @@ class MessagesActivity : AppCompatActivity(),
     }
 
     override fun onMessageLongClick(message: Message?) {
-        ToastUtils.show(applicationContext, "${message!!.text} 클릭됨!",
-            ToastUtils.SHORT, ToastUtils.SUCCESS)
+        ToastUtils.show(
+            applicationContext, "${message!!.text} 클릭됨!",
+            ToastUtils.SHORT, ToastUtils.SUCCESS
+        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -630,14 +662,14 @@ class MessagesActivity : AppCompatActivity(),
 
     override fun onBackPressed() {
         inputLayout!!.visibility = View.VISIBLE
-        if(selectionCount == 0) {
+        if (selectionCount == 0) {
             YoYo.with(Techniques.SlideInUp)
                 .duration(500)
                 .playOn(inputLayout)
         }
 
         YoYo.with(Techniques.FadeOutDown)
-            .withListener(object : Animator.AnimatorListener{
+            .withListener(object : Animator.AnimatorListener {
                 override fun onAnimationRepeat(p0: Animator?) {
                 }
 
@@ -654,10 +686,10 @@ class MessagesActivity : AppCompatActivity(),
             .duration(500)
             .playOn(rvPhoto!!)
 
-        if(isAnimatied){
+        if (isAnimatied) {
             isAnimatied = false
             YoYo.with(Techniques.FadeOutDown)
-                .withListener(object : Animator.AnimatorListener{
+                .withListener(object : Animator.AnimatorListener {
                     override fun onAnimationRepeat(p0: Animator?) {
                     }
 
@@ -673,12 +705,12 @@ class MessagesActivity : AppCompatActivity(),
                 })
                 .duration(300)
                 .playOn(rlAttachment!!)
-        }
-        else {
+        } else {
             if (selectionCount == 0 &&
-                    inputLayout!!.visibility == View.VISIBLE &&
-                    rvPhoto!!.visibility == View.INVISIBLE &&
-                    rlAttachment!!.visibility == View.INVISIBLE) {
+                inputLayout!!.visibility == View.VISIBLE &&
+                rvPhoto!!.visibility == View.INVISIBLE &&
+                rlAttachment!!.visibility == View.INVISIBLE
+            ) {
                 super.onBackPressed()
             } else {
                 messagesAdapter!!.unselectAllItems()
@@ -719,7 +751,7 @@ class MessagesActivity : AppCompatActivity(),
         )
         val columnIndex: Int = cursor!!.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA)
         while (cursor.moveToNext()) {
-            if(maxCount in 1 until count) break
+            if (maxCount in 1 until count) break
             val absolutePathOfImage: String = cursor.getString(columnIndex)
             if (!TextUtils.isEmpty(absolutePathOfImage)) {
                 result.add(absolutePathOfImage)

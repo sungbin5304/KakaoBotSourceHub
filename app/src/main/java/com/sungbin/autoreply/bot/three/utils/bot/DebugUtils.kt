@@ -18,27 +18,26 @@ object DebugUtils {
         return messages[room]
     }
 
-    fun addMessage(room: String, message: DebugMessageItem){
-        if(!messages.containsKey(room)) saveRoom(room)
+    fun addMessage(room: String, message: DebugMessageItem) {
+        if (!messages.containsKey(room)) saveRoom(room)
         val messages = getMessges(room)
-        if(messages == null) {
+        if (messages == null) {
             val array = ArrayList<DebugMessageItem>()
             array.add(message)
             this.messages[room] = array
-        }
-        else {
+        } else {
             messages.add(message)
             this.messages[room] = messages
         }
     }
 
-    fun saveSender(name: String, base64: String){
+    fun saveSender(name: String, base64: String) {
         StorageUtils.createFolder("$SENDER/$name")
         StorageUtils.save("$SENDER/$name/profile.base64", base64)
         saveProfileImage(name, base64)
     }
 
-    fun getSenderList(): ArrayList<String>{
+    fun getSenderList(): ArrayList<String> {
         val array = ArrayList<String>()
         File("$sdcard/$SENDER").listFiles()?.map {
             array.add(it.name)
@@ -46,11 +45,11 @@ object DebugUtils {
         return array
     }
 
-    fun saveRoom(name: String){
+    fun saveRoom(name: String) {
         StorageUtils.createFolder("$ROOM/$name")
     }
 
-    fun getRoomList(): ArrayList<String>{
+    fun getRoomList(): ArrayList<String> {
         val array = ArrayList<String>()
         File("$sdcard/$ROOM").listFiles()?.map {
             array.add(it.name)
@@ -58,15 +57,15 @@ object DebugUtils {
         return array
     }
 
-    fun getProfileBase64(name: String): String{
+    fun getProfileBase64(name: String): String {
         return StorageUtils.read("$SENDER/$name/profile.base64", "").toString()
     }
 
-    fun getProfileImagePath(name: String): String{
+    fun getProfileImagePath(name: String): String {
         return "$sdcard/$SENDER/$name/profile.png"
     }
 
-    private fun saveProfileImage(name: String, base64: String){
+    private fun saveProfileImage(name: String, base64: String) {
         val bitmap = Base64Utils.base642bitmap(base64)
         val path = getProfileImagePath(name)
         File(path).createNewFile()

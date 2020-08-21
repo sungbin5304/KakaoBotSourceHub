@@ -29,7 +29,7 @@ import kotlinx.android.synthetic.main.content_dashboard_new.*
 
 
 @Suppress("DEPRECATION")
-class DashboardActivity  : AppCompatActivity() {
+class DashboardActivity : AppCompatActivity() {
 
     private val fragmentManager: FragmentManager = this.supportFragmentManager
 
@@ -102,12 +102,11 @@ class DashboardActivity  : AppCompatActivity() {
             bottombar.onItemSelected = {
                 if (DataUtils.readData(applicationContext, "isTutorial", "true").toBoolean()) {
                     bottombar.setActiveItem(bottomBarIndex)
-                }
-                else {
+                } else {
                     val fragmentTransaction = fragmentManager.beginTransaction()
                     when (it) {
                         0 -> { //대쉬보드
-                            title.text = getString(R.string.string_dashboard)
+                            title.text = getString(R.string.dashboard)
                             fragmentTransaction.replace(
                                 R.id.framelayout,
                                 DashboardFragment(
@@ -120,7 +119,7 @@ class DashboardActivity  : AppCompatActivity() {
                             ).commit()
                         }
                         1 -> { //센드박스
-                            title.text = getString(R.string.string_sandbox)
+                            title.text = getString(R.string.sandbox)
                             fragmentTransaction.replace(
                                 R.id.framelayout,
                                 SandboxFragment(
@@ -160,7 +159,7 @@ class DashboardActivity  : AppCompatActivity() {
                             startActivity(Intent(this, MainActivity::class.java))
                         }
                         4 -> { //설정
-                            title.text = getString(R.string.string_setting)
+                            title.text = getString(R.string.setting)
                             fragmentTransaction.replace(
                                 R.id.framelayout,
                                 SettingFragment(
@@ -175,17 +174,17 @@ class DashboardActivity  : AppCompatActivity() {
                     }
                 }
             }
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             Log.e("Error", e.toString())
         }
     }
 
-    fun checkAppVersion(config: FirebaseRemoteConfig){
+    fun checkAppVersion(config: FirebaseRemoteConfig) {
         val nowVersion = Utils.getAppVersionName(this)
         val lastVersion = config.getString("last_version").replace("\"", "")
         if (lastVersion != nowVersion) {
-            DialogUtils.show(this, getString(R.string.need_app_update),
+            DialogUtils.show(
+                this, getString(R.string.need_app_update),
                 "사용중이신 KakaoTalkBotHub의 버전이 낮아서 더 이상 사용하실 수 없습니다." +
                         "\n계속해서 사용하시려면 업데이트를 해 주새요.\n\n" +
                         "현재 버전 : $nowVersion\n" +

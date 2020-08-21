@@ -27,8 +27,7 @@ open class OnSwipeListener(ctx: Context) : OnTouchListener {
     override fun onTouch(v: View, event: MotionEvent): Boolean {
         return try {
             gestureDetector.onTouchEvent(event)
-        }
-        catch (ignored: Exception){
+        } catch (ignored: Exception) {
             false
         }
     }
@@ -39,14 +38,20 @@ open class OnSwipeListener(ctx: Context) : OnTouchListener {
             return true
         }
 
-        override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+        override fun onFling(
+            e1: MotionEvent,
+            e2: MotionEvent,
+            velocityX: Float,
+            velocityY: Float
+        ): Boolean {
             var result = false
             try {
                 val diffY = e2.y - e1.y
                 val diffX = e2.x - e1.x
                 if (abs(diffX) > abs(diffY)) {
                     if (abs(diffX) > SWIPE_THRESHOLD &&
-                        abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                        abs(velocityX) > SWIPE_VELOCITY_THRESHOLD
+                    ) {
                         if (diffX > 0) {
                             onSwipeLeftToRight()
                         } else {
@@ -54,8 +59,7 @@ open class OnSwipeListener(ctx: Context) : OnTouchListener {
                         }
                         result = true
                     }
-                }
-                else if (abs(diffY) > SWIPE_THRESHOLD && abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
+                } else if (abs(diffY) > SWIPE_THRESHOLD && abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
                     if (diffY > 0) {
                         onSwipeTopToBottom()
                     } else {
@@ -63,8 +67,7 @@ open class OnSwipeListener(ctx: Context) : OnTouchListener {
                     }
                     result = true
                 }
-            }
-            catch (exception: Exception) {
+            } catch (exception: Exception) {
                 exception.printStackTrace()
             }
 

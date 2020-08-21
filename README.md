@@ -2,9 +2,6 @@
   <img src="https://raw.githubusercontent.com/sungbin5304/KakaoTalkBotHub/master/banner.png">
 </p>
 
-# DEPRECATED
-> So many source code is a fool...So I decided to start a new project with an MVVM pattern.
-
 -----
 
 # Description

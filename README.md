@@ -2,6 +2,11 @@
   <img src="https://raw.githubusercontent.com/sungbin5304/KakaoTalkBotHub/master/banner.png">
 </p>
 
+# DEPRECATED
+> So many source code is a fool...So I decided to start a new project with an MVVM pattern.
+
+-----
+
 # Description
 KakaotalkBotHub is an application that supports KakaoTalk Bot and Hub(similar to a GitHub) for KakaoTalk Bot.<br>
 Bot production methods include programming in JavaScript and setting simple keyword auto-response.
